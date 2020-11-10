@@ -1,0 +1,56 @@
+---
+    # Container descriptor
+    - descriptor: "pip-services:context-info:default:default:1.0"
+      name: "beacons"
+      description: "Beacons microservice"
+    
+    # Console logger
+    - descriptor: "pip-services:logger:console:default:1.0"
+      level: "trace"
+    
+    # Performance counter that post values to log
+    - descriptor: "pip-services:counters:log:default:1.0"
+    
+    {{^if MONGO_ENABLED}}{{^if FILE_ENABLED}}
+    # Memory persistence
+    - descriptor: "beacons:persistence:memory:default:1.0"
+    {{/if}}{{/if}}
+    
+    {{#if FILE_ENABLED}}
+    # File persistence
+    - descriptor: "beacons:persistence:file:default:1.0"
+      path: {{FILE_PATH}}{{^if FILE_PATH}}"./data/beacons.json"{{/if}}
+    {{/if}}
+    
+    {{#if MONGO_ENABLED}}
+    # MongoDb persistence
+    - descriptor: "beacons:persistence:mongodb:default:1.0"
+      connection:
+        uri: {{MONGO_SERVICE_URI}}
+        host: {{MONGO_SERVICE_HOST}}{{^if MONGO_SERVICE_HOST}}"localhost"{{/if}}
+        port: {{MONGO_SERVICE_PORT}}{{^if MONGO_SERVICE_PORT}}27017{{/if}}
+        database: {{MONGO_DB}}{{^if MONGO_DB}}"test"{{/if}}
+    {{/if}}
+    
+    # Controller
+    - descriptor: "beacons:controller:default:default:1.0"
+      options:
+          param1: XYZ
+          param2: 765
+    
+    # Shared HTTP Endpoint
+    - descriptor: "pip-services:endpoint:http:default:1.0"
+      connection:
+        protocol: http
+        host: 0.0.0.0
+        port: {{HTTP_PORT}}{{^if HTTP_PORT}}8080{{/if}}
+    
+    # HTTP Service V1
+    - descriptor: "beacons:service:http:default:1.0"
+
+
+    # Hearbeat service
+    - descriptor: "pip-services:heartbeat-service:http:default:1.0"
+    
+    # Status service
+    - descriptor: "pip-services:status-service:http:default:1.0"
