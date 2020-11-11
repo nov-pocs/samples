@@ -12,7 +12,7 @@ type BeaconsMemoryPersistenceTest struct {
 	fixture     *BeaconsPersistenceFixture
 }
 
-func NewBeaconsMemoryPersistenceTest() *BeaconsMemoryPersistenceTest {
+func newBeaconsMemoryPersistenceTest() *BeaconsMemoryPersistenceTest {
 	var persistence *persist.BeaconsMemoryPersistence
 	var fixture *BeaconsPersistenceFixture
 
@@ -26,7 +26,7 @@ func NewBeaconsMemoryPersistenceTest() *BeaconsMemoryPersistenceTest {
 	}
 }
 
-func (c *BeaconsMemoryPersistenceTest) Setup(t *testing.T) {
+func (c *BeaconsMemoryPersistenceTest) setup(t *testing.T) {
 	err := c.persistence.Open("")
 	if err != nil {
 		t.Error("Failed to open persistence", err)
@@ -38,7 +38,7 @@ func (c *BeaconsMemoryPersistenceTest) Setup(t *testing.T) {
 	}
 }
 
-func (c *BeaconsMemoryPersistenceTest) Teardown(t *testing.T) {
+func (c *BeaconsMemoryPersistenceTest) teardown(t *testing.T) {
 	err := c.persistence.Close("")
 	if err != nil {
 		t.Error("Failed to close persistence", err)
@@ -46,16 +46,16 @@ func (c *BeaconsMemoryPersistenceTest) Teardown(t *testing.T) {
 }
 
 func TestBeaconsMemoryPersistence(t *testing.T) {
-	c := NewBeaconsMemoryPersistenceTest()
+	c := newBeaconsMemoryPersistenceTest()
 	if c == nil {
 		return
 	}
 
-	c.Setup(t)
+	c.setup(t)
 	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
-	c.Teardown(t)
+	c.teardown(t)
 
-	c.Setup(t)
+	c.setup(t)
 	t.Run("Get With Filters", c.fixture.TestGetWithFilters)
-	c.Teardown(t)
+	c.teardown(t)
 }
