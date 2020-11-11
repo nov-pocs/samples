@@ -20,7 +20,7 @@ func NewBeaconsPostgresPersistence() *BeaconsPostgresPersistence {
 		IdentifiablePostgresPersistence: *cpersist.NewIdentifiablePostgresPersistence(proto, "beacons"),
 	}
 	// Row name must be in double quotes for properly case!!!
-	c.AutoCreateObject("CREATE TABLE beacons (\"id\" TEXT PRIMARY KEY, \"site_id\" TEXT, \"type\" TEXT, \"udi\" TEXT, \"label\" TEXT, \"center\" JSONB, \"radius\" REAL)")
+	c.AutoCreateObject("CREATE TABLE \"beacons\" (\"id\" TEXT PRIMARY KEY, \"site_id\" TEXT, \"type\" TEXT, \"udi\" TEXT, \"label\" TEXT, \"center\" JSONB, \"radius\" REAL)")
 	c.EnsureIndex("beacons_site_id", map[string]string{"site_id": "1"}, map[string]string{})
 	return c
 }
