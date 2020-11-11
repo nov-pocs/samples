@@ -10,41 +10,41 @@ import (
 )
 
 type BeaconsPersistenceFixture struct {
-	Beacon1     data1.BeaconV1
-	Beacon2     data1.BeaconV1
-	Beacon3     data1.BeaconV1
+	BEACON1     data1.BeaconV1
+	BEACON2     data1.BeaconV1
+	BEACON3     data1.BeaconV1
 	persistence persist.IBeaconsPersistence
 }
 
 func NewBeaconsPersistenceFixture(persistence persist.IBeaconsPersistence) *BeaconsPersistenceFixture {
 	c := BeaconsPersistenceFixture{}
 
-	c.Beacon1 = data1.BeaconV1{
+	c.BEACON1 = data1.BeaconV1{
 		Id:     "1",
 		Udi:    "00001",
 		Type:   data1.AltBeacon,
 		SiteId: "1",
-		Label:  "TestBeacon1",
+		Label:  "TestBEACON1",
 		Center: data1.GeoPointV1{Type: "Point", Coordinates: [][]float32{{0.0, 0.0}}},
 		Radius: 50,
 	}
 
-	c.Beacon2 = data1.BeaconV1{
+	c.BEACON2 = data1.BeaconV1{
 		Id:     "2",
 		Udi:    "00002",
 		Type:   data1.IBeacon,
 		SiteId: "1",
-		Label:  "TestBeacon2",
+		Label:  "TestBEACON2",
 		Center: data1.GeoPointV1{Type: "Point", Coordinates: [][]float32{{2.0, 2.0}}},
 		Radius: 70,
 	}
 
-	c.Beacon3 = data1.BeaconV1{
+	c.BEACON3 = data1.BeaconV1{
 		Id:     "3",
 		Udi:    "00003",
 		Type:   data1.AltBeacon,
 		SiteId: "2",
-		Label:  "TestBeacon3",
+		Label:  "TestBEACON3",
 		Center: data1.GeoPointV1{Type: "Point", Coordinates: [][]float32{{10.0, 10.0}}},
 		Radius: 50,
 	}
@@ -55,33 +55,33 @@ func NewBeaconsPersistenceFixture(persistence persist.IBeaconsPersistence) *Beac
 
 func (c *BeaconsPersistenceFixture) testCreateBeacons(t *testing.T) {
 	// Create the first beacon
-	beacon, err := c.persistence.Create("", &c.Beacon1)
+	beacon, err := c.persistence.Create("", &c.BEACON1)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.Beacon1.Udi, beacon.Udi)
-	assert.Equal(t, c.Beacon1.SiteId, beacon.SiteId)
-	assert.Equal(t, c.Beacon1.Type, beacon.Type)
-	assert.Equal(t, c.Beacon1.Label, beacon.Label)
+	assert.Equal(t, c.BEACON1.Udi, beacon.Udi)
+	assert.Equal(t, c.BEACON1.SiteId, beacon.SiteId)
+	assert.Equal(t, c.BEACON1.Type, beacon.Type)
+	assert.Equal(t, c.BEACON1.Label, beacon.Label)
 	assert.NotNil(t, beacon.Center)
 
 	// Create the second beacon
-	beacon, err = c.persistence.Create("", &c.Beacon2)
+	beacon, err = c.persistence.Create("", &c.BEACON2)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.Beacon2.Udi, beacon.Udi)
-	assert.Equal(t, c.Beacon2.SiteId, beacon.SiteId)
-	assert.Equal(t, c.Beacon2.Type, beacon.Type)
-	assert.Equal(t, c.Beacon2.Label, beacon.Label)
+	assert.Equal(t, c.BEACON2.Udi, beacon.Udi)
+	assert.Equal(t, c.BEACON2.SiteId, beacon.SiteId)
+	assert.Equal(t, c.BEACON2.Type, beacon.Type)
+	assert.Equal(t, c.BEACON2.Label, beacon.Label)
 	assert.NotNil(t, beacon.Center)
 
 	// Create the third beacon
-	beacon, err = c.persistence.Create("", &c.Beacon3)
+	beacon, err = c.persistence.Create("", &c.BEACON3)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.Beacon3.Udi, beacon.Udi)
-	assert.Equal(t, c.Beacon3.SiteId, beacon.SiteId)
-	assert.Equal(t, c.Beacon3.Type, beacon.Type)
-	assert.Equal(t, c.Beacon3.Label, beacon.Label)
+	assert.Equal(t, c.BEACON3.Udi, beacon.Udi)
+	assert.Equal(t, c.BEACON3.SiteId, beacon.SiteId)
+	assert.Equal(t, c.BEACON3.Type, beacon.Type)
+	assert.Equal(t, c.BEACON3.Label, beacon.Label)
 	assert.NotNil(t, beacon.Center)
 }
 
