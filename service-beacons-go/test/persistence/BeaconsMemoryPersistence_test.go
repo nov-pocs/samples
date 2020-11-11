@@ -7,7 +7,12 @@ import (
 	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
 )
 
-func TestBeaconsMemoryPersistence(t *testing.T) {
+type BeaconsMemoryPersistenceTest struct {
+	persistence *persist.BeaconsMemoryPersistence
+	fixture     *BeaconsPersistenceFixture
+}
+
+func newBeaconsMemoryPersistenceTest() *BeaconsMemoryPersistenceTest {
 	var persistence *persist.BeaconsMemoryPersistence
 	var fixture *BeaconsPersistenceFixture
 
@@ -15,12 +20,42 @@ func TestBeaconsMemoryPersistence(t *testing.T) {
 	persistence.Configure(cconf.NewEmptyConfigParams())
 	fixture = NewBeaconsPersistenceFixture(persistence)
 
-	persistence.Open("")
+	return &BeaconsMemoryPersistenceTest{
+		persistence: persistence,
+		fixture:     fixture,
+	}
+}
 
-	defer persistence.Close("")
+func (c *BeaconsMemoryPersistenceTest) setup(t *testing.T) {
+	err := c.persistence.Open("")
+	if err != nil {
+		t.Error("Failed to open persistence", err)
+	}
 
-	t.Run("BeaconsMemoryPersistence:CRUD Operations", fixture.TestCrudOperations)
+	err = c.persistence.Clear("")
+	if err != nil {
+		t.Error("Failed to clear persistence", err)
+	}
+}
 
-	persistence.Clear("")
-	t.Run("BeaconsMemoryPersistence:Get with Filters", fixture.TestGetWithFilters)
+func (c *BeaconsMemoryPersistenceTest) teardown(t *testing.T) {
+	err := c.persistence.Close("")
+	if err != nil {
+		t.Error("Failed to close persistence", err)
+	}
+}
+
+func TestBeaconsMemoryPersistence(t *testing.T) {
+	c := newBeaconsMemoryPersistenceTest()
+	if c == nil {
+		return
+	}
+
+	c.setup(t)
+	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
+	c.teardown(t)
+
+	c.setup(t)
+	t.Run("Get With Filters", c.fixture.TestGetWithFilters)
+	c.teardown(t)
 }

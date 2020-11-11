@@ -10,22 +10,21 @@ import (
 	cpersist "github.com/pip-services3-go/pip-services3-postgres-go/persistence"
 )
 
-type BeaconsPostgresPersistence struct {
-	cpersist.IdentifiablePostgresPersistence
+type BeaconsJsonPostgresPersistence struct {
+	cpersist.IdentifiableJsonPostgresPersistence
 }
 
-func NewBeaconsPostgresPersistence() *BeaconsPostgresPersistence {
+func NewBeaconsJsonPostgresPersistence() *BeaconsJsonPostgresPersistence {
 	proto := reflect.TypeOf(&data1.BeaconV1{})
-	c := &BeaconsPostgresPersistence{
-		IdentifiablePostgresPersistence: *cpersist.NewIdentifiablePostgresPersistence(proto, "beacons"),
+	c := &BeaconsJsonPostgresPersistence{
+		IdentifiableJsonPostgresPersistence: *cpersist.NewIdentifiableJsonPostgresPersistence(proto, "beacons_json"),
 	}
-	// Row name must be in double quotes for properly case!!!
-	c.AutoCreateObject("CREATE TABLE beacons (\"id\" TEXT PRIMARY KEY, \"site_id\" TEXT, \"type\" TEXT, \"udi\" TEXT, \"label\" TEXT, \"center\" JSONB, \"radius\" REAL)")
-	c.EnsureIndex("beacons_site_id", map[string]string{"site_id": "1"}, map[string]string{})
+	c.EnsureTable("VARCHAR(32)", "JSONB")
+	c.EnsureIndex("beacons_json_site_id", map[string]string{"(data->>'site_id')": "1"}, map[string]string{})
 	return c
 }
 
-func (c *BeaconsPostgresPersistence) composeFilter(filter *cdata.FilterParams) interface{} {
+func (c *BeaconsJsonPostgresPersistence) composeFilter(filter *cdata.FilterParams) interface{} {
 	if filter == nil {
 		filter = cdata.NewEmptyFilterParams()
 	}
@@ -34,29 +33,29 @@ func (c *BeaconsPostgresPersistence) composeFilter(filter *cdata.FilterParams) i
 
 	id := filter.GetAsString("id")
 	if id != "" {
-		criteria = append(criteria, "\"id\"='"+id+"'")
+		criteria = append(criteria, "data->>'id'='"+id+"'")
 	}
 
 	siteId := filter.GetAsString("site_id")
 	if siteId != "" {
-		criteria = append(criteria, "\"site_id\"='"+siteId+"'")
+		criteria = append(criteria, "data->>'site_id'='"+siteId+"'")
 	}
 
 	label := filter.GetAsString("label")
 	if label != "" {
-		criteria = append(criteria, "\"label\"='"+label+"'")
+		criteria = append(criteria, "data->>'label'='"+label+"'")
 	}
 
 	udi := filter.GetAsString("udi")
 	if udi != "" {
-		criteria = append(criteria, "\"udi\"='"+udi+"'")
+		criteria = append(criteria, "data->>'udi'='"+udi+"'")
 	}
 
 	udis := filter.GetAsString("udis")
 	if udis != "" {
 		udiValues := strings.Split(udis, ",")
 		if len(udiValues) > 1 {
-			condition := "\"udi\" IN ('" + strings.Join(udiValues, "','") + "')"
+			condition := "data->>'udi' IN ('" + strings.Join(udiValues, "','") + "')"
 			criteria = append(criteria, condition)
 		}
 	}
@@ -68,7 +67,7 @@ func (c *BeaconsPostgresPersistence) composeFilter(filter *cdata.FilterParams) i
 	return strings.Join(criteria, " AND ")
 }
 
-func (c *BeaconsPostgresPersistence) GetPageByFilter(correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (*data1.BeaconV1DataPage, error) {
+func (c *BeaconsJsonPostgresPersistence) GetPageByFilter(correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (*data1.BeaconV1DataPage, error) {
 	tempPage, err := c.IdentifiablePostgresPersistence.GetPageByFilter(correlationId, c.composeFilter(filter), paging, nil, nil)
 
 	// Convert to BeaconsV1Page
@@ -82,7 +81,7 @@ func (c *BeaconsPostgresPersistence) GetPageByFilter(correlationId string, filte
 	return page, err
 }
 
-func (c *BeaconsPostgresPersistence) GetOneById(correlationId string, id string) (*data1.BeaconV1, error) {
+func (c *BeaconsJsonPostgresPersistence) GetOneById(correlationId string, id string) (*data1.BeaconV1, error) {
 	result, err := c.IdentifiablePostgresPersistence.GetOneById(correlationId, id)
 
 	if result == nil || err != nil {
@@ -94,8 +93,8 @@ func (c *BeaconsPostgresPersistence) GetOneById(correlationId string, id string)
 	return item, err
 }
 
-func (c *BeaconsPostgresPersistence) GetOneByUdi(correlationId string, udi string) (*data1.BeaconV1, error) {
-	query := "SELECT * FROM " + c.QuoteIdentifier(c.TableName) + " WHERE \"udi\"=$1 LIMIT 1"
+func (c *BeaconsJsonPostgresPersistence) GetOneByUdi(correlationId string, udi string) (*data1.BeaconV1, error) {
+	query := "SELECT * FROM " + c.QuoteIdentifier(c.TableName) + " WHERE data->>'udi'=$1 LIMIT 1"
 
 	result, err := c.Client.Query(context.TODO(), query, udi)
 	if err != nil {
@@ -125,7 +124,7 @@ func (c *BeaconsPostgresPersistence) GetOneByUdi(correlationId string, udi strin
 	return item, nil
 }
 
-func (c *BeaconsPostgresPersistence) Create(correlationId string, item *data1.BeaconV1) (*data1.BeaconV1, error) {
+func (c *BeaconsJsonPostgresPersistence) Create(correlationId string, item *data1.BeaconV1) (*data1.BeaconV1, error) {
 	result, err := c.IdentifiablePostgresPersistence.Create(correlationId, item)
 
 	if result == nil || err != nil {
@@ -137,7 +136,7 @@ func (c *BeaconsPostgresPersistence) Create(correlationId string, item *data1.Be
 	return item, err
 }
 
-func (c *BeaconsPostgresPersistence) Update(correlationId string, item *data1.BeaconV1) (*data1.BeaconV1, error) {
+func (c *BeaconsJsonPostgresPersistence) Update(correlationId string, item *data1.BeaconV1) (*data1.BeaconV1, error) {
 	result, err := c.IdentifiablePostgresPersistence.Update(correlationId, item)
 
 	if result == nil || err != nil {
@@ -149,7 +148,7 @@ func (c *BeaconsPostgresPersistence) Update(correlationId string, item *data1.Be
 	return item, err
 }
 
-func (c *BeaconsPostgresPersistence) DeleteById(correlationId string, id string) (*data1.BeaconV1, error) {
+func (c *BeaconsJsonPostgresPersistence) DeleteById(correlationId string, id string) (*data1.BeaconV1, error) {
 	result, err := c.IdentifiablePostgresPersistence.DeleteById(correlationId, id)
 
 	if result == nil || err != nil {

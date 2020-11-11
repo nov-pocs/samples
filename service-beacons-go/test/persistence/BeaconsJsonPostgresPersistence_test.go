@@ -8,13 +8,13 @@ import (
 	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
 )
 
-type BeaconsPostgresPersistenceTest struct {
-	persistence *persist.BeaconsPostgresPersistence
+type BeaconsJsonPostgresPersistenceTest struct {
+	persistence *persist.BeaconsJsonPostgresPersistence
 	fixture     BeaconsPersistenceFixture
 }
 
-func newBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
-	var persistence *persist.BeaconsPostgresPersistence
+func newBeaconsJsonPostgresPersistenceTest() *BeaconsJsonPostgresPersistenceTest {
+	var persistence *persist.BeaconsJsonPostgresPersistence
 	var fixture BeaconsPersistenceFixture
 
 	postgresUri := os.Getenv("POSTGRES_URI")
@@ -55,17 +55,17 @@ func newBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
 		"credential.password", postgresPassword,
 	)
 
-	persistence = persist.NewBeaconsPostgresPersistence()
+	persistence = persist.NewBeaconsJsonPostgresPersistence()
 	fixture = *NewBeaconsPersistenceFixture(persistence)
 	persistence.Configure(dbConfig)
 
-	return &BeaconsPostgresPersistenceTest{
+	return &BeaconsJsonPostgresPersistenceTest{
 		persistence: persistence,
 		fixture:     fixture,
 	}
 }
 
-func (c *BeaconsPostgresPersistenceTest) setup(t *testing.T) {
+func (c *BeaconsJsonPostgresPersistenceTest) setup(t *testing.T) {
 	err := c.persistence.Open("")
 	if err != nil {
 		t.Error("Failed to open persistence", err)
@@ -77,15 +77,15 @@ func (c *BeaconsPostgresPersistenceTest) setup(t *testing.T) {
 	}
 }
 
-func (c *BeaconsPostgresPersistenceTest) teardown(t *testing.T) {
+func (c *BeaconsJsonPostgresPersistenceTest) teardown(t *testing.T) {
 	err := c.persistence.Close("")
 	if err != nil {
 		t.Error("Failed to close persistence", err)
 	}
 }
 
-func TestBeaconsPostgresPersistence(t *testing.T) {
-	c := newBeaconsPostgresPersistenceTest()
+func TestBeaconsJsonPostgresPersistence(t *testing.T) {
+	c := newBeaconsJsonPostgresPersistenceTest()
 	if c == nil {
 		return
 	}
