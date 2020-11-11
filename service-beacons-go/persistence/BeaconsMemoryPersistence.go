@@ -32,9 +32,9 @@ func (c *BeaconsMemoryPersistence) composeFilter(filter *cdata.FilterParams) fun
 	udi := filter.GetAsString("udi")
 	udis := filter.GetAsString("udis")
 
-	var arrUdis []string = make([]string, 0, 0)
+	var udiValues []string
 	if udis != "" {
-		arrUdis = strings.Split(udis, ",")
+		udiValues = strings.Split(udis, ",")
 	}
 
 	return func(beacon interface{}) bool {
@@ -54,7 +54,7 @@ func (c *BeaconsMemoryPersistence) composeFilter(filter *cdata.FilterParams) fun
 		if udi != "" && item.Udi != udi {
 			return false
 		}
-		if len(arrUdis) > 0 && strings.Index(udis, item.Udi) < 0 {
+		if len(udiValues) > 0 && strings.Index(udis, item.Udi) < 0 {
 			return false
 		}
 		return true

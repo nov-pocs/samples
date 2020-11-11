@@ -5,8 +5,8 @@ go 1.13
 require (
 	github.com/pip-services3-go/pip-services3-commons-go v1.0.2
 	github.com/pip-services3-go/pip-services3-data-go v1.0.5
-	github.com/pip-services3-go/pip-services3-mongodb-go v1.0.4
-	github.com/pip-templates/pip-templates-microservice-go v0.0.0-20201030152546-d3eeb6493349
+	github.com/pip-services3-go/pip-services3-postgres-go v1.0.0
 	github.com/stretchr/testify v1.6.1
-	go.mongodb.org/mongo-driver v1.4.3
+	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
