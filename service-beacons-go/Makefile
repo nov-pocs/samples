@@ -17,7 +17,7 @@ test: env go.sum
 	@go test -v ./test/...
 
 protogen: env go.sum
-	protoc --go_out=plugins=grpc:. protos/beacons_v1.proto
+	./protogen.ps1
 
 docgen: env go.sum
-	gold -gen -nouses -dir=docs -emphasize-wdpkgs ./...
+	./docgen.ps1

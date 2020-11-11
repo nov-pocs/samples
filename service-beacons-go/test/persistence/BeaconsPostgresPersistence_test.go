@@ -13,7 +13,7 @@ type BeaconsPostgresPersistenceTest struct {
 	fixture     BeaconsPersistenceFixture
 }
 
-func newBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
+func NewBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
 	var persistence *persist.BeaconsPostgresPersistence
 	var fixture BeaconsPersistenceFixture
 
@@ -65,7 +65,7 @@ func newBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
 	}
 }
 
-func (c *BeaconsPostgresPersistenceTest) setup(t *testing.T) {
+func (c *BeaconsPostgresPersistenceTest) Setup(t *testing.T) {
 	err := c.persistence.Open("")
 	if err != nil {
 		t.Error("Failed to open persistence", err)
@@ -77,7 +77,7 @@ func (c *BeaconsPostgresPersistenceTest) setup(t *testing.T) {
 	}
 }
 
-func (c *BeaconsPostgresPersistenceTest) teardown(t *testing.T) {
+func (c *BeaconsPostgresPersistenceTest) Teardown(t *testing.T) {
 	err := c.persistence.Close("")
 	if err != nil {
 		t.Error("Failed to close persistence", err)
@@ -85,16 +85,16 @@ func (c *BeaconsPostgresPersistenceTest) teardown(t *testing.T) {
 }
 
 func TestBeaconsPostgresPersistence(t *testing.T) {
-	c := newBeaconsPostgresPersistenceTest()
+	c := NewBeaconsPostgresPersistenceTest()
 	if c == nil {
 		return
 	}
 
-	c.setup(t)
+	c.Setup(t)
 	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
-	c.teardown(t)
+	c.Teardown(t)
 
-	c.setup(t)
+	c.Setup(t)
 	t.Run("Get With Filters", c.fixture.TestGetWithFilters)
-	c.teardown(t)
+	c.Teardown(t)
 }

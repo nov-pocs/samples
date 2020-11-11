@@ -12,7 +12,7 @@ type BeaconsFilePersistenceTest struct {
 	fixture     *BeaconsPersistenceFixture
 }
 
-func newBeaconsFilePersistenceTest() *BeaconsFilePersistenceTest {
+func NewBeaconsFilePersistenceTest() *BeaconsFilePersistenceTest {
 	var persistence *persist.BeaconsFilePersistence
 	var fixture *BeaconsPersistenceFixture
 
@@ -26,7 +26,7 @@ func newBeaconsFilePersistenceTest() *BeaconsFilePersistenceTest {
 	}
 }
 
-func (c *BeaconsFilePersistenceTest) setup(t *testing.T) {
+func (c *BeaconsFilePersistenceTest) Setup(t *testing.T) {
 	err := c.persistence.Open("")
 	if err != nil {
 		t.Error("Failed to open persistence", err)
@@ -38,7 +38,7 @@ func (c *BeaconsFilePersistenceTest) setup(t *testing.T) {
 	}
 }
 
-func (c *BeaconsFilePersistenceTest) teardown(t *testing.T) {
+func (c *BeaconsFilePersistenceTest) Teardown(t *testing.T) {
 	err := c.persistence.Close("")
 	if err != nil {
 		t.Error("Failed to close persistence", err)
@@ -46,16 +46,16 @@ func (c *BeaconsFilePersistenceTest) teardown(t *testing.T) {
 }
 
 func TestBeaconsFilePersistence(t *testing.T) {
-	c := newBeaconsFilePersistenceTest()
+	c := NewBeaconsFilePersistenceTest()
 	if c == nil {
 		return
 	}
 
-	c.setup(t)
+	c.Setup(t)
 	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
-	c.teardown(t)
+	c.Teardown(t)
 
-	c.setup(t)
+	c.Setup(t)
 	t.Run("Get With Filters", c.fixture.TestGetWithFilters)
-	c.teardown(t)
+	c.Teardown(t)
 }
