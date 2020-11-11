@@ -17,13 +17,13 @@ func newBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
 	var persistence *persist.BeaconsPostgresPersistence
 	var fixture BeaconsPersistenceFixture
 
-	postgresUri := os.Getenv("POSTGRES_URI")
-	postgresHost := os.Getenv("POSTGRES_HOST")
+	postgresUri := os.Getenv("POSTGRES_SERVICE_URI")
+	postgresHost := os.Getenv("POSTGRES_SERVICE_HOST")
 	if postgresHost == "" {
 		postgresHost = "localhost"
 	}
 
-	postgresPort := os.Getenv("POSTGRES_PORT")
+	postgresPort := os.Getenv("POSTGRES_SERVICE_PORT")
 	if postgresPort == "" {
 		postgresPort = "5432"
 	}
