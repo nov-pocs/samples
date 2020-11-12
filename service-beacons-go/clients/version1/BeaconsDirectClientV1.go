@@ -2,6 +2,7 @@ package clients1
 
 import (
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
+	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	clients "github.com/pip-services3-go/pip-services3-rpc-go/clients"
@@ -9,7 +10,7 @@ import (
 
 type BeaconsDirectClientV1 struct {
 	clients.DirectClient
-	controller IBeaconsClientV1
+	controller logic.IBeaconsController
 }
 
 func NewBeaconsDirectClientV1() *BeaconsDirectClientV1 {
@@ -23,7 +24,7 @@ func NewBeaconsDirectClientV1() *BeaconsDirectClientV1 {
 func (c *BeaconsDirectClientV1) SetReferences(references cref.IReferences) {
 	c.DirectClient.SetReferences(references)
 
-	controller, ok := c.Controller.(IBeaconsClientV1)
+	controller, ok := c.Controller.(logic.IBeaconsController)
 	if !ok {
 		panic("BeaconsDirectClientV1: Cant't resolv dependency 'controller' to IBeaconsClientV1")
 	}

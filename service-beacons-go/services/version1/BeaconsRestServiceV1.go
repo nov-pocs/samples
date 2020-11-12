@@ -18,15 +18,13 @@ import (
 
 type BeaconsRestServiceV1 struct {
 	*cservices.RestService
-	controller    logic.IBeaconsController
-	numberOfCalls int
+	controller logic.IBeaconsController
 }
 
 func NewBeaconsRestServiceV1() *BeaconsRestServiceV1 {
 	c := &BeaconsRestServiceV1{}
 	c.RestService = cservices.NewRestService()
 	c.RestService.IRegisterable = c
-	c.numberOfCalls = 0
 	c.BaseRoute = "v1/beacons"
 	c.DependencyResolver.Put("controller", crefer.NewDescriptor("beacons", "controller", "default", "*", "*"))
 	return c

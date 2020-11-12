@@ -19,7 +19,7 @@ type beaconsRestClientV1Test struct {
 	fixture     *BeaconsClientV1Fixture
 }
 
-func newbeaconsRestClientV1Test() *beaconsRestClientV1Test {
+func newBeaconsRestClientV1Test() *beaconsRestClientV1Test {
 	persistence := persist.NewBeaconsMemoryPersistence()
 	persistence.Configure(cconf.NewEmptyConfigParams())
 
@@ -99,7 +99,7 @@ func (c *beaconsRestClientV1Test) teardown(t *testing.T) {
 }
 
 func TestBeaconsRestClientV1(t *testing.T) {
-	c := newbeaconsRestClientV1Test()
+	c := newBeaconsRestClientV1Test()
 
 	c.setup(t)
 	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
