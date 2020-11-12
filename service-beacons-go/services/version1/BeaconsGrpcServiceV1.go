@@ -2,9 +2,7 @@ package services1
 
 import (
 	"context"
-	"encoding/json"
 
-	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
 	protos "github.com/nov-pocs/samples/service-beacons-go/protos"
 	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
@@ -51,22 +49,22 @@ func (c *BeaconsGrpcServiceV1) GetBeacons(
 	if req.Paging != nil {
 		paging = cdata.NewPagingParams(req.Paging.GetSkip(), req.Paging.GetTake(), req.Paging.GetTotal())
 	}
-	data, err := c.controller.GetBeacons(
+	page, err := c.controller.GetBeacons(
 		req.CorrelationId,
 		filter,
 		paging,
 	)
-	if err != nil || data == nil {
-		return nil, err
+
+	result := protos.BeaconV1PageReply{
+		Page: &protos.BeaconV1Page{},
 	}
 
-	result := protos.BeaconV1PageReply{}
-	result.Page.Total = *data.Total
-	for _, v := range data.Data {
-		buf := protos.BeaconV1{}
-		bytes, _ := json.Marshal(v)
-		json.Unmarshal(bytes, &buf)
-		result.Page.Data = append(result.Page.Data, &buf)
+	if page.Total != nil {
+		result.Page.Total = *page.Total
+	}
+	for _, v := range page.Data {
+		buf := FromBeacon(v)
+		result.Page.Data = append(result.Page.Data, buf)
 	}
 	return &result, err
 }
@@ -77,36 +75,26 @@ func (c *BeaconsGrpcServiceV1) GetBeaconById(
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("BeaconId", cconv.String)
 
-	validateErr := Schema.ValidateAndReturnError("", *req, false)
+	vErr := Schema.ValidateAndReturnError("", *req, false)
+	result := protos.BeaconV1ObjectReply{}
 
-	if validateErr != nil {
-		return nil, validateErr
+	if vErr != nil {
+		result.Error = FromError(vErr)
+		return &result, vErr
 	}
 
-	data, err := c.controller.GetBeaconById(
+	beacon, err := c.controller.GetBeaconById(
 		req.CorrelationId,
 		req.BeaconId,
 	)
-	if err != nil {
-		return nil, err
-	}
-	result := protos.BeaconV1ObjectReply{}
-	bytes, _ := json.Marshal(data)
-	json.Unmarshal(bytes, &result)
-	return &result, nil
+
+	result.Error = FromError(err)
+	result.Beacon = FromBeacon(beacon)
+	return &result, err
 }
 
 func (c *BeaconsGrpcServiceV1) CreateBeacon(
 	ctx context.Context, req *protos.BeaconV1ObjectRequest) (*protos.BeaconV1ObjectReply, error) {
-
-	Schema := cvalid.NewObjectSchema().
-		WithRequiredProperty("Beacon", data1.NewBeaconV1Schema())
-
-	validateErr := Schema.ValidateAndReturnError("", *req, false)
-
-	if validateErr != nil {
-		return nil, validateErr
-	}
 
 	beacon := ToBeacon(req.Beacon)
 
@@ -125,15 +113,6 @@ func (c *BeaconsGrpcServiceV1) CreateBeacon(
 
 func (c *BeaconsGrpcServiceV1) UpdateBeacon(
 	ctx context.Context, req *protos.BeaconV1ObjectRequest) (*protos.BeaconV1ObjectReply, error) {
-
-	Schema := cvalid.NewObjectSchema().
-		WithRequiredProperty("Beacon", data1.NewBeaconV1Schema())
-
-	validateErr := Schema.ValidateAndReturnError("", *req, false)
-
-	if validateErr != nil {
-		return nil, validateErr
-	}
 
 	beacon := ToBeacon(req.Beacon)
 	data, err := c.controller.UpdateBeacon(
@@ -154,17 +133,19 @@ func (c *BeaconsGrpcServiceV1) DeleteBeaconById(
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("BeaconId", cconv.String)
 
-	validateErr := Schema.ValidateAndReturnError("", *req, false)
+	vErr := Schema.ValidateAndReturnError("", *req, false)
+	result := protos.BeaconV1ObjectReply{}
 
-	if validateErr != nil {
-		return nil, validateErr
+	if vErr != nil {
+		result.Error = FromError(vErr)
+		return &result, vErr
 	}
 
 	beacon, err := c.controller.DeleteBeaconById(
 		req.CorrelationId,
 		req.BeaconId,
 	)
-	result := protos.BeaconV1ObjectReply{}
+
 	result.Error = FromError(err)
 	result.Beacon = FromBeacon(beacon)
 	return &result, err
@@ -174,19 +155,21 @@ func (c *BeaconsGrpcServiceV1) GetBeaconByUdi(
 	ctx context.Context, req *protos.BeaconV1UdiRequest) (*protos.BeaconV1ObjectReply, error) {
 
 	Schema := cvalid.NewObjectSchema().
-		WithRequiredProperty("BeaconId", cconv.String)
+		WithRequiredProperty("BeaconUdi", cconv.String)
 
-	validateErr := Schema.ValidateAndReturnError("", *req, false)
+	vErr := Schema.ValidateAndReturnError("", *req, false)
+	result := protos.BeaconV1ObjectReply{}
 
-	if validateErr != nil {
-		return nil, validateErr
+	if vErr != nil {
+		result.Error = FromError(vErr)
+		return &result, vErr
 	}
 
 	beacon, err := c.controller.GetBeaconByUdi(
 		req.CorrelationId,
 		req.BeaconUdi,
 	)
-	result := protos.BeaconV1ObjectReply{}
+
 	result.Error = FromError(err)
 	result.Beacon = FromBeacon(beacon)
 	return &result, err
@@ -199,10 +182,12 @@ func (c *BeaconsGrpcServiceV1) CalculatePosition(
 		WithRequiredProperty("SiteId", cconv.String).
 		WithRequiredProperty("Udis", cvalid.NewArraySchema(cconv.String))
 
-	validateErr := Schema.ValidateAndReturnError("", *req, false)
+	vErr := Schema.ValidateAndReturnError("", *req, false)
+	result := protos.BeaconV1PositionReply{}
 
-	if validateErr != nil {
-		return nil, validateErr
+	if vErr != nil {
+		result.Error = FromError(vErr)
+		return &result, vErr
 	}
 
 	position, err := c.controller.CalculatePosition(
@@ -210,9 +195,9 @@ func (c *BeaconsGrpcServiceV1) CalculatePosition(
 		req.SiteId,
 		req.Udis,
 	)
-	result := protos.BeaconV1PositionReply{}
+
 	result.Error = FromError(err)
-	result.Coordinates = FromPosition(position)
+	result.Point = FromPosition(position)
 	return &result, err
 }
 

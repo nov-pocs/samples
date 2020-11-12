@@ -121,5 +121,5 @@ message BeaconV1ObjectReply {
 //  The response message containing the geo point object response
 message BeaconV1PositionReply {
     ErrorDescription error = 1;
-    GeoPointV1 coordinates = 2;
+    GeoPointV1 point = 2;
 }

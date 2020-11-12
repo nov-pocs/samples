@@ -103,13 +103,14 @@ func FromBeacon(item *data1.BeaconV1) *protos.BeaconV1 {
 	beacon.Label = item.Label
 	beacon.Center = &protos.GeoPointV1{}
 	beacon.Center.Type = item.Center.Type
-
-	for _, row := range item.Center.Coordinates {
-		i := protos.InternalArray{}
-		for _, val := range row {
-			i.InternalArray = append(i.InternalArray, val)
+	if item.Center.Coordinates != nil {
+		for _, row := range item.Center.Coordinates {
+			i := protos.InternalArray{}
+			for _, val := range row {
+				i.InternalArray = append(i.InternalArray, val)
+			}
+			beacon.Center.Coordinates = append(beacon.Center.Coordinates, &i)
 		}
-		beacon.Center.Coordinates = append(beacon.Center.Coordinates, &i)
 	}
 	return &beacon
 }
@@ -127,17 +128,22 @@ func ToBeacon(item *protos.BeaconV1) *data1.BeaconV1 {
 	beacon.SiteId = item.SiteId
 	beacon.Radius = item.Radius
 	beacon.Label = item.Label
-	beacon.Center = data1.GeoPointV1{}
-	beacon.Center.Type = item.Center.Type
-	for x, row := range item.Center.Coordinates {
-		for y, val := range row.InternalArray {
-			beacon.Center.Coordinates[x][y] = val
+	if item.Center != nil {
+		beacon.Center = data1.GeoPointV1{}
+		beacon.Center.Type = item.Center.Type
+		beacon.Center.Coordinates = make([][]float32, len(item.Center.Coordinates))
+		for x, row := range item.Center.Coordinates {
+			beacon.Center.Coordinates[x] = row.InternalArray
 		}
 	}
 	return &beacon
 }
 
 func FromPosition(item *data1.GeoPointV1) *protos.GeoPointV1 {
+
+	if item == nil {
+		return nil
+	}
 
 	point := protos.GeoPointV1{}
 	point.Type = item.Type
@@ -148,6 +154,23 @@ func FromPosition(item *data1.GeoPointV1) *protos.GeoPointV1 {
 			i.InternalArray = append(i.InternalArray, val)
 		}
 		point.Coordinates = append(point.Coordinates, &i)
+	}
+	return &point
+}
+
+func ToPosition(item *protos.GeoPointV1) *data1.GeoPointV1 {
+
+	if item == nil {
+		return nil
+	}
+
+	point := data1.GeoPointV1{}
+	point.Type = item.Type
+
+	point.Type = item.Type
+	point.Coordinates = make([][]float32, len(item.Coordinates))
+	for x, row := range item.Coordinates {
+		point.Coordinates[x] = row.InternalArray
 	}
 	return &point
 }
