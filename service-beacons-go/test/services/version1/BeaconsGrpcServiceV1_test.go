@@ -128,12 +128,12 @@ func (c *beaconsGrpcServiceV1Test) testCrudOperations(t *testing.T) {
 	var beacon1 *data1.BeaconV1
 
 	// Create beacon
-	var beacon data1.BeaconV1
+	var beacon *data1.BeaconV1
 	request := protos.BeaconV1ObjectRequest{
 		Beacon: services1.FromBeacon(c.BEACON1),
 	}
 	result, err := c.client.CreateBeacon(context.TODO(), &request)
-	beacon = *services1.ToBeacon(result.Beacon)
+	beacon = services1.ToBeacon(result.Beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Udi, beacon.Udi)
@@ -147,7 +147,7 @@ func (c *beaconsGrpcServiceV1Test) testCrudOperations(t *testing.T) {
 		Beacon: services1.FromBeacon(c.BEACON2),
 	}
 	result, err = c.client.CreateBeacon(context.TODO(), &request)
-	beacon = *services1.ToBeacon(result.Beacon)
+	beacon = services1.ToBeacon(result.Beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON2.Udi, beacon.Udi)
@@ -170,7 +170,7 @@ func (c *beaconsGrpcServiceV1Test) testCrudOperations(t *testing.T) {
 		Beacon: services1.FromBeacon(beacon1),
 	}
 	result, err = c.client.UpdateBeacon(context.TODO(), &request)
-	beacon = *services1.ToBeacon(result.Beacon)
+	beacon = services1.ToBeacon(result.Beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Id, beacon.Id)
@@ -181,7 +181,7 @@ func (c *beaconsGrpcServiceV1Test) testCrudOperations(t *testing.T) {
 		BeaconUdi: beacon1.Udi,
 	}
 	result, err = c.client.GetBeaconByUdi(context.TODO(), &udiRequest)
-	beacon = *services1.ToBeacon(result.Beacon)
+	beacon = services1.ToBeacon(result.Beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Id, beacon.Id)
@@ -205,15 +205,16 @@ func (c *beaconsGrpcServiceV1Test) testCrudOperations(t *testing.T) {
 		BeaconId: beacon1.Id,
 	}
 	result, err = c.client.DeleteBeaconById(context.TODO(), &delRequest)
-	beacon = *services1.ToBeacon(result.Beacon)
+	beacon = services1.ToBeacon(result.Beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Id, beacon.Id)
 
 	// Try get beacon
 	result, err = c.client.GetBeaconById(context.TODO(), &delRequest)
+	beacon = services1.ToBeacon(result.Beacon)
 	assert.Nil(t, err)
-	assert.Nil(t, services1.ToBeacon(result.Beacon))
+	assert.Nil(t, beacon)
 }
 
 func TestBeaconsGrpcServiceV1(t *testing.T) {
