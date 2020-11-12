@@ -10,16 +10,16 @@ import (
 )
 
 type BeaconsPersistenceFixture struct {
-	BEACON1     data1.BeaconV1
-	BEACON2     data1.BeaconV1
-	BEACON3     data1.BeaconV1
+	BEACON1     *data1.BeaconV1
+	BEACON2     *data1.BeaconV1
+	BEACON3     *data1.BeaconV1
 	persistence persist.IBeaconsPersistence
 }
 
 func NewBeaconsPersistenceFixture(persistence persist.IBeaconsPersistence) *BeaconsPersistenceFixture {
 	c := BeaconsPersistenceFixture{}
 
-	c.BEACON1 = data1.BeaconV1{
+	c.BEACON1 = &data1.BeaconV1{
 		Id:     "1",
 		Udi:    "00001",
 		Type:   data1.AltBeacon,
@@ -29,7 +29,7 @@ func NewBeaconsPersistenceFixture(persistence persist.IBeaconsPersistence) *Beac
 		Radius: 50,
 	}
 
-	c.BEACON2 = data1.BeaconV1{
+	c.BEACON2 = &data1.BeaconV1{
 		Id:     "2",
 		Udi:    "00002",
 		Type:   data1.IBeacon,
@@ -39,7 +39,7 @@ func NewBeaconsPersistenceFixture(persistence persist.IBeaconsPersistence) *Beac
 		Radius: 70,
 	}
 
-	c.BEACON3 = data1.BeaconV1{
+	c.BEACON3 = &data1.BeaconV1{
 		Id:     "3",
 		Udi:    "00003",
 		Type:   data1.AltBeacon,
@@ -55,7 +55,7 @@ func NewBeaconsPersistenceFixture(persistence persist.IBeaconsPersistence) *Beac
 
 func (c *BeaconsPersistenceFixture) testCreateBeacons(t *testing.T) {
 	// Create the first beacon
-	beacon, err := c.persistence.Create("", &c.BEACON1)
+	beacon, err := c.persistence.Create("", c.BEACON1)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Udi, beacon.Udi)
@@ -65,7 +65,7 @@ func (c *BeaconsPersistenceFixture) testCreateBeacons(t *testing.T) {
 	assert.NotNil(t, beacon.Center)
 
 	// Create the second beacon
-	beacon, err = c.persistence.Create("", &c.BEACON2)
+	beacon, err = c.persistence.Create("", c.BEACON2)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON2.Udi, beacon.Udi)
@@ -75,7 +75,7 @@ func (c *BeaconsPersistenceFixture) testCreateBeacons(t *testing.T) {
 	assert.NotNil(t, beacon.Center)
 
 	// Create the third beacon
-	beacon, err = c.persistence.Create("", &c.BEACON3)
+	beacon, err = c.persistence.Create("", c.BEACON3)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON3.Udi, beacon.Udi)

@@ -1,0 +1,73 @@
+---
+# Container descriptor
+- descriptor: "pip-services:context-info:default:default:1.0"
+  name: "beacons"
+  description: "Beacons microservice"
+
+# Console logger
+- descriptor: "pip-services:logger:console:default:1.0"
+  level: "trace"
+
+# Perfomance counter that post values to log
+- descriptor: "pip-services:counters:log:default:1.0"
+
+{{#unless MEMORY_ENABLED}}{{#unless FILE_ENABLED}}{{#unless POSTGRES_ENABLED}}
+# Default in-memory persistence
+- descriptor: "beacons:persistence:memory:default:1.0"
+{{/unless}}{{/unless}}{{/unless}}
+
+{{#if FILE_ENABLED}}
+# File persistence
+- descriptor: "beacons:persistence:file:default:1.0"
+  path: {{FILE_PATH}}{{#unless FILE_PATH}}"./temp/beacons.json"{{/unless}}
+{{/if}}
+    
+{{#if POSTGRES_ENABLED}}
+# PostreSQL Persistence
+- descriptor: "beacons:persistence:postgres:default:1.0"
+  table: {{POSTGRES_TABLE}}{{#unless POSTGRES_TABLE}}id_records{{/unless}}
+  connection:
+    uri: {{{POSTGRES_SERVICE_URI}}}
+    host: {{{POSTGRES_SERVICE_HOST}}}{{#unless POSTGRES_SERVICE_HOST}}localhost{{/unless}}
+    port: {{POSTGRES_SERVICE_PORT}}{{#unless POSTGRES_SERVICE_PORT}}5432{{/unless}}
+    database: {{POSTGRES_DB}}{{#unless POSTGRES_DB}}app{{/unless}}
+  credential:
+    username: {{POSTGRES_USER}}
+    password: {{POSTGRES_PASS}}
+{{/if}}
+    
+# Controller
+- descriptor: "beacons:controller:default:default:1.0"
+
+{{#if HTTP_ENABLED}}
+# Shared HTTP Endpoint
+- descriptor: "pip-services:endpoint:http:default:1.0"
+  connection:
+    protocol: http
+    host: 0.0.0.0
+    port: {{HTTP_PORT}}{{#unless HTTP_PORT}}8080{{/unless}}
+
+# HTTP Service V1
+- descriptor: "beacons:service:commandable-http:default:1.0"
+
+# Hearbeat service
+- descriptor: "pip-services:heartbeat-service:http:default:1.0"
+
+# Status service
+- descriptor: "pip-services:status-service:http:default:1.0"  
+{{/if}}
+
+{{#if GRPC_ENABLED}}
+# Shared GRPC endpoint
+- descriptor: "pip-services:endpoint:grpc:default:1.0"
+  connection:
+    protocol: "http"
+    host: "0.0.0.0"
+    port: {{GRPC_PORT}}{{#unless GRPC_PORT}}8090{{/unless}}
+
+# GRPC endpoint version 1.0
+- descriptor: "beacons:service:grpc:default:1.0"
+
+# Commandable GRPC endpoint version 1.0
+- descriptor: "beacons:service:commandable-grpc:command:1.0"
+{{/if}}
