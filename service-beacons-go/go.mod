@@ -11,9 +11,9 @@ require (
 	github.com/pip-services3-go/pip-services3-components-go v1.0.2
 	github.com/pip-services3-go/pip-services3-container-go v1.0.0
 	github.com/pip-services3-go/pip-services3-data-go v1.0.6
-	github.com/pip-services3-go/pip-services3-grpc-go v1.0.2
-	github.com/pip-services3-go/pip-services3-postgres-go v1.0.0
-	github.com/pip-services3-go/pip-services3-rpc-go v1.0.2
+	github.com/pip-services3-go/pip-services3-grpc-go v1.0.3
+	github.com/pip-services3-go/pip-services3-postgres-go v1.0.1
+	github.com/pip-services3-go/pip-services3-rpc-go v1.0.3
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect

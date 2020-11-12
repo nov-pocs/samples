@@ -108,12 +108,7 @@ func (c *BeaconsPostgresPersistence) GetOneByUdi(correlationId string, udi strin
 		return nil, result.Err()
 	}
 
-	rows, err1 := result.Values()
-	if err1 != nil || len(rows) == 0 {
-		return nil, err1
-	}
-
-	val := c.ConvertFromRows(result.FieldDescriptions(), rows)
+	val := c.ConvertToPublic(result)
 	item, _ := val.(*data1.BeaconV1)
 
 	if item == nil {

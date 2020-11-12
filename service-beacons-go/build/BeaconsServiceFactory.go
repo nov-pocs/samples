@@ -24,6 +24,7 @@ func NewBeaconsServiceFactory() *BeaconsServiceFactory {
 	controllerDescriptor := cref.NewDescriptor("beacons", "controller", "default", "*", "1.0")
 	cmdHttpServiceV1Descriptor := cref.NewDescriptor("beacons", "service", "commandable-http", "*", "1.0")
 	cmdGrpcServiceV1Descriptor := cref.NewDescriptor("beacons", "service", "commandable-grpc", "*", "1.0")
+	httpServiceV1Descriptor := cref.NewDescriptor("beacons", "service", "http", "*", "1.0")
 
 	c.RegisterType(memoryPersistenceDescriptor, persist.NewBeaconsMemoryPersistence)
 	c.RegisterType(filePersistenceDescriptor, persist.NewBeaconsFilePersistence)
@@ -33,6 +34,7 @@ func NewBeaconsServiceFactory() *BeaconsServiceFactory {
 	c.RegisterType(controllerDescriptor, logic.NewBeaconsController)
 	c.RegisterType(cmdHttpServiceV1Descriptor, services1.NewBeaconsCommandableHttpServiceV1)
 	c.RegisterType(cmdGrpcServiceV1Descriptor, services1.NewBeaconsCommandableGrpcServiceV1)
+	c.RegisterType(httpServiceV1Descriptor, services1.NewBeaconsRestServiceV1)
 
 	return c
 }

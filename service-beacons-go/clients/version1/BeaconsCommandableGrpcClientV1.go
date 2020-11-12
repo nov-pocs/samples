@@ -31,7 +31,7 @@ func (c *BeaconsCommandableGrpcClientV1) GetBeacons(
 	c.AddFilterParams(params, filter)
 	c.AddPagingParams(params, paging)
 
-	res, err := c.CallCommand(c.beaconV1DataPageType, "get_beacons", correlationId, params)
+	res, err := c.CallCommand(c.beaconV1DataPageType, "get_beacons", correlationId, cdata.NewAnyValueMapFromValue(params.Value()))
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (c *BeaconsCommandableGrpcClientV1) GetBeacons(
 
 func (c *BeaconsCommandableGrpcClientV1) GetBeaconById(
 	correlationId string, beaconId string) (*data1.BeaconV1, error) {
-	params := cdata.NewStringValueMapFromTuples(
+	params := cdata.NewAnyValueMapFromTuples(
 		"beacon_id", beaconId,
 	)
 
@@ -57,7 +57,7 @@ func (c *BeaconsCommandableGrpcClientV1) GetBeaconById(
 
 func (c *BeaconsCommandableGrpcClientV1) GetBeaconByUdi(
 	correlationId string, udi string) (*data1.BeaconV1, error) {
-	params := cdata.NewStringValueMapFromTuples(
+	params := cdata.NewAnyValueMapFromTuples(
 		"udi", udi,
 	)
 
@@ -118,7 +118,7 @@ func (c *BeaconsCommandableGrpcClientV1) UpdateBeacon(
 
 func (c *BeaconsCommandableGrpcClientV1) DeleteBeaconById(
 	correlationId string, beaconId string) (*data1.BeaconV1, error) {
-	params := cdata.NewStringValueMapFromTuples(
+	params := cdata.NewAnyValueMapFromTuples(
 		"beacon_id", beaconId,
 	)
 

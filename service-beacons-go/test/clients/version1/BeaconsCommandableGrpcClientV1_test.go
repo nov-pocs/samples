@@ -99,13 +99,13 @@ func (c *beaconsCommandableGrpcClientV1Test) teardown(t *testing.T) {
 }
 
 func TestBeaconsCommandableGrpcClientV1(t *testing.T) {
-	// c := newBeaconsCommandableGrpcClientV1Test()
+	c := newBeaconsCommandableGrpcClientV1Test()
 
-	// c.setup(t)
-	// t.Run("CRUD Operations", c.fixture.TestCrudOperations)
-	// c.teardown(t)
+	c.setup(t)
+	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
+	c.teardown(t)
 
-	// c.setup(t)
-	// t.Run("Calculate Positions", c.fixture.TestCalculatePosition)
-	// c.teardown(t)
+	c.setup(t)
+	t.Run("Calculate Positions", c.fixture.TestCalculatePosition)
+	c.teardown(t)
 }

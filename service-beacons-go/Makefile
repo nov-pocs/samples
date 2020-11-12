@@ -14,7 +14,7 @@ run: env go.sum
 	@go run ./bin/run.go
 
 test: env go.sum
-	@go test -v ./test/...
+	@go clean -testcache && go test -v ./test/...
 
 protogen: env go.sum
 	protoc --go_out=plugins=grpc:. protos/beacons_v1.proto
