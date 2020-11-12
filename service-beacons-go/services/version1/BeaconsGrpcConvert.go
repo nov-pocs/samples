@@ -174,3 +174,18 @@ func ToPosition(item *protos.GeoPointV1) *data1.GeoPointV1 {
 	}
 	return &point
 }
+
+func ToBeaconPage(obj *protos.BeaconV1Page) *data1.BeaconV1DataPage {
+	if obj == nil {
+		return nil
+	}
+
+	beacons := make([]*data1.BeaconV1, len(obj.Data))
+	for i, v := range obj.Data {
+		beacons[i] = ToBeacon(v)
+	}
+
+	total := obj.Total
+	page := data1.NewBeaconV1DataPage(&total, beacons)
+	return page
+}
