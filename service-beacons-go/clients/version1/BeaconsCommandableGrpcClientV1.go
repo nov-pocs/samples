@@ -26,12 +26,15 @@ func NewBeaconsCommandableGrpcClientV1() *BeaconsCommandableGrpcClientV1 {
 }
 
 func (c *BeaconsCommandableGrpcClientV1) GetBeacons(
-	correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (*data1.BeaconV1DataPage, error) {
-	params := cdata.NewEmptyStringValueMap()
-	c.AddFilterParams(params, filter)
-	c.AddPagingParams(params, paging)
+	correlationId string, filter *cdata.FilterParams,
+	paging *cdata.PagingParams) (*data1.BeaconV1DataPage, error) {
 
-	res, err := c.CallCommand(c.beaconV1DataPageType, "get_beacons", correlationId, cdata.NewAnyValueMapFromValue(params.Value()))
+	params := cdata.NewAnyValueMapFromTuples(
+		"filter", filter,
+		"paging", paging,
+	)
+
+	res, err := c.CallCommand(c.beaconV1DataPageType, "get_beacons", correlationId, params)
 	if err != nil {
 		return nil, err
 	}

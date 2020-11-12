@@ -35,6 +35,7 @@ func (c *BeaconsDirectClientV1) GetBeacons(
 	timing := c.Instrument(correlationId, "beacons.get_beacons")
 	result, err := c.controller.GetBeacons(correlationId, filter, paging)
 	timing.EndTiming()
+	c.InstrumentError(correlationId, "beacons.get_beacons", err, result)
 	return result, err
 }
 
@@ -43,6 +44,7 @@ func (c *BeaconsDirectClientV1) GetBeaconById(
 	timing := c.Instrument(correlationId, "beacons.get_beacon_by_id")
 	result, err := c.controller.GetBeaconById(correlationId, beaconId)
 	timing.EndTiming()
+	c.InstrumentError(correlationId, "beacons.get_beacon_by_id", err, result)
 	return result, err
 }
 
@@ -51,6 +53,7 @@ func (c *BeaconsDirectClientV1) GetBeaconByUdi(
 	timing := c.Instrument(correlationId, "beacons.get_beacon_by_udi")
 	result, err := c.controller.GetBeaconByUdi(correlationId, udi)
 	timing.EndTiming()
+	c.InstrumentError(correlationId, "beacons.get_beacon_by_udi", err, result)
 	return result, err
 }
 
@@ -59,6 +62,7 @@ func (c *BeaconsDirectClientV1) CalculatePosition(
 	timing := c.Instrument(correlationId, "beacons.calculate_position")
 	result, err := c.controller.CalculatePosition(correlationId, siteId, udis)
 	timing.EndTiming()
+	c.InstrumentError(correlationId, "beacons.calculate_position", err, result)
 	return result, err
 }
 
@@ -67,6 +71,7 @@ func (c *BeaconsDirectClientV1) CreateBeacon(
 	timing := c.Instrument(correlationId, "beacons.create_beacon")
 	result, err := c.controller.CreateBeacon(correlationId, beacon)
 	timing.EndTiming()
+	c.InstrumentError(correlationId, "beacons.create_beacon", err, result)
 	return result, err
 }
 
@@ -75,6 +80,7 @@ func (c *BeaconsDirectClientV1) UpdateBeacon(
 	timing := c.Instrument(correlationId, "beacons.update_beacon")
 	result, err := c.controller.UpdateBeacon(correlationId, beacon)
 	timing.EndTiming()
+	c.InstrumentError(correlationId, "beacons.update_beacon", err, result)
 	return result, err
 }
 
@@ -83,5 +89,6 @@ func (c *BeaconsDirectClientV1) DeleteBeaconById(
 	timing := c.Instrument(correlationId, "beacons.delete_beacon_by_id")
 	result, err := c.controller.DeleteBeaconById(correlationId, beaconId)
 	timing.EndTiming()
+	c.InstrumentError(correlationId, "beacons.delete_beacon_by_id", err, result)
 	return result, err
 }
