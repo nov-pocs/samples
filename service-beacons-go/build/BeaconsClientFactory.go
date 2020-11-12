@@ -21,6 +21,7 @@ func NewBeaconsClientFactory() *BeaconsClientFactory {
 	cmdGrpcClientDescriptor := cref.NewDescriptor("beacons", "client", "commandable-grpc", "*", "1.0")
 
 	httpClientDescriptor := cref.NewDescriptor("beacons", "client", "http", "*", "1.0")
+	grpcClientDescriptor := cref.NewDescriptor("beacons", "client", "grpc", "*", "1.0")
 
 	c.RegisterType(nullClientDescriptor, clients1.NewBeaconsNullClientV1)
 	c.RegisterType(directClientDescriptor, clients1.NewBeaconsDirectClientV1)
@@ -28,6 +29,7 @@ func NewBeaconsClientFactory() *BeaconsClientFactory {
 	c.RegisterType(cmdGrpcClientDescriptor, clients1.NewBeaconsCommandableGrpcClientV1)
 
 	c.RegisterType(httpClientDescriptor, clients1.NewBeaconsRestClientV1)
+	c.RegisterType(grpcClientDescriptor, clients1.NewBeaconsGrpcClientV1)
 
 	return c
 }
