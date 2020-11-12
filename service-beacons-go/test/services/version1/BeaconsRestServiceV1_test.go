@@ -142,13 +142,13 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 	err = c.invoke("put", "/v1/beacons/beacon", beacon1, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.BEACON1.Id, beacon.Id)
+	assert.Equal(t, beacon1.Id, beacon.Id)
 	assert.Equal(t, "ABC", beacon.Label)
 
 	err = c.invoke("get", "/v1/beacons/beacon/udi/"+beacon1.Udi, nil, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.BEACON1.Id, beacon.Id)
+	assert.Equal(t, beacon1.Id, beacon.Id)
 
 	//Calculate position for one beacon
 	body := cdata.NewAnyValueMapFromTuples(
@@ -166,7 +166,7 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 	err = c.invoke("delete", "/v1/beacons/beacon/"+beacon1.Id, nil, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.BEACON1.Id, beacon.Id)
+	assert.Equal(t, beacon1.Id, beacon.Id)
 
 	beacon = data1.BeaconV1{}
 	err = c.invoke("get", "/v1/beacons/beacon/"+beacon1.Id, nil, &beacon)
