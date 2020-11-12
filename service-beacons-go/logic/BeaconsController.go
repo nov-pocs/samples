@@ -15,8 +15,8 @@ type BeaconsController struct {
 }
 
 func NewBeaconsController() *BeaconsController {
-	c := BeaconsController{}
-	return &c
+	c := &BeaconsController{}
+	return c
 }
 
 func (c *BeaconsController) Configure(config *cconf.ConfigParams) {

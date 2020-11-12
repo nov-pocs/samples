@@ -16,17 +16,16 @@ import (
 
 type BeaconsGrpcServiceV1 struct {
 	*grpcservices.GrpcService
-	controller    logic.IBeaconsController
-	numberOfCalls int64
+	controller logic.IBeaconsController
 }
 
 func NewBeaconsGrpcServiceV1() *BeaconsGrpcServiceV1 {
-	c := BeaconsGrpcServiceV1{}
-	c.GrpcService = grpcservices.NewGrpcService("beacons_v1.BeaconsV1")
-	c.GrpcService.IRegisterable = &c
-	c.numberOfCalls = 0
+	c := &BeaconsGrpcServiceV1{
+		GrpcService: grpcservices.NewGrpcService("beacons_v1.BeaconsV1"),
+	}
+	c.GrpcService.IRegisterable = c
 	c.DependencyResolver.Put("controller", cref.NewDescriptor("beacons", "controller", "default", "*", "*"))
-	return &c
+	return c
 }
 
 func (c *BeaconsGrpcServiceV1) SetReferences(references cref.IReferences) {
@@ -41,11 +40,11 @@ func (c *BeaconsGrpcServiceV1) SetReferences(references cref.IReferences) {
 
 func (c *BeaconsGrpcServiceV1) Open(correlationId string) error {
 	// Add interceptors here
-
 	return c.GrpcService.Open(correlationId)
 }
 
-func (c *BeaconsGrpcServiceV1) GetBeacons(ctx context.Context, req *protos.BeaconV1PageRequest) (*protos.BeaconV1PageReply, error) {
+func (c *BeaconsGrpcServiceV1) GetBeacons(
+	ctx context.Context, req *protos.BeaconV1PageRequest) (*protos.BeaconV1PageReply, error) {
 
 	filter := cdata.NewFilterParamsFromValue(req.GetFilter())
 	paging := cdata.NewEmptyPagingParams()
@@ -72,7 +71,8 @@ func (c *BeaconsGrpcServiceV1) GetBeacons(ctx context.Context, req *protos.Beaco
 	return &result, err
 }
 
-func (c *BeaconsGrpcServiceV1) GetBeaconById(ctx context.Context, req *protos.BeaconV1IdRequest) (*protos.BeaconV1ObjectReply, error) {
+func (c *BeaconsGrpcServiceV1) GetBeaconById(
+	ctx context.Context, req *protos.BeaconV1IdRequest) (*protos.BeaconV1ObjectReply, error) {
 
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("BeaconId", cconv.String)
@@ -96,7 +96,8 @@ func (c *BeaconsGrpcServiceV1) GetBeaconById(ctx context.Context, req *protos.Be
 	return &result, nil
 }
 
-func (c *BeaconsGrpcServiceV1) CreateBeacon(ctx context.Context, req *protos.BeaconV1ObjectRequest) (*protos.BeaconV1ObjectReply, error) {
+func (c *BeaconsGrpcServiceV1) CreateBeacon(
+	ctx context.Context, req *protos.BeaconV1ObjectRequest) (*protos.BeaconV1ObjectReply, error) {
 
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("Beacon", data1.NewBeaconV1Schema())
@@ -114,14 +115,16 @@ func (c *BeaconsGrpcServiceV1) CreateBeacon(ctx context.Context, req *protos.Bea
 		beacon,
 	)
 
-	result := protos.BeaconV1ObjectReply{}
-	result.Error = FromError(err)
-	result.Beacon = FromBeacon(data)
+	result := &protos.BeaconV1ObjectReply{
+		Beacon: FromBeacon(data),
+		Error:  FromError(err),
+	}
 
-	return &result, err
+	return result, err
 }
 
-func (c *BeaconsGrpcServiceV1) UpdateBeacon(ctx context.Context, req *protos.BeaconV1ObjectRequest) (*protos.BeaconV1ObjectReply, error) {
+func (c *BeaconsGrpcServiceV1) UpdateBeacon(
+	ctx context.Context, req *protos.BeaconV1ObjectRequest) (*protos.BeaconV1ObjectReply, error) {
 
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("Beacon", data1.NewBeaconV1Schema())
@@ -145,7 +148,8 @@ func (c *BeaconsGrpcServiceV1) UpdateBeacon(ctx context.Context, req *protos.Bea
 	return &result, err
 }
 
-func (c *BeaconsGrpcServiceV1) DeleteBeaconById(ctx context.Context, req *protos.BeaconV1IdRequest) (*protos.BeaconV1ObjectReply, error) {
+func (c *BeaconsGrpcServiceV1) DeleteBeaconById(
+	ctx context.Context, req *protos.BeaconV1IdRequest) (*protos.BeaconV1ObjectReply, error) {
 
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("BeaconId", cconv.String)
@@ -166,7 +170,8 @@ func (c *BeaconsGrpcServiceV1) DeleteBeaconById(ctx context.Context, req *protos
 	return &result, err
 }
 
-func (c *BeaconsGrpcServiceV1) GetBeaconByUdi(ctx context.Context, req *protos.BeaconV1UdiRequest) (*protos.BeaconV1ObjectReply, error) {
+func (c *BeaconsGrpcServiceV1) GetBeaconByUdi(
+	ctx context.Context, req *protos.BeaconV1UdiRequest) (*protos.BeaconV1ObjectReply, error) {
 
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("BeaconId", cconv.String)
@@ -187,7 +192,9 @@ func (c *BeaconsGrpcServiceV1) GetBeaconByUdi(ctx context.Context, req *protos.B
 	return &result, err
 }
 
-func (c *BeaconsGrpcServiceV1) CalculatePosition(ctx context.Context, req *protos.BeaconV1PositionRequest) (*protos.BeaconV1PositionReply, error) {
+func (c *BeaconsGrpcServiceV1) CalculatePosition(
+	ctx context.Context, req *protos.BeaconV1PositionRequest) (*protos.BeaconV1PositionReply, error) {
+
 	Schema := cvalid.NewObjectSchema().
 		WithRequiredProperty("SiteId", cconv.String).
 		WithRequiredProperty("Udis", cvalid.NewArraySchema(cconv.String))

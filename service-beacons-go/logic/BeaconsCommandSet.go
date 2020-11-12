@@ -18,9 +18,11 @@ type BeaconsCommandSet struct {
 }
 
 func NewBeaconsCommandSet(controller IBeaconsController) *BeaconsCommandSet {
-	c := BeaconsCommandSet{}
-	c.CommandSet = *ccomand.NewCommandSet()
-	c.controller = controller
+	c := &BeaconsCommandSet{
+		CommandSet: *ccomand.NewCommandSet(),
+		controller: controller,
+	}
+
 	c.AddCommand(c.makeGetBeaconsCommand())
 	c.AddCommand(c.makeGetBeaconByIdCommand())
 	c.AddCommand(c.makeGetBeaconByUdiCommand())
@@ -28,7 +30,8 @@ func NewBeaconsCommandSet(controller IBeaconsController) *BeaconsCommandSet {
 	c.AddCommand(c.makeCreateBeaconCommand())
 	c.AddCommand(c.makeUpdateBeaconCommand())
 	c.AddCommand(c.makeDeleteBeaconByIdCommand())
-	return &c
+
+	return c
 }
 
 func (c *BeaconsCommandSet) makeGetBeaconsCommand() ccomand.ICommand {
