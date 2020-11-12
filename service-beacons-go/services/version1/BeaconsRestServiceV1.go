@@ -10,7 +10,6 @@ import (
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
 	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
-	cerr "github.com/pip-services3-go/pip-services3-commons-go/errors"
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
 	cservices "github.com/pip-services3-go/pip-services3-rpc-go/services"
@@ -52,132 +51,73 @@ func (c *BeaconsRestServiceV1) getBeacons(res http.ResponseWriter, req *http.Req
 
 	result, err := c.controller.GetBeacons(
 		params.Get("correlation_id"),
-		cdata.NewFilterParamsFromValue(params), // W! need test
+		cdata.NewFilterParamsFromValue(params),
 		cdata.NewPagingParamsFromValue(pagingParams),
 	)
 	c.SendResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) getBeaconById(res http.ResponseWriter, req *http.Request) {
-	params := req.URL.Query()
-	vars := mux.Vars(req)
-
-	beaconId := params.Get("beacon_id")
-	if beaconId == "" {
-		beaconId = vars["beacon_id"]
-	}
-
 	result, err := c.controller.GetBeaconById(
-		params.Get("correlation_id"),
-		beaconId)
+		getParam(req, "correlation_id"),
+		getParam(req, "beacon_id"))
 	c.SendResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) createBeacon(res http.ResponseWriter, req *http.Request) {
-	params := req.URL.Query()
-	correlationId := params.Get("correlation_id")
+
 	var beacon data1.BeaconV1
+	err := decodeBody(req, &beacon)
 
-	body, bodyErr := ioutil.ReadAll(req.Body)
-	if bodyErr != nil {
-		err := cerr.NewInternalError(correlationId, "READ_ERR", "Can't read from body").WithCause(bodyErr)
+	if err != nil {
 		c.SendError(res, req, err)
-		return
-	}
-	defer req.Body.Close()
-	jsonErr := json.Unmarshal(body, &beacon)
-
-	if jsonErr != nil {
-		err := cerr.NewInternalError(correlationId, "JSON_CONVERT_ERR", "Can't convert from JSON to Beacons").WithCause(jsonErr)
-		c.SendError(res, req, err)
-		return
 	}
 
 	result, err := c.controller.CreateBeacon(
-		correlationId,
+		getParam(req, "correlation_id"),
 		&beacon,
 	)
 	c.SendCreatedResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) updateBeacon(res http.ResponseWriter, req *http.Request) {
-	params := req.URL.Query()
-	correlationId := params.Get("correlation_id")
 
 	var beacon data1.BeaconV1
+	err := decodeBody(req, &beacon)
 
-	body, bodyErr := ioutil.ReadAll(req.Body)
-	if bodyErr != nil {
-		err := cerr.NewInternalError(correlationId, "READ_ERR", "Can't read from body").WithCause(bodyErr)
+	if err != nil {
 		c.SendError(res, req, err)
-		return
 	}
-	defer req.Body.Close()
-	jsonErr := json.Unmarshal(body, &beacon)
 
-	if jsonErr != nil {
-		err := cerr.NewInternalError(correlationId, "JSON_CONVERT_ERR", "Can't convert from JSON to Beacons").WithCause(jsonErr)
-		c.SendError(res, req, err)
-		return
-	}
 	result, err := c.controller.UpdateBeacon(
-		correlationId,
+		getParam(req, "correlation_id"),
 		&beacon,
 	)
 	c.SendResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) deleteBeaconById(res http.ResponseWriter, req *http.Request) {
-	params := req.URL.Query()
-	vars := mux.Vars(req)
-
-	beaconId := params.Get("beacon_id")
-	if beaconId == "" {
-		beaconId = vars["beacon_id"]
-	}
-
 	result, err := c.controller.DeleteBeaconById(
-		params.Get("correlation_id"),
-		beaconId,
+		getParam(req, "correlation_id"),
+		getParam(req, "beacon_id"),
 	)
 	c.SendDeletedResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) getBeaconByUdi(res http.ResponseWriter, req *http.Request) {
-	params := req.URL.Query()
-	vars := mux.Vars(req)
-
-	beaconUdi := params.Get("udi")
-	if beaconUdi == "" {
-		beaconUdi = vars["udi"]
-	}
-
 	result, err := c.controller.GetBeaconByUdi(
-		params.Get("correlation_id"),
-		beaconUdi)
+		getParam(req, "correlation_id"),
+		getParam(req, "udi"))
 	c.SendResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) calculatePosition(res http.ResponseWriter, req *http.Request) {
 
-	params := req.URL.Query()
-	correlationId := params.Get("correlation_id")
-
 	bodyParams := make(map[string]interface{}, 0)
+	err := decodeBody(req, &bodyParams)
 
-	body, bodyErr := ioutil.ReadAll(req.Body)
-	if bodyErr != nil {
-		err := cerr.NewInternalError(correlationId, "READ_ERR", "Can't read from body").WithCause(bodyErr)
+	if err != nil {
 		c.SendError(res, req, err)
-		return
-	}
-	defer req.Body.Close()
-	jsonErr := json.Unmarshal(body, &bodyParams)
-
-	if jsonErr != nil {
-		err := cerr.NewInternalError(correlationId, "JSON_CONVERT_ERR", "Can't convert from JSON to map").WithCause(jsonErr)
-		c.SendError(res, req, err)
-		return
 	}
 
 	udiValues, _ := bodyParams["udis"].([]interface{})
@@ -189,7 +129,7 @@ func (c *BeaconsRestServiceV1) calculatePosition(res http.ResponseWriter, req *h
 	siteId, _ := bodyParams["site_id"].(string)
 
 	result, err := c.controller.CalculatePosition(
-		correlationId,
+		getParam(req, "correlation_id"),
 		siteId,
 		udis)
 	c.SendResult(res, req, result, err)
@@ -250,4 +190,26 @@ func (c *BeaconsRestServiceV1) Register() {
 			WithRequiredProperty("beacon_id", cconv.String).Schema,
 		c.deleteBeaconById,
 	)
+}
+
+func getParam(req *http.Request, name string) string {
+	param := req.URL.Query().Get(name)
+	if param == "" {
+		param = mux.Vars(req)[name]
+	}
+	return param
+}
+
+func decodeBody(req *http.Request, target interface{}) error {
+
+	bytes, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		return err
+	}
+	defer req.Body.Close()
+	err = json.Unmarshal(bytes, target)
+	if err != nil {
+		return err
+	}
+	return nil
 }
