@@ -27,7 +27,7 @@ type beaconsRestServiceV1Test struct {
 	service     *services1.BeaconsRestServiceV1
 }
 
-func newbeaconsRestServiceV1Test() *beaconsRestServiceV1Test {
+func newBeaconsRestServiceV1Test() *beaconsRestServiceV1Test {
 	BEACON1 := &data1.BeaconV1{
 		Id:     "1",
 		Udi:    "00001",
@@ -224,7 +224,7 @@ func (c *beaconsRestServiceV1Test) invoke(method string,
 }
 
 func TestBeaconsRestServiceV1(t *testing.T) {
-	c := newbeaconsRestServiceV1Test()
+	c := newBeaconsRestServiceV1Test()
 
 	c.setup(t)
 	t.Run("CRUD Operations", c.testCrudOperations)

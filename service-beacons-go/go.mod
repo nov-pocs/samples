@@ -3,7 +3,7 @@ module github.com/nov-pocs/samples/service-beacons-go
 go 1.13
 
 require (
-	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/golang/protobuf v1.4.2
 	github.com/gorilla/mux v1.7.4
 	github.com/jackc/pgx/v4 v4.9.2 // indirect
 	github.com/jinzhu/copier v0.0.0-20201025035756-632e723a6687 // indirect
@@ -22,5 +22,5 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20200804151602-45615f50871c // indirect
 	google.golang.org/grpc v1.31.0
-	google.golang.org/protobuf v1.25.0 // indirect
+	google.golang.org/protobuf v1.25.0
 )
