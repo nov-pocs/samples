@@ -2,25 +2,23 @@ version: '3.3'
 
 services:
 
-  app:
-    image: ${IMAGE:-app}
-    command: sh -c "sleep 3 && node ./bin/run.js"
-    ports:
-      - "8080:8080"  
-    depends_on:
+  test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.test
+    image: ${IMAGE:-nov/test}
+    links:
       - postgres
     environment:
-      - HTTP_PORT=8080
-      - POSTGRES_ENABLED=true
       - POSTGRES_SERVICE_HOST=postgres
       - POSTGRES_SERVICE_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASS=postgres
-      - POSTGRES_DB=app
+      - POSTGRES_DB=test
 
   postgres:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: app
+      POSTGRES_DB: test

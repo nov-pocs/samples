@@ -1,0 +1,7 @@
+FROM docker.pkg.github.com/nov-pocs/max-devops/go-protogen:latest
+
+WORKDIR /app
+
+COPY ./protos ./protos
+
+RUN protoc --go_out=plugins=grpc:. -I. ./protos/beacons_v1.proto

@@ -1,17 +1,18 @@
 #!/usr/bin/env pwsh
 
-##Set-StrictMode -Version latest
+Set-StrictMode -Version latest
 $ErrorActionPreference = "Stop"
 
+# Generate image names using the data in the "component.json" file
 $component = Get-Content -Path "component.json" | ConvertFrom-Json
-$image="$($component.registry)/$($component.name):$($component.version)-$($component.build)-rc"
+$rcImage="$($component.registry)/$($component.name):$($component.version)-$($component.build)-rc"
 $latestImage="$($component.registry)/$($component.name):latest"
 
 # Build docker image
-docker build -f docker/Dockerfile -t $image -t $latestImage .
+docker build -f docker/Dockerfile -t $rcImage -t $latestImage .
 
 # Set environment variables
-$env:IMAGE = $image
+$env:IMAGE = $rcImage
 
 # Set docker machine ip (on windows not localhost)
 if ($env:DOCKER_IP -ne $null) {
@@ -26,7 +27,8 @@ try {
 
     docker-compose -f ./docker/docker-compose.yml up -d
 
-    Start-Sleep -Seconds 10
+    # Give the service time to start and then check that it's responding to requests
+    Start-Sleep -Seconds 20
     Invoke-WebRequest -Uri "http://$($dockerMachineIp):8080/heartbeat"
     Invoke-WebRequest -Uri "http://$($dockerMachineIp):8080/$($component.test_route)" -Method Post
 

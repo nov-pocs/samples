@@ -96,7 +96,7 @@ func (c *BeaconsRestClientV1) CreateBeacon(
 func (c *BeaconsRestClientV1) UpdateBeacon(
 	correlationId string, beacon *data1.BeaconV1) (*data1.BeaconV1, error) {
 
-	res, err := c.Call(c.beaconV1Type, "put", "/beacon", correlationId, nil, beacon)
+	res, err := c.Call(c.beaconV1Type, "put", "/beacon/"+beacon.Id, correlationId, nil, beacon)
 	if err != nil {
 		return nil, err
 	}
