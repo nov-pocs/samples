@@ -25,7 +25,6 @@
 {{#if POSTGRES_ENABLED}}
 # PostreSQL Persistence
 - descriptor: "beacons:persistence:postgres:default:1.0"
-  table: {{POSTGRES_TABLE}}{{#unless POSTGRES_TABLE}}id_records{{/unless}}
   connection:
     uri: {{{POSTGRES_SERVICE_URI}}}
     host: {{{POSTGRES_SERVICE_HOST}}}{{#unless POSTGRES_SERVICE_HOST}}localhost{{/unless}}

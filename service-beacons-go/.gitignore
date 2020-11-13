@@ -1,2 +1,4 @@
+/dist
+/docker/id_rsa*
 /temp/*.json
 go.sum

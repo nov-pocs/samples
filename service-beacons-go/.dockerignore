@@ -1,0 +1,4 @@
+/doc
+/docker/Dockerfile*
+/docker/docker-compose*.yml
+/temp

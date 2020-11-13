@@ -1,0 +1,24 @@
+version: '3.3'
+
+services:
+
+  test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.test
+    image: ${IMAGE:-nov/test}
+    links:
+      - postgres
+    environment:
+      - POSTGRES_SERVICE_HOST=postgres
+      - POSTGRES_SERVICE_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASS=postgres
+      - POSTGRES_DB=test
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test

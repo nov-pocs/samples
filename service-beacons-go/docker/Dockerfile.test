@@ -1,0 +1,25 @@
+FROM docker.pkg.github.com/nov-pocs/max-devops/go-test:latest
+
+# Copy local ssh keys
+COPY docker/id_rsa /root/.ssh/
+
+# Setup ssh access to git repositories
+RUN chmod 600 /root/.ssh/id_rsa* \
+    && ssh-keyscan github.com >> ~/.ssh/known_hosts \
+    && ssh-keyscan gitlab.com >> ~/.ssh/known_hosts \
+    && git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+
+# Set a working directory
+WORKDIR /app
+
+# Copy the package files
+COPY go.mod ./
+
+# Install all go_modules
+RUN go mod download
+
+# Copy the entire project
+COPY . .
+
+# Specify the command from running tests
+CMD go test -v ./test/...
