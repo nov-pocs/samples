@@ -1,6 +1,7 @@
 {
     "name": "beacons",
     "registry": "myregistry:5000",
+    "test_route": "v1/beacons/get_beacons",
     "version": "1.0.0",
     "build": "0"
 }

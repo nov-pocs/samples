@@ -26,9 +26,9 @@ try {
 
     docker-compose -f ./docker/docker-compose.yml up -d
 
-    Start-Sleep -Seconds 3
+    Start-Sleep -Seconds 10
     Invoke-WebRequest -Uri "http://$($dockerMachineIp):8080/heartbeat"
-    Invoke-WebRequest -Uri "http://$($dockerMachineIp):8080/v1/beacons/get_beacons" -Method Post
+    Invoke-WebRequest -Uri "http://$($dockerMachineIp):8080/$($component.test_route)" -Method Post
 
     Write-Host "The container was successfully built."
 } finally {
