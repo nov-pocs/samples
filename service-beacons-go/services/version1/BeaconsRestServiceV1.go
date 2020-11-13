@@ -6,7 +6,6 @@ import (
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
 	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
-	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
 	cservices "github.com/pip-services3-go/pip-services3-rpc-go/services"
@@ -35,21 +34,11 @@ func (c *BeaconsRestServiceV1) SetReferences(references crefer.IReferences) {
 }
 
 func (c *BeaconsRestServiceV1) getBeacons(res http.ResponseWriter, req *http.Request) {
-	params := req.URL.Query()
-	pagingParams := make(map[string]string, 0)
-
-	pagingParams["skip"] = params.Get("skip")
-	pagingParams["take"] = params.Get("take")
-	pagingParams["total"] = params.Get("total")
-
-	delete(params, "skip")
-	delete(params, "take")
-	delete(params, "total")
 
 	result, err := c.controller.GetBeacons(
-		params.Get("correlation_id"),
-		cdata.NewFilterParamsFromValue(params),
-		cdata.NewPagingParamsFromValue(pagingParams),
+		c.GetParam(req, "correlation_id"),
+		c.GetFilterParams(req),
+		c.GetPagingParams(req),
 	)
 	c.SendResult(res, req, result, err)
 }
