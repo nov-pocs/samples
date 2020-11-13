@@ -4,7 +4,6 @@ go 1.13
 
 require (
 	github.com/golang/protobuf v1.4.2
-	github.com/gorilla/mux v1.7.4
 	github.com/jackc/pgx/v4 v4.9.2 // indirect
 	github.com/jinzhu/copier v0.0.0-20201025035756-632e723a6687 // indirect
 	github.com/pip-services3-go/pip-services3-commons-go v1.0.2
@@ -13,7 +12,7 @@ require (
 	github.com/pip-services3-go/pip-services3-data-go v1.0.6
 	github.com/pip-services3-go/pip-services3-grpc-go v1.0.3
 	github.com/pip-services3-go/pip-services3-postgres-go v1.0.1
-	github.com/pip-services3-go/pip-services3-rpc-go v1.0.3
+	github.com/pip-services3-go/pip-services3-rpc-go v1.0.4
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect

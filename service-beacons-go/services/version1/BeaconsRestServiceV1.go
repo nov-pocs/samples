@@ -1,11 +1,8 @@
 package services1
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
 	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
@@ -59,22 +56,22 @@ func (c *BeaconsRestServiceV1) getBeacons(res http.ResponseWriter, req *http.Req
 
 func (c *BeaconsRestServiceV1) getBeaconById(res http.ResponseWriter, req *http.Request) {
 	result, err := c.controller.GetBeaconById(
-		getParam(req, "correlation_id"),
-		getParam(req, "beacon_id"))
+		c.GetParam(req, "correlation_id"),
+		c.GetParam(req, "beacon_id"))
 	c.SendResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) createBeacon(res http.ResponseWriter, req *http.Request) {
 
 	var beacon data1.BeaconV1
-	err := decodeBody(req, &beacon)
+	err := c.DecodeBody(req, &beacon)
 
 	if err != nil {
 		c.SendError(res, req, err)
 	}
 
 	result, err := c.controller.CreateBeacon(
-		getParam(req, "correlation_id"),
+		c.GetParam(req, "correlation_id"),
 		&beacon,
 	)
 	c.SendCreatedResult(res, req, result, err)
@@ -83,14 +80,14 @@ func (c *BeaconsRestServiceV1) createBeacon(res http.ResponseWriter, req *http.R
 func (c *BeaconsRestServiceV1) updateBeacon(res http.ResponseWriter, req *http.Request) {
 
 	var beacon data1.BeaconV1
-	err := decodeBody(req, &beacon)
+	err := c.DecodeBody(req, &beacon)
 
 	if err != nil {
 		c.SendError(res, req, err)
 	}
 
 	result, err := c.controller.UpdateBeacon(
-		getParam(req, "correlation_id"),
+		c.GetParam(req, "correlation_id"),
 		&beacon,
 	)
 	c.SendResult(res, req, result, err)
@@ -98,23 +95,23 @@ func (c *BeaconsRestServiceV1) updateBeacon(res http.ResponseWriter, req *http.R
 
 func (c *BeaconsRestServiceV1) deleteBeaconById(res http.ResponseWriter, req *http.Request) {
 	result, err := c.controller.DeleteBeaconById(
-		getParam(req, "correlation_id"),
-		getParam(req, "beacon_id"),
+		c.GetParam(req, "correlation_id"),
+		c.GetParam(req, "beacon_id"),
 	)
 	c.SendDeletedResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) getBeaconByUdi(res http.ResponseWriter, req *http.Request) {
 	result, err := c.controller.GetBeaconByUdi(
-		getParam(req, "correlation_id"),
-		getParam(req, "udi"))
+		c.GetParam(req, "correlation_id"),
+		c.GetParam(req, "udi"))
 	c.SendResult(res, req, result, err)
 }
 
 func (c *BeaconsRestServiceV1) calculatePosition(res http.ResponseWriter, req *http.Request) {
 
 	bodyParams := make(map[string]interface{}, 0)
-	err := decodeBody(req, &bodyParams)
+	err := c.DecodeBody(req, &bodyParams)
 
 	if err != nil {
 		c.SendError(res, req, err)
@@ -129,7 +126,7 @@ func (c *BeaconsRestServiceV1) calculatePosition(res http.ResponseWriter, req *h
 	siteId, _ := bodyParams["site_id"].(string)
 
 	result, err := c.controller.CalculatePosition(
-		getParam(req, "correlation_id"),
+		c.GetParam(req, "correlation_id"),
 		siteId,
 		udis)
 	c.SendResult(res, req, result, err)
@@ -190,26 +187,4 @@ func (c *BeaconsRestServiceV1) Register() {
 			WithRequiredProperty("beacon_id", cconv.String).Schema,
 		c.deleteBeaconById,
 	)
-}
-
-func getParam(req *http.Request, name string) string {
-	param := req.URL.Query().Get(name)
-	if param == "" {
-		param = mux.Vars(req)[name]
-	}
-	return param
-}
-
-func decodeBody(req *http.Request, target interface{}) error {
-
-	bytes, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		return err
-	}
-	defer req.Body.Close()
-	err = json.Unmarshal(bytes, target)
-	if err != nil {
-		return err
-	}
-	return nil
 }
