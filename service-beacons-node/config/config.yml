@@ -11,10 +11,10 @@
     # Performance counter that post values to log
     - descriptor: "pip-services:counters:log:default:1.0"
     
-    {{^if MONGO_ENABLED}}{{^if FILE_ENABLED}}
+    {{^if POSTGRES_ENABLED}}{{^if MONGO_ENABLED}}{{^if FILE_ENABLED}}
     # Memory persistence
     - descriptor: "beacons:persistence:memory:default:1.0"
-    {{/if}}{{/if}}
+    {{/if}}{{/if}}{{/if}}
     
     {{#if FILE_ENABLED}}
     # File persistence
@@ -31,7 +31,20 @@
         port: {{MONGO_SERVICE_PORT}}{{^if MONGO_SERVICE_PORT}}27017{{/if}}
         database: {{MONGO_DB}}{{^if MONGO_DB}}"test"{{/if}}
     {{/if}}
-    
+
+    {{#if POSTGRES_ENABLED}}
+    # Postgres persistence
+    - descriptor: "beacons:persistence:postgres:default:1.0"
+      connection:
+        uri: {{POSTGRES_SERVICE_URI}}
+        host: {{POSTGRES_SERVICE_HOST}}{{^if POSTGRES_SERVICE_HOST}}"localhost"{{/if}}
+        port: {{POSTGRES_SERVICE_PORT}}{{^if POSTGRES_SERVICE_PORT}}5432{{/if}}
+        database: {{POSTGRES_DB}}{{^if POSTGRES_DB}}"test"{{/if}}
+      credential:
+        username: {{POSTGRES_USER}}{{^if POSTGRES_USER}}"postgres"{{/if}}
+        password: {{POSTGRES_PASS}}{{^if POSTGRES_PASS}}"postgres"{{/if}}
+    {{/if}}
+   
     # Controller
     - descriptor: "beacons:controller:default:default:1.0"
       options:
