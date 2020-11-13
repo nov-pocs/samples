@@ -175,7 +175,7 @@ func (c *BeaconsRestServiceV1) Register() {
 	)
 
 	c.RegisterRoute(
-		"put", "/beacon",
+		"put", "/beacon/{beacon_id}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("body", data1.NewBeaconV1Schema()).Schema,
 		c.updateBeacon,

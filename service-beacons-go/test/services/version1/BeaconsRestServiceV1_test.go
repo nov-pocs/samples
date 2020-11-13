@@ -139,7 +139,7 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 
 	// Update the beacon
 	beacon1.Label = "ABC"
-	err = c.invoke("put", "/v1/beacons/beacon", beacon1, &beacon)
+	err = c.invoke("put", "/v1/beacons/beacon/"+beacon1.Id, beacon1, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, beacon1.Id, beacon.Id)

@@ -9,17 +9,17 @@ import (
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
-	grpcservices "github.com/pip-services3-go/pip-services3-grpc-go/services"
+	cservices "github.com/pip-services3-go/pip-services3-grpc-go/services"
 )
 
 type BeaconsGrpcServiceV1 struct {
-	*grpcservices.GrpcService
+	*cservices.GrpcService
 	controller logic.IBeaconsController
 }
 
 func NewBeaconsGrpcServiceV1() *BeaconsGrpcServiceV1 {
 	c := &BeaconsGrpcServiceV1{
-		GrpcService: grpcservices.NewGrpcService("beacons_v1.BeaconsV1"),
+		GrpcService: cservices.NewGrpcService("beacons_v1.BeaconsV1"),
 	}
 	c.GrpcService.IRegisterable = c
 	c.DependencyResolver.Put("controller", cref.NewDescriptor("beacons", "controller", "default", "*", "*"))
