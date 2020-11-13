@@ -26,7 +26,7 @@ func (c *BeaconsDirectClientV1) SetReferences(references cref.IReferences) {
 
 	controller, ok := c.Controller.(logic.IBeaconsController)
 	if !ok {
-		panic("BeaconsDirectClientV1: Cant't resolv dependency 'controller' to IBeaconsClientV1")
+		panic("BeaconsDirectClientV1: Cant't resolv dependency 'controller' to IBeaconsController")
 	}
 	c.controller = controller
 }
