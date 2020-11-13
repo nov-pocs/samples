@@ -44,7 +44,7 @@ func (c *BeaconsRestClientV1) GetBeacons(
 func (c *BeaconsRestClientV1) GetBeaconById(
 	correlationId string, beaconId string) (*data1.BeaconV1, error) {
 
-	res, err := c.Call(c.beaconV1Type, "get", "/beacon/"+beaconId, correlationId, nil, nil)
+	res, err := c.Call(c.beaconV1Type, "get", "/beacons/"+beaconId, correlationId, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *BeaconsRestClientV1) GetBeaconById(
 func (c *BeaconsRestClientV1) GetBeaconByUdi(
 	correlationId string, udi string) (*data1.BeaconV1, error) {
 
-	res, err := c.Call(c.beaconV1Type, "get", "/beacon/udi/"+udi, correlationId, nil, nil)
+	res, err := c.Call(c.beaconV1Type, "get", "/beacons/udi/"+udi, correlationId, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (c *BeaconsRestClientV1) CalculatePosition(
 func (c *BeaconsRestClientV1) CreateBeacon(
 	correlationId string, beacon *data1.BeaconV1) (*data1.BeaconV1, error) {
 
-	res, err := c.Call(c.beaconV1Type, "post", "/beacon", correlationId, nil, beacon)
+	res, err := c.Call(c.beaconV1Type, "post", "/beacons", correlationId, nil, beacon)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (c *BeaconsRestClientV1) CreateBeacon(
 func (c *BeaconsRestClientV1) UpdateBeacon(
 	correlationId string, beacon *data1.BeaconV1) (*data1.BeaconV1, error) {
 
-	res, err := c.Call(c.beaconV1Type, "put", "/beacon/"+beacon.Id, correlationId, nil, beacon)
+	res, err := c.Call(c.beaconV1Type, "put", "/beacons/"+beacon.Id, correlationId, nil, beacon)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (c *BeaconsRestClientV1) UpdateBeacon(
 func (c *BeaconsRestClientV1) DeleteBeaconById(
 	correlationId string, beaconId string) (*data1.BeaconV1, error) {
 
-	res, err := c.Call(c.beaconV1Type, "delete", "/beacon/"+beaconId, correlationId, nil, nil)
+	res, err := c.Call(c.beaconV1Type, "delete", "/beacons/"+beaconId, correlationId, nil, nil)
 	if err != nil {
 		return nil, err
 	}

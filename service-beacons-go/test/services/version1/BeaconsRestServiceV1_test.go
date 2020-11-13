@@ -112,7 +112,7 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 	var beacon1 *data1.BeaconV1
 
 	var beacon data1.BeaconV1
-	err := c.invoke("post", "/v1/beacons/beacon", c.BEACON1, &beacon)
+	err := c.invoke("post", "/v1/beacons/beacons", c.BEACON1, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Udi, beacon.Udi)
@@ -121,7 +121,7 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 	assert.Equal(t, c.BEACON1.Label, beacon.Label)
 	assert.NotNil(t, beacon.Center)
 
-	err = c.invoke("post", "/v1/beacons/beacon", c.BEACON2, &beacon)
+	err = c.invoke("post", "/v1/beacons/beacons", c.BEACON2, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON2.Udi, beacon.Udi)
@@ -139,13 +139,13 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 
 	// Update the beacon
 	beacon1.Label = "ABC"
-	err = c.invoke("put", "/v1/beacons/beacon/"+beacon1.Id, beacon1, &beacon)
+	err = c.invoke("put", "/v1/beacons/beacons/"+beacon1.Id, beacon1, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, beacon1.Id, beacon.Id)
 	assert.Equal(t, "ABC", beacon.Label)
 
-	err = c.invoke("get", "/v1/beacons/beacon/udi/"+beacon1.Udi, nil, &beacon)
+	err = c.invoke("get", "/v1/beacons/beacons/udi/"+beacon1.Udi, nil, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, beacon1.Id, beacon.Id)
@@ -163,13 +163,13 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 	assert.Equal(t, (float32)(0.0), position.Coordinates[0][0])
 	assert.Equal(t, (float32)(0.0), position.Coordinates[0][1])
 
-	err = c.invoke("delete", "/v1/beacons/beacon/"+beacon1.Id, nil, &beacon)
+	err = c.invoke("delete", "/v1/beacons/beacons/"+beacon1.Id, nil, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, beacon1.Id, beacon.Id)
 
 	beacon = data1.BeaconV1{}
-	err = c.invoke("get", "/v1/beacons/beacon/"+beacon1.Id, nil, &beacon)
+	err = c.invoke("get", "/v1/beacons/beacons/"+beacon1.Id, nil, &beacon)
 	assert.Nil(t, err)
 	assert.NotNil(t, beacon)
 	assert.Empty(t, beacon)

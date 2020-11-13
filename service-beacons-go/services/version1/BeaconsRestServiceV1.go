@@ -133,14 +133,14 @@ func (c *BeaconsRestServiceV1) Register() {
 	)
 
 	c.RegisterRoute(
-		"get", "/beacon/{beacon_id}",
+		"get", "/beacons/{beacon_id}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("beacon_id", cconv.String).Schema,
 		c.getBeaconById,
 	)
 
 	c.RegisterRoute(
-		"get", "/beacon/udi/{udi}",
+		"get", "/beacons/udi/{udi}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("udi", cconv.String).Schema,
 		c.getBeaconByUdi,
@@ -157,21 +157,21 @@ func (c *BeaconsRestServiceV1) Register() {
 	)
 
 	c.RegisterRoute(
-		"post", "/beacon",
+		"post", "/beacons",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("body", data1.NewBeaconV1Schema()).Schema,
 		c.createBeacon,
 	)
 
 	c.RegisterRoute(
-		"put", "/beacon/{beacon_id}",
+		"put", "/beacons/{beacon_id}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("body", data1.NewBeaconV1Schema()).Schema,
 		c.updateBeacon,
 	)
 
 	c.RegisterRoute(
-		"delete", "/beacon/{beacon_id}",
+		"delete", "/beacons/{beacon_id}",
 		&cvalid.NewObjectSchema().
 			WithRequiredProperty("beacon_id", cconv.String).Schema,
 		c.deleteBeaconById,
