@@ -34,8 +34,8 @@ func (c *BeaconsDirectClientV1) SetReferences(references cref.IReferences) {
 func (c *BeaconsDirectClientV1) GetBeacons(
 	correlationId string, filter *cdata.FilterParams, paging *cdata.PagingParams) (*data1.BeaconV1DataPage, error) {
 	timing := c.Instrument(correlationId, "beacons.get_beacons")
+	defer timing.EndTiming()
 	result, err := c.controller.GetBeacons(correlationId, filter, paging)
-	timing.EndTiming()
 	c.InstrumentError(correlationId, "beacons.get_beacons", err, result)
 	return result, err
 }
@@ -43,8 +43,8 @@ func (c *BeaconsDirectClientV1) GetBeacons(
 func (c *BeaconsDirectClientV1) GetBeaconById(
 	correlationId string, beaconId string) (*data1.BeaconV1, error) {
 	timing := c.Instrument(correlationId, "beacons.get_beacon_by_id")
+	defer timing.EndTiming()
 	result, err := c.controller.GetBeaconById(correlationId, beaconId)
-	timing.EndTiming()
 	c.InstrumentError(correlationId, "beacons.get_beacon_by_id", err, result)
 	return result, err
 }
@@ -52,8 +52,8 @@ func (c *BeaconsDirectClientV1) GetBeaconById(
 func (c *BeaconsDirectClientV1) GetBeaconByUdi(
 	correlationId string, udi string) (*data1.BeaconV1, error) {
 	timing := c.Instrument(correlationId, "beacons.get_beacon_by_udi")
+	defer timing.EndTiming()
 	result, err := c.controller.GetBeaconByUdi(correlationId, udi)
-	timing.EndTiming()
 	c.InstrumentError(correlationId, "beacons.get_beacon_by_udi", err, result)
 	return result, err
 }
@@ -61,8 +61,8 @@ func (c *BeaconsDirectClientV1) GetBeaconByUdi(
 func (c *BeaconsDirectClientV1) CalculatePosition(
 	correlationId string, siteId string, udis []string) (*data1.GeoPointV1, error) {
 	timing := c.Instrument(correlationId, "beacons.calculate_position")
+	defer timing.EndTiming()
 	result, err := c.controller.CalculatePosition(correlationId, siteId, udis)
-	timing.EndTiming()
 	c.InstrumentError(correlationId, "beacons.calculate_position", err, result)
 	return result, err
 }
@@ -70,8 +70,8 @@ func (c *BeaconsDirectClientV1) CalculatePosition(
 func (c *BeaconsDirectClientV1) CreateBeacon(
 	correlationId string, beacon *data1.BeaconV1) (*data1.BeaconV1, error) {
 	timing := c.Instrument(correlationId, "beacons.create_beacon")
+	defer timing.EndTiming()
 	result, err := c.controller.CreateBeacon(correlationId, beacon)
-	timing.EndTiming()
 	c.InstrumentError(correlationId, "beacons.create_beacon", err, result)
 	return result, err
 }
@@ -79,8 +79,8 @@ func (c *BeaconsDirectClientV1) CreateBeacon(
 func (c *BeaconsDirectClientV1) UpdateBeacon(
 	correlationId string, beacon *data1.BeaconV1) (*data1.BeaconV1, error) {
 	timing := c.Instrument(correlationId, "beacons.update_beacon")
+	defer timing.EndTiming()
 	result, err := c.controller.UpdateBeacon(correlationId, beacon)
-	timing.EndTiming()
 	c.InstrumentError(correlationId, "beacons.update_beacon", err, result)
 	return result, err
 }
@@ -88,8 +88,8 @@ func (c *BeaconsDirectClientV1) UpdateBeacon(
 func (c *BeaconsDirectClientV1) DeleteBeaconById(
 	correlationId string, beaconId string) (*data1.BeaconV1, error) {
 	timing := c.Instrument(correlationId, "beacons.delete_beacon_by_id")
+	defer timing.EndTiming()
 	result, err := c.controller.DeleteBeaconById(correlationId, beaconId)
-	timing.EndTiming()
 	c.InstrumentError(correlationId, "beacons.delete_beacon_by_id", err, result)
 	return result, err
 }

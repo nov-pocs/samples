@@ -15,8 +15,9 @@ type BeaconsMemoryPersistence struct {
 
 func NewBeaconsMemoryPersistence() *BeaconsMemoryPersistence {
 	proto := reflect.TypeOf(&data1.BeaconV1{})
-	c := BeaconsMemoryPersistence{}
-	c.IdentifiableMemoryPersistence = *cpersist.NewIdentifiableMemoryPersistence(proto)
+	c := BeaconsMemoryPersistence{
+		IdentifiableMemoryPersistence: *cpersist.NewIdentifiableMemoryPersistence(proto),
+	}
 	c.MaxPageSize = 1000
 	return &c
 }

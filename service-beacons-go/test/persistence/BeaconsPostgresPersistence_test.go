@@ -14,9 +14,6 @@ type BeaconsPostgresPersistenceTest struct {
 }
 
 func newBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
-	var persistence *persist.BeaconsPostgresPersistence
-	var fixture BeaconsPersistenceFixture
-
 	postgresUri := os.Getenv("POSTGRES_SERVICE_URI")
 	postgresHost := os.Getenv("POSTGRES_SERVICE_HOST")
 	if postgresHost == "" {
@@ -55,9 +52,10 @@ func newBeaconsPostgresPersistenceTest() *BeaconsPostgresPersistenceTest {
 		"credential.password", postgresPassword,
 	)
 
-	persistence = persist.NewBeaconsPostgresPersistence()
-	fixture = *NewBeaconsPersistenceFixture(persistence)
+	persistence := persist.NewBeaconsPostgresPersistence()
 	persistence.Configure(dbConfig)
+
+	fixture := *NewBeaconsPersistenceFixture(persistence)
 
 	return &BeaconsPostgresPersistenceTest{
 		persistence: persistence,

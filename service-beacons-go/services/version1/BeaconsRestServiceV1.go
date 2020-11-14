@@ -17,8 +17,9 @@ type BeaconsRestServiceV1 struct {
 }
 
 func NewBeaconsRestServiceV1() *BeaconsRestServiceV1 {
-	c := &BeaconsRestServiceV1{}
-	c.RestService = cservices.NewRestService()
+	c := &BeaconsRestServiceV1{
+		RestService: cservices.NewRestService(),
+	}
 	c.RestService.IRegisterable = c
 	c.BaseRoute = "v1/beacons"
 	c.DependencyResolver.Put("controller", crefer.NewDescriptor("beacons", "controller", "default", "*", "*"))

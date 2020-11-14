@@ -11,8 +11,9 @@ type BeaconsFilePersistence struct {
 }
 
 func NewBeaconsFilePersistence(path string) *BeaconsFilePersistence {
-	c := BeaconsFilePersistence{}
-	c.BeaconsMemoryPersistence = *NewBeaconsMemoryPersistence()
+	c := BeaconsFilePersistence{
+		BeaconsMemoryPersistence: *NewBeaconsMemoryPersistence(),
+	}
 	c.persister = cpersist.NewJsonFilePersister(c.Prototype, path)
 	c.Loader = c.persister
 	c.Saver = c.persister
