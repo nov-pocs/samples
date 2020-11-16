@@ -7,7 +7,7 @@ require (
 	github.com/jackc/pgx/v4 v4.9.2 // indirect
 	github.com/jinzhu/copier v0.0.0-20201025035756-632e723a6687 // indirect
 	github.com/pip-services3-go/pip-services3-commons-go v1.0.2
-	github.com/pip-services3-go/pip-services3-components-go v1.0.2
+	github.com/pip-services3-go/pip-services3-components-go v1.0.4
 	github.com/pip-services3-go/pip-services3-container-go v1.0.0
 	github.com/pip-services3-go/pip-services3-data-go v1.0.6
 	github.com/pip-services3-go/pip-services3-grpc-go v1.0.3
