@@ -3,7 +3,7 @@ package logic
 import (
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	persist "github.com/nov-pocs/samples/service-beacons-go/persistence"
-	ccomand "github.com/pip-services3-go/pip-services3-commons-go/commands"
+	ccmd "github.com/pip-services3-go/pip-services3-commons-go/commands"
 	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
@@ -30,7 +30,7 @@ func (c *BeaconsController) SetReferences(references cref.IReferences) {
 	}
 }
 
-func (c *BeaconsController) GetCommandSet() *ccomand.CommandSet {
+func (c *BeaconsController) GetCommandSet() *ccmd.CommandSet {
 	if c.commandSet == nil {
 		c.commandSet = NewBeaconsCommandSet(c)
 	}

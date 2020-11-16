@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
-	ccomand "github.com/pip-services3-go/pip-services3-commons-go/commands"
+	ccmd "github.com/pip-services3-go/pip-services3-commons-go/commands"
 	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
 	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	crun "github.com/pip-services3-go/pip-services3-commons-go/run"
@@ -13,13 +13,13 @@ import (
 )
 
 type BeaconsCommandSet struct {
-	ccomand.CommandSet
+	ccmd.CommandSet
 	controller IBeaconsController
 }
 
 func NewBeaconsCommandSet(controller IBeaconsController) *BeaconsCommandSet {
 	c := &BeaconsCommandSet{
-		CommandSet: *ccomand.NewCommandSet(),
+		CommandSet: *ccmd.NewCommandSet(),
 		controller: controller,
 	}
 
@@ -34,8 +34,8 @@ func NewBeaconsCommandSet(controller IBeaconsController) *BeaconsCommandSet {
 	return c
 }
 
-func (c *BeaconsCommandSet) makeGetBeaconsCommand() ccomand.ICommand {
-	return ccomand.NewCommand(
+func (c *BeaconsCommandSet) makeGetBeaconsCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
 		"get_beacons",
 		cvalid.NewObjectSchema().
 			WithOptionalProperty("filter", cvalid.NewFilterParamsSchema()).
@@ -47,8 +47,8 @@ func (c *BeaconsCommandSet) makeGetBeaconsCommand() ccomand.ICommand {
 		})
 }
 
-func (c *BeaconsCommandSet) makeGetBeaconByIdCommand() ccomand.ICommand {
-	return ccomand.NewCommand(
+func (c *BeaconsCommandSet) makeGetBeaconByIdCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
 		"get_beacon_by_id",
 		cvalid.NewObjectSchema().
 			WithRequiredProperty("beacon_id", cconv.String),
@@ -58,8 +58,8 @@ func (c *BeaconsCommandSet) makeGetBeaconByIdCommand() ccomand.ICommand {
 		})
 }
 
-func (c *BeaconsCommandSet) makeGetBeaconByUdiCommand() ccomand.ICommand {
-	return ccomand.NewCommand(
+func (c *BeaconsCommandSet) makeGetBeaconByUdiCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
 		"get_beacon_by_udi",
 		cvalid.NewObjectSchema().
 			WithRequiredProperty("udi", cconv.String),
@@ -69,8 +69,8 @@ func (c *BeaconsCommandSet) makeGetBeaconByUdiCommand() ccomand.ICommand {
 		})
 }
 
-func (c *BeaconsCommandSet) makeCalculatePositionCommand() ccomand.ICommand {
-	return ccomand.NewCommand(
+func (c *BeaconsCommandSet) makeCalculatePositionCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
 		"calculate_position",
 		cvalid.NewObjectSchema().
 			WithRequiredProperty("site_id", cconv.String).
@@ -84,8 +84,8 @@ func (c *BeaconsCommandSet) makeCalculatePositionCommand() ccomand.ICommand {
 		})
 }
 
-func (c *BeaconsCommandSet) makeCreateBeaconCommand() ccomand.ICommand {
-	return ccomand.NewCommand(
+func (c *BeaconsCommandSet) makeCreateBeaconCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
 		"create_beacon",
 		cvalid.NewObjectSchema().
 			WithRequiredProperty("beacon", data1.NewBeaconV1Schema()),
@@ -101,8 +101,8 @@ func (c *BeaconsCommandSet) makeCreateBeaconCommand() ccomand.ICommand {
 		})
 }
 
-func (c *BeaconsCommandSet) makeUpdateBeaconCommand() ccomand.ICommand {
-	return ccomand.NewCommand(
+func (c *BeaconsCommandSet) makeUpdateBeaconCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
 		"update_beacon",
 		cvalid.NewObjectSchema().
 			WithRequiredProperty("beacon", data1.NewBeaconV1Schema()),
@@ -114,8 +114,8 @@ func (c *BeaconsCommandSet) makeUpdateBeaconCommand() ccomand.ICommand {
 		})
 }
 
-func (c *BeaconsCommandSet) makeDeleteBeaconByIdCommand() ccomand.ICommand {
-	return ccomand.NewCommand(
+func (c *BeaconsCommandSet) makeDeleteBeaconByIdCommand() ccmd.ICommand {
+	return ccmd.NewCommand(
 		"delete_beacon_by_id",
 		cvalid.NewObjectSchema().
 			WithRequiredProperty("beacon_id", cconv.String),

@@ -44,10 +44,11 @@ func (c *BeaconsGrpcClientV1) GetBeacons(
 		}
 	}
 
+	timing := c.Instrument(correlationId, "beacons.get_beacons")
+	defer timing.EndTiming()
+
 	reply := new(protos.BeaconV1PageReply)
-	time := c.Instrument(correlationId, "beacons.get_beacons")
 	err := c.Call("get_beacons", correlationId, req, reply)
-	time.EndTiming()
 
 	if err != nil {
 		return nil, err
@@ -67,10 +68,11 @@ func (c *BeaconsGrpcClientV1) GetBeaconById(
 		BeaconId:      beaconId,
 	}
 
+	timing := c.Instrument(correlationId, "beacons.get_beacon_by_id")
+	defer timing.EndTiming()
+
 	reply := new(protos.BeaconV1ObjectReply)
-	time := c.Instrument(correlationId, "beacons.get_beacon_by_id")
 	err := c.Call("get_beacon_by_id", correlationId, req, reply)
-	time.EndTiming()
 
 	if err != nil {
 		return nil, err
@@ -90,10 +92,11 @@ func (c *BeaconsGrpcClientV1) GetBeaconByUdi(
 		BeaconUdi:     udi,
 	}
 
+	timing := c.Instrument(correlationId, "beacons.get_beacon_by_udi")
+	defer timing.EndTiming()
+
 	reply := new(protos.BeaconV1ObjectReply)
-	time := c.Instrument(correlationId, "beacons.get_beacon_by_udi")
 	err := c.Call("get_beacon_by_udi", correlationId, req, reply)
-	time.EndTiming()
 
 	if err != nil {
 		return nil, err
@@ -113,10 +116,11 @@ func (c *BeaconsGrpcClientV1) CalculatePosition(
 		SiteId:        siteId,
 	}
 
+	timing := c.Instrument(correlationId, "beacons.calculate_position")
+	defer timing.EndTiming()
+
 	reply := new(protos.BeaconV1PositionReply)
-	time := c.Instrument(correlationId, "beacons.calculate_position")
 	err := c.Call("calculate_position", correlationId, req, reply)
-	time.EndTiming()
 
 	if err != nil {
 		return nil, err
@@ -135,10 +139,11 @@ func (c *BeaconsGrpcClientV1) CreateBeacon(
 		Beacon:        services1.FromBeacon(beacon),
 	}
 
+	timing := c.Instrument(correlationId, "beacons.create_beacon")
+	defer timing.EndTiming()
+
 	reply := new(protos.BeaconV1ObjectReply)
-	time := c.Instrument(correlationId, "beacons.create_beacon")
 	err := c.Call("create_beacon", correlationId, req, reply)
-	time.EndTiming()
 
 	if err != nil {
 		return nil, err
@@ -157,10 +162,11 @@ func (c *BeaconsGrpcClientV1) UpdateBeacon(
 		Beacon:        services1.FromBeacon(beacon),
 	}
 
+	timing := c.Instrument(correlationId, "beacons.update_beacon")
+	defer timing.EndTiming()
+
 	reply := new(protos.BeaconV1ObjectReply)
-	time := c.Instrument(correlationId, "beacons.update_beacon")
 	err := c.Call("update_beacon", correlationId, req, reply)
-	time.EndTiming()
 
 	if err != nil {
 		return nil, err
@@ -179,10 +185,11 @@ func (c *BeaconsGrpcClientV1) DeleteBeaconById(
 		BeaconId:      beaconId,
 	}
 
+	timing := c.Instrument(correlationId, "beacons.delete_beacon_by_id")
+	defer timing.EndTiming()
+
 	reply := new(protos.BeaconV1ObjectReply)
-	time := c.Instrument(correlationId, "beacons.delete_beacon_by_id")
 	err := c.Call("delete_beacon_by_id", correlationId, req, reply)
-	time.EndTiming()
 
 	if err != nil {
 		return nil, err

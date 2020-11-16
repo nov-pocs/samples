@@ -13,12 +13,10 @@ type BeaconsMemoryPersistenceTest struct {
 }
 
 func newBeaconsMemoryPersistenceTest() *BeaconsMemoryPersistenceTest {
-	var persistence *persist.BeaconsMemoryPersistence
-	var fixture *BeaconsPersistenceFixture
-
-	persistence = persist.NewBeaconsMemoryPersistence()
+	persistence := persist.NewBeaconsMemoryPersistence()
 	persistence.Configure(cconf.NewEmptyConfigParams())
-	fixture = NewBeaconsPersistenceFixture(persistence)
+
+	fixture := NewBeaconsPersistenceFixture(persistence)
 
 	return &BeaconsMemoryPersistenceTest{
 		persistence: persistence,
