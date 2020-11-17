@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BeaconsPersistenceFixture = void 0;
 let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;

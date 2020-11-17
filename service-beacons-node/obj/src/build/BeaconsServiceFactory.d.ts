@@ -8,5 +8,6 @@ export declare class BeaconsServiceFactory extends Factory {
     static HttpServiceV1Descriptor: Descriptor;
     static PostgresPersistenceDescriptor: Descriptor;
     static JsonPostgresPersistenceDescriptor: Descriptor;
+    static CommandableGrpcServiceDescriptor: Descriptor;
     constructor();
 }

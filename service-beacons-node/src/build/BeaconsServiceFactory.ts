@@ -17,6 +17,7 @@ export class BeaconsServiceFactory extends Factory{
     public static HttpServiceV1Descriptor = new Descriptor('beacons', 'service', 'http', '*', '1.0');
     public static PostgresPersistenceDescriptor = new Descriptor('beacons', 'persistence', 'postgres', '*', '1.0');
     public static JsonPostgresPersistenceDescriptor = new Descriptor('beacons', 'persistence', 'json-postgres', '*', '1.0');
+    public static CommandableGrpcServiceDescriptor = new Descriptor("beacons", "service", "commandable-grpc", "default", "1.0");
     
     constructor(){
         super();

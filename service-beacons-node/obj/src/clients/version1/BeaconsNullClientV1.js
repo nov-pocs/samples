@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BeaconsNullClientV1 = void 0;
 const pip_services3_commons_node_1 = require("pip-services3-commons-node");
 class BeaconsNullClientV1 {
     getBeacons(correlationId, filter, paging, callback) {

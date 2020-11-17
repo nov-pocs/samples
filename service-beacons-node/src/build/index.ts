@@ -1,0 +1,1 @@
+export {BeaconsServiceFactory} from "./BeaconsServiceFactory";

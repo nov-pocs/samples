@@ -5,7 +5,8 @@
   "typings": "./obj/src/index.d.ts",
   "scripts": {
     "service": "node ./bin/run.js",
-    "test": "mocha -t 5000 -R spec -u tdd --recursive ./obj/test"
+    "test": "mocha -t 5000 -R spec -u tdd --recursive ./obj/test",
+    "protogen": "cd src/protos && protoc --plugin=protoc-gen-ts=../../node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./ --ts_out=. --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` beacons_v1.proto"
   },
   "dependencies": {
     "pip-services3-commons-node": "^3.0.*",
@@ -14,6 +15,7 @@
     "pip-services3-data-node": "^3.0.*",
     "pip-services3-rpc-node": "^3.0.*",
     "pip-services3-mongodb-node": "^3.0.*",
+    "pip-services3-grpc-node": "^3.0.0",
     "pip-services3-postgres-node": "^3.0.*"
   },
   "devDependencies": {
@@ -24,6 +26,10 @@
     "@types/node": "^10.3.0",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
-    "restify": "^4.3.0"
+    "restify": "^4.3.0",
+    "ts-protoc-gen": "^0.9.0",
+    "typedoc": "^0.11.1",
+    "grpc-tools": "^1.9.1",
+    "grpc_tools_node_protoc_ts": "^5.0.1"
   }
 }

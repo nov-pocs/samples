@@ -223,4 +223,5 @@ func TestBeaconsGrpcServiceV1(t *testing.T) {
 	c.setup(t)
 	t.Run("CRUD Operations", c.testCrudOperations)
 	c.teardown(t)
+
 }

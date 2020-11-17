@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BeaconsServiceFactory = void 0;
 const pip_services3_components_node_1 = require("pip-services3-components-node");
 const pip_services3_commons_node_1 = require("pip-services3-commons-node");
 const BeaconsMemoryPersistence_1 = require("../../src/persistence/BeaconsMemoryPersistence");
@@ -29,4 +30,5 @@ BeaconsServiceFactory.ControllerDescriptor = new pip_services3_commons_node_1.De
 BeaconsServiceFactory.HttpServiceV1Descriptor = new pip_services3_commons_node_1.Descriptor('beacons', 'service', 'http', '*', '1.0');
 BeaconsServiceFactory.PostgresPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor('beacons', 'persistence', 'postgres', '*', '1.0');
 BeaconsServiceFactory.JsonPostgresPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor('beacons', 'persistence', 'json-postgres', '*', '1.0');
+BeaconsServiceFactory.CommandableGrpcServiceDescriptor = new pip_services3_commons_node_1.Descriptor("beacons", "service", "commandable-grpc", "default", "1.0");
 //# sourceMappingURL=BeaconsServiceFactory.js.map
