@@ -1,14 +1,13 @@
-FROM docker.pkg.github.com/nov-pocs/max-devops/go-build:latest
+#FROM docker.pkg.github.com/nov-pocs/max-devops/go-build:latest
+FROM golang:1.13
 
-# Copy local ssh keys
-COPY docker/id_rsa /root/.ssh/
-
-# Setup ssh access to git repositories
-RUN chmod 600 /root/.ssh/id_rsa* \
-    && ssh-keyscan github.com >> ~/.ssh/known_hosts \
-    && ssh-keyscan gitlab.com >> ~/.ssh/known_hosts \
-    && git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-
+# Set environment variables for Go
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64 \
+    GOPRIVATE=github.com/nov-pocs/*
+    
 # Set a working directory
 WORKDIR /app
 
