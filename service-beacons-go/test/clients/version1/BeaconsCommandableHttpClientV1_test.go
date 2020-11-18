@@ -2,6 +2,7 @@ package test_clients1
 
 import (
 	"testing"
+	"time"
 
 	clients1 "github.com/nov-pocs/samples/service-beacons-go/clients/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
@@ -102,10 +103,12 @@ func TestBeaconsCommandableHttpClientV1(t *testing.T) {
 	c := newBeaconsCommandableHttpClientV1Test()
 
 	c.setup(t)
+	time.Sleep(time.Duration(time.Millisecond * 500))
 	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
 	c.teardown(t)
 
 	c.setup(t)
+	time.Sleep(time.Duration(time.Millisecond * 500))
 	t.Run("Calculate Positions", c.fixture.TestCalculatePosition)
 	c.teardown(t)
 }

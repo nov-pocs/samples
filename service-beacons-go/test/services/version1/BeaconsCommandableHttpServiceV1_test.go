@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
+	"time"
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
@@ -56,7 +57,7 @@ func newBeaconsCommandableHttpServiceV1Test() *beaconsCommandableHttpServiceV1Te
 	service := services1.NewBeaconsCommandableHttpServiceV1()
 	service.Configure(cconf.NewConfigParamsFromTuples(
 		"connection.protocol", "http",
-		"connection.port", "3000",
+		"connection.port", "3005",
 		"connection.host", "localhost",
 	))
 
@@ -204,7 +205,7 @@ func (c *beaconsCommandableHttpServiceV1Test) testCrudOperations(t *testing.T) {
 
 func (c *beaconsCommandableHttpServiceV1Test) invoke(
 	route string, body *cdata.AnyValueMap, result interface{}) error {
-	var url string = "http://localhost:3000" + route
+	var url string = "http://localhost:3005" + route
 
 	var bodyReader *bytes.Reader = nil
 	if body != nil {
@@ -245,6 +246,7 @@ func TestBeaconsCommmandableHttpServiceV1(t *testing.T) {
 	c := newBeaconsCommandableHttpServiceV1Test()
 
 	c.setup(t)
+	time.Sleep(time.Duration(time.Millisecond * 500))
 	t.Run("CRUD Operations", c.testCrudOperations)
 	c.teardown(t)
 

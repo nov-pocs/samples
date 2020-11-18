@@ -3,6 +3,7 @@ package test_services1
 import (
 	"context"
 	"testing"
+	"time"
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
@@ -55,7 +56,7 @@ func newBeaconsGrpcServiceV1Test() *beaconsGrpcServiceV1Test {
 	service := services1.NewBeaconsGrpcServiceV1()
 	service.Configure(cconf.NewConfigParamsFromTuples(
 		"connection.protocol", "http",
-		"connection.port", "3000",
+		"connection.port", "3001",
 		"connection.host", "localhost",
 	))
 
@@ -97,7 +98,7 @@ func (c *beaconsGrpcServiceV1Test) setup(t *testing.T) {
 		grpc.WithInsecure(),
 	}
 
-	connection, err := grpc.Dial("localhost:3000", opts...)
+	connection, err := grpc.Dial("localhost:3001", opts...)
 	if err != nil {
 		t.Error("Failed to creaate grpc connection", err)
 	}
@@ -221,6 +222,7 @@ func TestBeaconsGrpcServiceV1(t *testing.T) {
 	c := newBeaconsGrpcServiceV1Test()
 
 	c.setup(t)
+	time.Sleep(time.Duration(time.Millisecond * 500))
 	t.Run("CRUD Operations", c.testCrudOperations)
 	c.teardown(t)
 

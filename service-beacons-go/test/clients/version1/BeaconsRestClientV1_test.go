@@ -2,6 +2,7 @@ package test_clients1
 
 import (
 	"testing"
+	"time"
 
 	clients1 "github.com/nov-pocs/samples/service-beacons-go/clients/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
@@ -28,7 +29,7 @@ func newBeaconsRestClientV1Test() *beaconsRestClientV1Test {
 
 	httpConfig := cconf.NewConfigParamsFromTuples(
 		"connection.protocol", "http",
-		"connection.port", "3000",
+		"connection.port", "3004",
 		"connection.host", "localhost",
 	)
 
@@ -102,10 +103,12 @@ func TestBeaconsRestClientV1(t *testing.T) {
 	c := newBeaconsRestClientV1Test()
 
 	c.setup(t)
+	time.Sleep(time.Duration(time.Millisecond * 500))
 	t.Run("CRUD Operations", c.fixture.TestCrudOperations)
 	c.teardown(t)
 
 	c.setup(t)
+	time.Sleep(time.Duration(time.Millisecond * 500))
 	t.Run("Calculate Positions", c.fixture.TestCalculatePosition)
 	c.teardown(t)
 }

@@ -28,7 +28,7 @@ func newBeaconsCommandableGrpcClientV1Test() *beaconsCommandableGrpcClientV1Test
 
 	httpConfig := cconf.NewConfigParamsFromTuples(
 		"connection.protocol", "http",
-		"connection.port", "3000",
+		"connection.port", "3001",
 		"connection.host", "localhost",
 	)
 
