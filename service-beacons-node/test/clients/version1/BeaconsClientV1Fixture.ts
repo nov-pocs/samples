@@ -15,7 +15,7 @@ const BEACON1: BeaconV1 = {
     type: BeaconTypeV1.AltBeacon,
     site_id: '1',
     label: 'TestBeacon1',
-    center: { type: 'Point', coordinates: [ 0, 0 ] },
+    center: { type: 'Point', coordinates: [0, 0] },
     radius: 50
 };
 const BEACON2: BeaconV1 = {
@@ -24,7 +24,7 @@ const BEACON2: BeaconV1 = {
     type: BeaconTypeV1.iBeacon,
     site_id: '1',
     label: 'TestBeacon2',
-    center: { type: 'Point', coordinates: [ 2, 2 ] },
+    center: { type: 'Point', coordinates: [2, 2] },
     radius: 70
 };
 
@@ -83,7 +83,7 @@ export class BeaconsClientV1Fixture {
                 this._client.getBeacons(
                     null,
                     new FilterParams(),
-                    new PagingParams(),
+                    new PagingParams(0, 5, false),
                     (err, page) => {
                         assert.isNull(err);
 
@@ -117,7 +117,7 @@ export class BeaconsClientV1Fixture {
             // Get beacon by udi
             (callback) => {
                 this._client.getBeaconByUdi(
-                    null, 
+                    null,
                     beacon1.udi,
                     (err, beacon) => {
                         assert.isNull(err);

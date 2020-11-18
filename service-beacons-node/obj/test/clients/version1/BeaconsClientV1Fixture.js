@@ -61,7 +61,7 @@ class BeaconsClientV1Fixture {
             },
             // Get all beacons
             (callback) => {
-                this._client.getBeacons(null, new pip_services3_commons_node_1.FilterParams(), new pip_services3_commons_node_2.PagingParams(), (err, page) => {
+                this._client.getBeacons(null, new pip_services3_commons_node_1.FilterParams(), new pip_services3_commons_node_2.PagingParams(0, 5, false), (err, page) => {
                     assert.isNull(err);
                     assert.isObject(page);
                     assert.lengthOf(page.data, 2);
