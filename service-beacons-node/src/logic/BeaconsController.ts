@@ -32,7 +32,7 @@ export class BeaconsController implements IBeaconsController, IConfigurable, IRe
         this._param1 = config.getAsStringWithDefault("options.param1", this._param1);
         this._param2 = config.getAsIntegerWithDefault("options.param2", this._param2);
 
-        console.log("param1=" + this._param1 + ", param2=" + this._param2);
+        //console.log("param1=" + this._param1 + ", param2=" + this._param2);
     }
 
     public setReferences(references: IReferences): void {

@@ -5,6 +5,7 @@
   "typings": "./obj/src/index.d.ts",
   "scripts": {
     "service": "node ./bin/run.js",
+    "benchmark": "node ./obj/benchmark/run.js",
     "test": "mocha -t 5000 -R spec -u tdd --recursive ./obj/test",
     "protogen": "cd src/protos && protoc --plugin=protoc-gen-ts=../../node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:./ --ts_out=. --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` beacons_v1.proto"
   },
@@ -30,6 +31,7 @@
     "ts-protoc-gen": "^0.9.0",
     "typedoc": "^0.11.1",
     "grpc-tools": "^1.9.1",
-    "grpc_tools_node_protoc_ts": "^5.0.1"
+    "grpc_tools_node_protoc_ts": "^5.0.1",
+    "pip-benchmark-node": "^2.1.4"
   }
 }

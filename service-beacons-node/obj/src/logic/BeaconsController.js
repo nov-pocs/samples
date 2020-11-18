@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BeaconsController = void 0;
 let _ = require('lodash');
 let async = require('async');
 const pip_services3_commons_node_1 = require("pip-services3-commons-node");
@@ -16,7 +15,7 @@ class BeaconsController {
     configure(config) {
         this._param1 = config.getAsStringWithDefault("options.param1", this._param1);
         this._param2 = config.getAsIntegerWithDefault("options.param2", this._param2);
-        console.log("param1=" + this._param1 + ", param2=" + this._param2);
+        //console.log("param1=" + this._param1 + ", param2=" + this._param2);
     }
     setReferences(references) {
         this._persistence = references.getOneRequired(new pip_services3_commons_node_2.Descriptor('beacons', 'persistence', '*', '*', '1.0'));
