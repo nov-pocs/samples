@@ -5,13 +5,13 @@ env:
 	export GOPRIVATE=github.com/nov-pocs/*
 
 install: env
-	@go install ./bin/run.go
+	@go install ./bin/main.go
 
 go.sum: env
 	@go mod tidy
 
 run: env go.sum
-	@go run ./bin/run.go
+	@go run ./bin/main.go
 
 test: env go.sum
 	@go clean -testcache && go test -v ./test/...

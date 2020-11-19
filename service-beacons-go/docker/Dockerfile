@@ -22,4 +22,4 @@ EXPOSE "8080:8080"
 EXPOSE "8090:8090"
 
 # Specify the command to run
-CMD ["./bin/run"]
+CMD ["./bin/main"]

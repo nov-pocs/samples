@@ -1,4 +1,4 @@
-package main
+package suite
 
 import (
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"

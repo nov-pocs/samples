@@ -1,4 +1,4 @@
-package main
+package suite
 
 import (
 	bbuild "github.com/nov-pocs/samples/service-beacons-go/build"
