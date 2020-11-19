@@ -76,7 +76,8 @@ func (c *BeaconsJsonPostgresPersistence) GetPageByFilter(correlationId string, f
 	for i, v := range tempPage.Data {
 		data[i] = v.(*data1.BeaconV1)
 	}
-	page := data1.NewBeaconV1DataPage(&dataLen, data)
+	total := *tempPage.Total
+	page := data1.NewBeaconV1DataPage(&total, data)
 
 	return page, err
 }

@@ -23,4 +23,4 @@ docgen: env go.sum
 	gold -gen -nouses -dir=docs -emphasize-wdpkgs ./...
 
 benchmark:
-	@go run ./benchmarks/bin/main.go
+	@go run ./benchmark/main.go
