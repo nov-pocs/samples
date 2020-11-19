@@ -4,7 +4,7 @@ services:
 
   app:
     image: ${IMAGE:-nov/app}
-    command: sh -c "sleep 3 && ./bin/run"
+    command: sh -c "sleep 3 && ./bin/main"
     links:
       - postgres
     environment:

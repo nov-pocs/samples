@@ -5,12 +5,12 @@ import (
 	"os"
 	"os/signal"
 
-	bb "github.com/nov-pocs/samples/service-beacons-go/benchmark/suite"
+	suite "github.com/nov-pocs/samples/service-beacons-go/benchmark/suite"
 )
 
 func main() {
 
-	builder := bb.NewBeaconsBenchmarkBuilder()
+	builder := suite.NewBeaconsBenchmarkBuilder()
 
 	choice := os.Getenv("BENCHMARK_TYPE")
 	if choice == "" {
