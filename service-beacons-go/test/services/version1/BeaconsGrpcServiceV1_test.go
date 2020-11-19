@@ -3,7 +3,6 @@ package test_services1
 import (
 	"context"
 	"testing"
-	"time"
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
@@ -222,7 +221,7 @@ func TestBeaconsGrpcServiceV1(t *testing.T) {
 	c := newBeaconsGrpcServiceV1Test()
 
 	c.setup(t)
-	time.Sleep(time.Duration(time.Millisecond * 500))
+
 	t.Run("CRUD Operations", c.testCrudOperations)
 	c.teardown(t)
 

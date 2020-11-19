@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strings"
 	"testing"
-	"time"
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
@@ -228,7 +227,7 @@ func TestBeaconsRestServiceV1(t *testing.T) {
 	c := newBeaconsRestServiceV1Test()
 
 	c.setup(t)
-	time.Sleep(time.Duration(time.Millisecond * 500))
+
 	t.Run("CRUD Operations", c.testCrudOperations)
 	c.teardown(t)
 
