@@ -1,5 +1,5 @@
 
-.PHONY: all build clean env install uninstall fmt simplify check run test protogen docgen
+.PHONY: all build clean env install uninstall fmt simplify check run test protogen docgen benchmark
 
 env:
 	export GOPRIVATE=github.com/nov-pocs/*
@@ -21,3 +21,6 @@ protogen: env go.sum
 
 docgen: env go.sum
 	gold -gen -nouses -dir=docs -emphasize-wdpkgs ./...
+
+benchmark:
+	@go run ./benchmarks/bin/main.go
