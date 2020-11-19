@@ -3,13 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
-
-	bb "github.com/nov-pocs/samples/service-beacons-go/benchmarks/suite"
 )
 
 func main() {
 
-	builder := bb.NewBeaconsBenchmarkBuilder()
+	builder := NewBeaconsBenchmarkBuilder()
 
 	choice := os.Getenv("BENCHMARK_TYPE")
 	if choice == "" {

@@ -1,4 +1,4 @@
-package benchmark
+package main
 
 import (
 	bench "github.com/pip-benchmark/pip-benchmark-go/benchmark"

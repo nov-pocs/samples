@@ -1,4 +1,4 @@
-package benchmark
+package main
 
 import (
 	bbuild "github.com/nov-pocs/samples/service-beacons-go/build"
