@@ -2,109 +2,92 @@ package benchmark
 
 import (
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
-	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
-	persist "github.com/nov-pocs/samples/service-beacons-go/persistence"
 	bench "github.com/pip-benchmark/pip-benchmark-go/benchmark"
-	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
-	conv "github.com/pip-services3-go/pip-services3-commons-go/convert"
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	rnd "github.com/pip-services3-go/pip-services3-commons-go/random"
-	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
 )
 
 type BeaconsCalculateBenchmark struct {
 	*bench.Benchmark
-	persistence *persist.BeaconsPostgresPersistence
-	controller  *logic.BeaconsController
+	siteId         string
+	udis           []string
+	beaconsContext *BeaconsBenchmarkContext
 }
 
 func NewBeaconsCalculateBenchmark() *BeaconsCalculateBenchmark {
-	c := BeaconsCalculateBenchmark{}
-	c.Benchmark = bench.NewBenchmark("BeaconsCalculateBenchmark", "Measures performance of updating", "Type")
+	c := BeaconsCalculateBenchmark{
+		Benchmark: bench.NewBenchmark("CalculatePosition", "Measures performance of calculatePosition operation", "Type"),
+		udis:      make([]string, 0),
+	}
 	c.Benchmark.IExecutable = &c
-
-	c.persistence = persist.NewBeaconsPostgresPersistence()
-
-	c.controller = logic.NewBeaconsController()
-	c.controller.Configure(cconf.NewEmptyConfigParams())
-
-	references := cref.NewReferencesFromTuples(
-		cref.NewDescriptor("beacons", "persistence", "postgres", "default", "1.0"), c.persistence,
-		cref.NewDescriptor("beacons", "controller", "default", "default", "1.0"), c.controller,
-	)
-
-	c.controller.SetReferences(references)
 
 	return &c
 }
 
 func (c *BeaconsCalculateBenchmark) SetUp() error {
 
-	dbConfig := cconf.NewConfigParamsFromTuples(
-		"connection.uri", c.Context.GetParameters()["postgresUri"].GetAsString(),
-		"connection.host", c.Context.GetParameters()["postgresHost"].GetAsString(),
-		"connection.port", c.Context.GetParameters()["postgresPort"].GetAsString(),
-		"connection.database", c.Context.GetParameters()["postgresDatabase"].GetAsString(),
-		"credential.username", c.Context.GetParameters()["postgresUser"].GetAsString(),
-		"credential.password", c.Context.GetParameters()["postgresPassword"].GetAsString(),
-	)
+	siteCount := c.GetContext().GetParameters()["SiteCount"].GetAsInteger()
+	c.siteId = data1.RandomBeaconV1.NextSiteId(siteCount)
 
-	c.persistence.Configure(dbConfig)
+	c.beaconsContext = NewBeaconsBenchmarkContext(c.GetContext())
 
-	err := c.persistence.Open("")
+	// Connext to the database
+	err := c.beaconsContext.Open()
 	if err != nil {
 		return err
 	}
-	return c.persistence.Clear("")
+
+	// Get beacon udis
+	page, err := c.beaconsContext.Persistence.GetPageByFilter(
+		"",
+		cdata.NewFilterParamsFromTuples(
+			"site_id", c.siteId,
+		),
+		cdata.NewPagingParams(0, 100, false))
+	if err != nil {
+		return err
+	}
+	if page != nil {
+		for _, item := range page.Data {
+			c.udis = append(c.udis, item.Udi)
+		}
+	}
+
+	return nil
 }
 
 func (c *BeaconsCalculateBenchmark) TearDown() error {
-	return c.persistence.Close("")
+	// Disconnect from the database
+	return c.beaconsContext.Close()
 }
 
 func (c *BeaconsCalculateBenchmark) Execute() error {
-	_, err := c.controller.CreateBeacon("", c.generateRandomBeaconV1())
-	if err != nil {
-		c.Context.ReportError(err)
+	udis := c.NextUdis()
+	if c.beaconsContext != nil {
+		_, err := c.beaconsContext.Controller.CalculatePosition(
+			"", c.siteId, udis,
+		)
+		return err
 	}
-	return err
+	return nil
 }
 
-func (c *BeaconsCalculateBenchmark) generateRandomType() string {
+func (c *BeaconsCalculateBenchmark) NextUdis() []string {
 
-	i := rnd.RandomInteger.NextInteger(0, 4)
-	var t string
+	udiCount := rnd.RandomInteger.NextInteger(0, 10)
+	remainingUdis := make([]string, 0)
+	remainingUdis = append(remainingUdis, c.udis...)
+	udis := make([]string, 0)
 
-	switch i {
-	case 0:
-		t = data1.Unknown
-	case 1:
-		t = data1.AltBeacon
-	case 2:
-		t = data1.IBeacon
-	case 3:
-		t = data1.EddyStoneUdi
+	for udiCount > 0 && len(remainingUdis) > 0 {
+		index := rnd.RandomInteger.NextInteger(0, len(remainingUdis)-1)
+		udis = append(udis, remainingUdis[index])
+
+		if index == len(remainingUdis) {
+			remainingUdis = remainingUdis[:index-1]
+		} else {
+			remainingUdis = append(remainingUdis[:index], remainingUdis[index+1:]...)
+		}
 	}
-	return t
-}
-
-func (c *BeaconsCalculateBenchmark) generateRandomBeaconV1() *data1.BeaconV1 {
-
-	beacon := &data1.BeaconV1{
-		Udi:    "000" + conv.StringConverter.ToString(rnd.RandomInteger.NextInteger(0, 10)),
-		Type:   c.generateRandomType(),
-		SiteId: conv.StringConverter.ToString(rnd.RandomInteger.NextInteger(0, 20)),
-		Label:  rnd.RandomString.NextString(5, 15),
-		Center: data1.GeoPointV1{
-			Type: "Point",
-			Coordinates: [][]float32{
-				{
-					rnd.RandomFloat.NextFloat(0, 100),
-					rnd.RandomFloat.NextFloat(0, 100),
-				},
-			},
-		},
-		Radius: rnd.RandomFloat.NextFloat(0, 100),
-	}
-
-	return beacon
+	return udis
 }
