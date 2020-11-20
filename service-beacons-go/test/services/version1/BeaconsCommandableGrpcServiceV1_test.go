@@ -1,8 +1,7 @@
 package test_services1
 
 import (
-	"context"
-	"encoding/json"
+	"reflect"
 	"testing"
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
@@ -10,15 +9,27 @@ import (
 	persist "github.com/nov-pocs/samples/service-beacons-go/persistence"
 	services1 "github.com/nov-pocs/samples/service-beacons-go/services/version1"
 	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
+	cdata "github.com/pip-services3-go/pip-services3-commons-go/data"
 	cref "github.com/pip-services3-go/pip-services3-commons-go/refer"
-	cmdproto "github.com/pip-services3-go/pip-services3-grpc-go/protos"
+	cclients "github.com/pip-services3-go/pip-services3-grpc-go/clients"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/grpclog"
+)
+
+var (
+	BeaconV1DataPageType reflect.Type = reflect.TypeOf(&data1.BeaconV1DataPage{})
+	BeaconV1Type         reflect.Type = reflect.TypeOf(&data1.BeaconV1{})
+	GeoPointV1Type       reflect.Type = reflect.TypeOf(&data1.GeoPointV1{})
 )
 
 type testGrpcClient struct {
-	*
+	*cclients.CommandableGrpcClient
+}
+
+func newTestGrpcClient() *testGrpcClient {
+	c := &testGrpcClient{
+		CommandableGrpcClient: cclients.NewCommandableGrpcClient("v1.beacons"),
+	}
+	return c
 }
 
 type beaconsCommandableGrpcServiceV1Test struct {
@@ -27,6 +38,7 @@ type beaconsCommandableGrpcServiceV1Test struct {
 	persistence *persist.BeaconsMemoryPersistence
 	controller  *logic.BeaconsController
 	service     *services1.BeaconsCommandableGrpcServiceV1
+	client      *testGrpcClient
 }
 
 func newBeaconsCommandableGrpcServiceV1Test() *beaconsCommandableGrpcServiceV1Test {
@@ -50,6 +62,12 @@ func newBeaconsCommandableGrpcServiceV1Test() *beaconsCommandableGrpcServiceV1Te
 		Radius: 70,
 	}
 
+	grpcConf := cconf.NewConfigParamsFromTuples(
+		"connection.protocol", "http",
+		"connection.port", "3002",
+		"connection.host", "localhost",
+	)
+
 	persistence := persist.NewBeaconsMemoryPersistence()
 	persistence.Configure(cconf.NewEmptyConfigParams())
 
@@ -57,11 +75,7 @@ func newBeaconsCommandableGrpcServiceV1Test() *beaconsCommandableGrpcServiceV1Te
 	controller.Configure(cconf.NewEmptyConfigParams())
 
 	service := services1.NewBeaconsCommandableGrpcServiceV1()
-	service.Configure(cconf.NewConfigParamsFromTuples(
-		"connection.protocol", "http",
-		"connection.port", "3002",
-		"connection.host", "localhost",
-	))
+	service.Configure(grpcConf)
 
 	references := cref.NewReferencesFromTuples(
 		cref.NewDescriptor("beacons", "persistence", "memory", "default", "1.0"), persistence,
@@ -72,12 +86,19 @@ func newBeaconsCommandableGrpcServiceV1Test() *beaconsCommandableGrpcServiceV1Te
 	controller.SetReferences(references)
 	service.SetReferences(references)
 
+	var client *testGrpcClient
+
+	client = newTestGrpcClient()
+
+	client.Configure(grpcConf)
+
 	return &beaconsCommandableGrpcServiceV1Test{
 		BEACON1:     BEACON1,
 		BEACON2:     BEACON2,
 		persistence: persistence,
 		controller:  controller,
 		service:     service,
+		client:      client,
 	}
 }
 
@@ -96,10 +117,21 @@ func (c *beaconsCommandableGrpcServiceV1Test) setup(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to clear persistence", err)
 	}
+
+	err = c.client.Open("")
+	if err != nil {
+		t.Error("Failed to open client", err)
+	}
 }
 
 func (c *beaconsCommandableGrpcServiceV1Test) teardown(t *testing.T) {
-	err := c.service.Close("")
+
+	err := c.client.Close("")
+	if err != nil {
+		t.Error("Failed to close client", err)
+	}
+
+	err = c.service.Close("")
 	if err != nil {
 		t.Error("Failed to close service", err)
 	}
@@ -111,33 +143,17 @@ func (c *beaconsCommandableGrpcServiceV1Test) teardown(t *testing.T) {
 }
 
 func (c *beaconsCommandableGrpcServiceV1Test) testCrudOperations(t *testing.T) {
-	var client cmdproto.CommandableClient
-
-	opts := []grpc.DialOption{
-		grpc.WithInsecure(),
-	}
-	conn, err := grpc.Dial("localhost:3002", opts...)
-	if err != nil {
-		grpclog.Fatalf("fail to dial: %v", err)
-	}
-	defer conn.Close()
-	client = cmdproto.NewCommandableClient(conn)
 
 	var beacon1 data1.BeaconV1
 	// Create the first beacon
-	requestParams := make(map[string]interface{})
-	requestParams["beacon"] = c.BEACON1
-	jsonBuf, _ := json.Marshal(requestParams)
 
-	request := cmdproto.InvokeRequest{}
-	request.Method = "v1.beacons.create_beacon"
-	request.ArgsEmpty = false
-	request.ArgsJson = string(jsonBuf)
-	response, err := client.Invoke(context.TODO(), &request)
+	params := cdata.NewAnyValueMapFromTuples(
+		"beacon", c.BEACON1,
+	)
+	res, err := c.client.CallCommand(BeaconV1Type, "create_beacon", "", params)
 	assert.Nil(t, err)
-	var beacon data1.BeaconV1
-	jsonErr := json.Unmarshal([]byte(response.ResultJson), &beacon)
-	assert.Nil(t, jsonErr)
+	var beacon *data1.BeaconV1
+	beacon, _ = res.(*data1.BeaconV1)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Udi, beacon.Udi)
 	assert.Equal(t, c.BEACON1.SiteId, beacon.SiteId)
@@ -146,18 +162,12 @@ func (c *beaconsCommandableGrpcServiceV1Test) testCrudOperations(t *testing.T) {
 	assert.NotNil(t, beacon.Center)
 
 	// Create the second beacon
-	requestParams = make(map[string]interface{})
-	requestParams["beacon"] = c.BEACON2
-	jsonBuf, _ = json.Marshal(requestParams)
-
-	request.Method = "v1.beacons.create_beacon"
-	request.ArgsEmpty = false
-	request.ArgsJson = string(jsonBuf)
-	response, err = client.Invoke(context.TODO(), &request)
+	params = cdata.NewAnyValueMapFromTuples(
+		"beacon", c.BEACON2,
+	)
+	res, err = c.client.CallCommand(BeaconV1Type, "create_beacon", "", params)
 	assert.Nil(t, err)
-
-	jsonErr = json.Unmarshal([]byte(response.ResultJson), &beacon)
-	assert.Nil(t, jsonErr)
+	beacon, _ = res.(*data1.BeaconV1)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON2.Udi, beacon.Udi)
 	assert.Equal(t, c.BEACON2.SiteId, beacon.SiteId)
@@ -166,108 +176,73 @@ func (c *beaconsCommandableGrpcServiceV1Test) testCrudOperations(t *testing.T) {
 	assert.NotNil(t, beacon.Center)
 
 	// Get all beacons
-	request.Method = "v1.beacons.get_beacons"
-	request.ArgsEmpty = false
-	request.ArgsJson = "{}"
-	response, err = client.Invoke(context.TODO(), &request)
+	params = cdata.NewAnyValueMapFromTuples(
+		"filter", cdata.NewEmptyFilterParams(),
+		"paging", cdata.NewEmptyPagingParams(),
+	)
+	res, err = c.client.CallCommand(BeaconV1DataPageType, "get_beacons", "", params)
 	assert.Nil(t, err)
-
-	var page data1.BeaconV1DataPage
-	jsonErr = json.Unmarshal([]byte(response.ResultJson), &page)
-	assert.Nil(t, jsonErr)
+	var page *data1.BeaconV1DataPage
+	page, _ = res.(*data1.BeaconV1DataPage)
 	assert.NotNil(t, page)
 	assert.Len(t, page.Data, 2)
 	beacon1 = *page.Data[0]
 
 	// Update the beacon
 	beacon1.Label = "ABC"
-	requestParams = make(map[string]interface{})
-	requestParams["beacon"] = beacon1
-	jsonBuf, _ = json.Marshal(requestParams)
-
-	request.Method = "v1.beacons.update_beacon"
-	request.ArgsEmpty = false
-	request.ArgsJson = string(jsonBuf)
-	response, err = client.Invoke(context.TODO(), &request)
+	params = cdata.NewAnyValueMapFromTuples(
+		"beacon", beacon1,
+	)
+	res, err = c.client.CallCommand(BeaconV1Type, "update_beacon", "", params)
 	assert.Nil(t, err)
-
-	jsonErr = json.Unmarshal([]byte(response.ResultJson), &beacon)
-	assert.Nil(t, jsonErr)
+	beacon, _ = res.(*data1.BeaconV1)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.BEACON1.Id, beacon.Id)
+	assert.Equal(t, beacon1.Id, beacon.Id)
 	assert.Equal(t, "ABC", beacon.Label)
 
 	// Get beacon by udi
-	requestParams = make(map[string]interface{})
-	requestParams["udi"] = beacon1.Udi
-	jsonBuf, _ = json.Marshal(requestParams)
-
-	request.Method = "v1.beacons.get_beacon_by_udi"
-	request.ArgsEmpty = false
-	request.ArgsJson = string(jsonBuf)
-	response, err = client.Invoke(context.TODO(), &request)
+	params = cdata.NewAnyValueMapFromTuples(
+		"udi", beacon1.Udi,
+	)
+	res, err = c.client.CallCommand(BeaconV1Type, "get_beacon_by_udi", "", params)
 	assert.Nil(t, err)
-
-	jsonErr = json.Unmarshal([]byte(response.ResultJson), &beacon)
-	assert.Nil(t, jsonErr)
+	beacon, _ = res.(*data1.BeaconV1)
 	assert.NotNil(t, beacon)
-	assert.Equal(t, c.BEACON1.Id, beacon.Id)
+	assert.Equal(t, beacon1.Id, beacon.Id)
 
 	// Calculate position for one beacon
-	requestParams = make(map[string]interface{})
-	requestParams["site_id"] = "1"
-	requestParams["udis"] = []string{"00001"}
-	jsonBuf, _ = json.Marshal(requestParams)
-
-	request.Method = "v1.beacons.calculate_position"
-	request.ArgsEmpty = false
-	request.ArgsJson = string(jsonBuf)
-	response, err = client.Invoke(context.TODO(), &request)
+	params = cdata.NewAnyValueMapFromTuples(
+		"site_id", "1",
+		"udis", []string{"00001"},
+	)
+	res, err = c.client.CallCommand(GeoPointV1Type, "calculate_position", "", params)
 	assert.Nil(t, err)
-
-	var position data1.GeoPointV1
-	jsonErr = json.Unmarshal([]byte(response.ResultJson), &position)
-	assert.Nil(t, jsonErr)
-	assert.NotNil(t, beacon)
-
+	var position *data1.GeoPointV1
+	position, _ = res.(*data1.GeoPointV1)
 	assert.NotNil(t, position)
 	assert.Equal(t, "Point", position.Type)
 	assert.Equal(t, (float32)(0.0), position.Coordinates[0][0])
 	assert.Equal(t, (float32)(0.0), position.Coordinates[0][1])
 
 	// Delete the beacon
-	requestParams = make(map[string]interface{})
-	requestParams["beacon_id"] = beacon1.Id
-	jsonBuf, _ = json.Marshal(requestParams)
-
-	request.Method = "v1.beacons.delete_beacon_by_id"
-	request.ArgsEmpty = false
-	request.ArgsJson = string(jsonBuf)
-	response, err = client.Invoke(context.TODO(), &request)
+	params = cdata.NewAnyValueMapFromTuples(
+		"beacon_id", beacon1.Id,
+	)
+	res, err = c.client.CallCommand(BeaconV1Type, "delete_beacon_by_id", "", params)
 	assert.Nil(t, err)
-
-	jsonErr = json.Unmarshal([]byte(response.ResultJson), &beacon)
-	assert.Nil(t, jsonErr)
+	beacon, _ = res.(*data1.BeaconV1)
 	assert.NotNil(t, beacon)
 	assert.Equal(t, c.BEACON1.Id, beacon.Id)
 
 	// Try to get deleted beacon
-	requestParams = make(map[string]interface{})
-	requestParams["beacon_id"] = beacon1.Id
-	jsonBuf, _ = json.Marshal(requestParams)
-
-	request.Method = "v1.beacons.get_beacon_by_id"
-	request.ArgsEmpty = false
-	request.ArgsJson = string(jsonBuf)
-	response, err = client.Invoke(context.TODO(), &request)
+	params = cdata.NewAnyValueMapFromTuples(
+		"beacon_id", beacon1.Id,
+	)
+	res, err = c.client.CallCommand(BeaconV1Type, "get_beacon_by_id", "", params)
 	assert.Nil(t, err)
 
-	beacon = data1.BeaconV1{}
-
-	jsonErr = json.Unmarshal([]byte(response.ResultJson), &beacon)
-	assert.Nil(t, jsonErr)
-	assert.NotNil(t, beacon)
-	assert.Empty(t, beacon)
+	beacon, _ = res.(*data1.BeaconV1)
+	assert.Nil(t, beacon)
 }
 
 func TestBeaconsCommmandableGrpcServiceV1(t *testing.T) {
