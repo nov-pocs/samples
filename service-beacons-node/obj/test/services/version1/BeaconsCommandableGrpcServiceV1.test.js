@@ -50,7 +50,13 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
         service.open(null, done);
     });
     suiteTeardown((done) => {
-        service.close(null, done);
+        client.close(null, (err) => {
+            if (err) {
+                done(err);
+                return;
+            }
+            service.close(null, done);
+        });
     });
     setup((done) => {
         client = new TestGrpcClient();

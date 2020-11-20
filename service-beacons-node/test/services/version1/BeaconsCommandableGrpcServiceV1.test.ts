@@ -68,7 +68,14 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
     });
 
     suiteTeardown((done) => {
-        service.close(null, done);
+        client.close(null, (err)=>{
+            if (err) {
+                done(err);
+                return;
+            }
+            service.close(null, done);
+        })
+        
     });
 
     setup((done) => {
