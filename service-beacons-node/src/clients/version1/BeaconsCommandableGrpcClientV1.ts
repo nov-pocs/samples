@@ -23,14 +23,17 @@ export class BeaconsCommandableGrpcClientV1 extends CommandableGrpcClient implem
         this.callCommand(
             'get_beacons',
             correlationId,
-            { filter: filter, paging: paging },
+            {
+                filter: filter,
+                paging: paging
+            },
             callback
         );
     }
 
     public getBeaconById(correlationId: string, beaconId: string,
         callback: (err: any, beacon: BeaconV1) => void): void {
-            
+
         this.callCommand(
             'get_beacon_by_id',
             correlationId,
@@ -53,7 +56,7 @@ export class BeaconsCommandableGrpcClientV1 extends CommandableGrpcClient implem
         );
     }
 
-    public calculatePosition(correlationId: string, siteId: string, udis: string[], 
+    public calculatePosition(correlationId: string, siteId: string, udis: string[],
         callback: (err: any, position: any) => void): void {
         this.callCommand(
             'calculate_position',
@@ -63,7 +66,7 @@ export class BeaconsCommandableGrpcClientV1 extends CommandableGrpcClient implem
                 udis: udis
             },
             callback
-        );    
+        );
     }
 
     public createBeacon(correlationId: string, beacon: BeaconV1,
@@ -87,7 +90,7 @@ export class BeaconsCommandableGrpcClientV1 extends CommandableGrpcClient implem
                 beacon: beacon
             },
             callback
-        );    
+        );
     }
 
     public deleteBeaconById(correlationId: string, beaconId: string,
@@ -101,5 +104,5 @@ export class BeaconsCommandableGrpcClientV1 extends CommandableGrpcClient implem
             callback
         );
     }
-  
+
 }

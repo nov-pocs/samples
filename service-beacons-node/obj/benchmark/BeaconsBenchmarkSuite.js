@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BeaconsBenchmarkSuite = void 0;
 const async = require('async');
+const _ = require('lodash');
 const pip_benchmark_node_1 = require("pip-benchmark-node");
 const pip_benchmark_node_2 = require("pip-benchmark-node");
 const pip_services3_commons_node_1 = require("pip-services3-commons-node");
@@ -48,8 +50,13 @@ class BeaconsBenchmarkSuite extends pip_benchmark_node_1.BenchmarkSuite {
                 }
                 this.context.sendMessage("Creating " + (totalCount - currentCount) + " beacons...");
                 async.whilst((callback) => {
-                    callback(null, currentCount < totalCount);
-                    //return currentCount < totalCount;
+                    if (_.isFunction(callback)) {
+                        callback(null, currentCount < totalCount);
+                        return;
+                    }
+                    else {
+                        return currentCount < totalCount;
+                    }
                 }, (callback) => {
                     let beacon = RandomBeaconV1_1.RandomBeaconV1.nextBeacon(siteCount);
                     context.persistence.create(null, beacon, (err, beacon) => {

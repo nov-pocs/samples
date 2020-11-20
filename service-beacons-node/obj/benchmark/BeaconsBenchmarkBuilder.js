@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BeaconsBenchmarkBuilder = void 0;
 const pip_benchmark_node_1 = require("pip-benchmark-node");
 const pip_benchmark_node_2 = require("pip-benchmark-node");
 const pip_benchmark_node_3 = require("pip-benchmark-node");

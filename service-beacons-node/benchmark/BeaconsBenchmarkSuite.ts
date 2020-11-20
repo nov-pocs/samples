@@ -1,4 +1,5 @@
 const async = require('async');
+const _ = require('lodash');
 
 import { BenchmarkSuite } from 'pip-benchmark-node';
 import { Parameter } from 'pip-benchmark-node';
@@ -61,8 +62,12 @@ export class BeaconsBenchmarkSuite extends BenchmarkSuite {
 
                 async.whilst(
                     (callback) => {
-                        callback(null, currentCount < totalCount); 
-                        //return currentCount < totalCount;
+                        if (_.isFunction(callback)) {
+                            callback(null, currentCount < totalCount); 
+                            return
+                        } else {
+                            return currentCount < totalCount;
+                        }     
                     },
                     (callback) => {
                         let beacon = RandomBeaconV1.nextBeacon(siteCount);

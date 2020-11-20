@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BeaconsCommandableGrpcServiceV1 = void 0;
 const pip_services3_commons_node_1 = require("pip-services3-commons-node");
 const pip_services3_grpc_node_1 = require("pip-services3-grpc-node");
 class BeaconsCommandableGrpcServiceV1 extends pip_services3_grpc_node_1.CommandableGrpcService {

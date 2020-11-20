@@ -7,6 +7,7 @@ let async = require('async');
 const pip_services3_commons_node_1 = require("pip-services3-commons-node");
 const pip_services3_commons_node_2 = require("pip-services3-commons-node");
 const pip_services3_commons_node_3 = require("pip-services3-commons-node");
+const pip_services3_grpc_node_1 = require("pip-services3-grpc-node");
 const src_1 = require("../../../src");
 const logic_1 = require("../../../src/logic");
 const persistence_1 = require("../../../src/persistence");
@@ -30,6 +31,11 @@ const BEACON2 = {
     center: { type: 'Point', coordinates: [2, 2] },
     radius: 70
 };
+class TestClient extends pip_services3_grpc_node_1.CommandableGrpcClient {
+    constructor() {
+        super('beacons_v1');
+    }
+}
 suite('BeaconsCommandableGrpcServiceV1', () => {
     let service;
     let client;
@@ -46,31 +52,20 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
     suiteTeardown((done) => {
         service.close(null, done);
     });
-    setup(() => {
-        let packageDefinition = protoLoader.loadSync(__dirname + "../../../../../node_modules/pip-services3-grpc-node/src/protos/commandable.proto", {
-            keepCase: true,
-            defaults: true,
-            oneofs: true
-        });
-        let clientProto = grpc.loadPackageDefinition(packageDefinition).commandable.Commandable;
-        client = new clientProto('localhost:3001', grpc.credentials.createInsecure());
+    setup((done) => {
+        client = new TestClient();
+        client.configure(grpcConfig);
+        client.open(null, done);
     });
     test('CRUD Operations', (done) => {
         let beacon1;
         async.series([
             // Create the first beacon
             (callback) => {
-                client.invoke({
-                    method: 'beacons_v1.create_beacon',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        beacon: BEACON1
-                    })
-                }, (err, response) => {
+                client.callCommand("create_beacon", null, {
+                    beacon: BEACON1
+                }, (err, beacon) => {
                     assert.isNull(err);
-                    assert.isFalse(response.result_empty);
-                    assert.isString(response.result_json);
-                    let beacon = JSON.parse(response.result_json);
                     assert.isObject(beacon);
                     assert.equal(BEACON1.udi, beacon.udi);
                     assert.equal(BEACON1.site_id, beacon.site_id);
@@ -82,17 +77,10 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
             },
             // Create the second beacon
             (callback) => {
-                client.invoke({
-                    method: 'beacons_v1.create_beacon',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        beacon: BEACON2
-                    })
-                }, (err, response) => {
+                client.callCommand("create_beacon", null, {
+                    beacon: BEACON2
+                }, (err, beacon) => {
                     assert.isNull(err);
-                    assert.isFalse(response.result_empty);
-                    assert.isString(response.result_json);
-                    let beacon = JSON.parse(response.result_json);
                     assert.isObject(beacon);
                     assert.equal(BEACON2.udi, beacon.udi);
                     assert.equal(BEACON2.site_id, beacon.site_id);
@@ -104,18 +92,11 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
             },
             // Get all beacons
             (callback) => {
-                client.invoke({
-                    method: 'beacons_v1.get_beacons',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        filter: new pip_services3_commons_node_1.FilterParams(),
-                        paging: new pip_services3_commons_node_1.PagingParams()
-                    })
-                }, (err, response) => {
+                client.callCommand("get_beacons", null, {
+                    filter: new pip_services3_commons_node_1.FilterParams(),
+                    paging: new pip_services3_commons_node_1.PagingParams()
+                }, (err, page) => {
                     assert.isNull(err);
-                    assert.isFalse(response.result_empty);
-                    assert.isString(response.result_json);
-                    let page = JSON.parse(response.result_json);
                     assert.isObject(page);
                     assert.lengthOf(page.data, 2);
                     beacon1 = page.data[0];
@@ -125,17 +106,10 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
             // Update the beacon
             (callback) => {
                 beacon1.label = 'ABC';
-                client.invoke({
-                    method: 'beacons_v1.update_beacon',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        beacon: beacon1
-                    })
-                }, (err, response) => {
+                client.callCommand("update_beacon", null, {
+                    beacon: beacon1
+                }, (err, beacon) => {
                     assert.isNull(err);
-                    assert.isFalse(response.result_empty);
-                    assert.isString(response.result_json);
-                    let beacon = JSON.parse(response.result_json);
                     assert.isObject(beacon);
                     assert.equal(beacon1.id, beacon.id);
                     assert.equal('ABC', beacon.label);
@@ -144,17 +118,10 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
             },
             // Get beacon by udi
             (callback) => {
-                client.invoke({
-                    method: 'beacons_v1.get_beacon_by_udi',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        udi: beacon1.udi
-                    })
-                }, (err, response) => {
+                client.callCommand("get_beacon_by_udi", null, {
+                    udi: beacon1.udi
+                }, (err, beacon) => {
                     assert.isNull(err);
-                    assert.isFalse(response.result_empty);
-                    assert.isString(response.result_json);
-                    let beacon = JSON.parse(response.result_json);
                     assert.isObject(beacon);
                     assert.equal(beacon1.id, beacon.id);
                     callback();
@@ -162,18 +129,11 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
             },
             // Calculate position for one beacon
             (callback) => {
-                client.invoke({
-                    method: 'beacons_v1.calculate_position',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        site_id: '1',
-                        udis: ['00001']
-                    })
-                }, (err, response) => {
+                client.callCommand("calculate_position", null, {
+                    site_id: '1',
+                    udis: ['00001']
+                }, (err, position) => {
                     assert.isNull(err);
-                    assert.isFalse(response.result_empty);
-                    assert.isString(response.result_json);
-                    let position = JSON.parse(response.result_json);
                     assert.isObject(position);
                     assert.equal('Point', position.type);
                     assert.lengthOf(position.coordinates, 2);
@@ -184,17 +144,10 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
             },
             // Delete the beacon
             (callback) => {
-                client.invoke({
-                    method: 'beacons_v1.delete_beacon_by_id',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        beacon_id: beacon1.id
-                    })
-                }, (err, response) => {
+                client.callCommand("delete_beacon_by_id", null, {
+                    beacon_id: beacon1.id
+                }, (err, beacon) => {
                     assert.isNull(err);
-                    assert.isFalse(response.result_empty);
-                    assert.isString(response.result_json);
-                    let beacon = JSON.parse(response.result_json);
                     assert.isObject(beacon);
                     assert.equal(beacon1.id, beacon.id);
                     callback();
@@ -202,13 +155,9 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
             },
             // Try to get deleted beacon
             (callback) => {
-                client.invoke({
-                    method: 'beacons_v1.get_beacon_by_id',
-                    args_empty: false,
-                    args_json: JSON.stringify({
-                        beacon_id: beacon1.id
-                    })
-                }, (err, response) => {
+                client.callCommand("get_beacon_by_id", null, {
+                    beacon_id: beacon1.id
+                }, (err, beacon) => {
                     assert.isNull(err);
                     //assert.isEmpty(beacon || null);
                     callback();
