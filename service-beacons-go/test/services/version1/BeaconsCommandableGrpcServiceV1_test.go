@@ -17,6 +17,10 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
+type testGrpcClient struct {
+	*
+}
+
 type beaconsCommandableGrpcServiceV1Test struct {
 	BEACON1     *data1.BeaconV1
 	BEACON2     *data1.BeaconV1

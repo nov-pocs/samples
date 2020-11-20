@@ -13,7 +13,10 @@ class BeaconsCommandableGrpcClientV1 extends pip_services3_grpc_node_1.Commandab
         this._blockCount = config.getAsIntegerWithDefault("options.block_count", this._blockCount);
     }
     getBeacons(correlationId, filter, paging, callback) {
-        this.callCommand('get_beacons', correlationId, { filter: filter, paging: paging }, callback);
+        this.callCommand('get_beacons', correlationId, {
+            filter: filter,
+            paging: paging
+        }, callback);
     }
     getBeaconById(correlationId, beaconId, callback) {
         this.callCommand('get_beacon_by_id', correlationId, {

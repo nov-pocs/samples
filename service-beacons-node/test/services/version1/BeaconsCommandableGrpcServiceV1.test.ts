@@ -38,7 +38,7 @@ const BEACON2: BeaconV1 = {
     radius: 70
 };
 
-class TestClient extends CommandableGrpcClient {
+class TestGrpcClient extends CommandableGrpcClient {
     public constructor() {
         super('beacons_v1');
     }
@@ -47,7 +47,7 @@ class TestClient extends CommandableGrpcClient {
 suite('BeaconsCommandableGrpcServiceV1', () => {
     let service: BeaconsCommandableGrpcServiceV1;
 
-    let client: TestClient;
+    let client: TestGrpcClient;
 
     suiteSetup((done) => {
         let controller = new BeaconsController();
@@ -72,7 +72,7 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
     });
 
     setup((done) => {
-        client = new TestClient();
+        client = new TestGrpcClient();
         client.configure(grpcConfig);
         client.open(null, done);
     });

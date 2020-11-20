@@ -31,7 +31,7 @@ const BEACON2 = {
     center: { type: 'Point', coordinates: [2, 2] },
     radius: 70
 };
-class TestClient extends pip_services3_grpc_node_1.CommandableGrpcClient {
+class TestGrpcClient extends pip_services3_grpc_node_1.CommandableGrpcClient {
     constructor() {
         super('beacons_v1');
     }
@@ -53,7 +53,7 @@ suite('BeaconsCommandableGrpcServiceV1', () => {
         service.close(null, done);
     });
     setup((done) => {
-        client = new TestClient();
+        client = new TestGrpcClient();
         client.configure(grpcConfig);
         client.open(null, done);
     });
