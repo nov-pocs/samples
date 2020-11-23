@@ -1,0 +1,5 @@
+openapi: '3.0.2'
+info:
+  title: 'Beacons Service V1'
+  description: 'Microservice to generate unique string or numeric object IDs one by one or in small batches'
+  version: '1'

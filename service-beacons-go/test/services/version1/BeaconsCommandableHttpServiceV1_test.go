@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
@@ -58,6 +59,7 @@ func newBeaconsCommandableHttpServiceV1Test() *beaconsCommandableHttpServiceV1Te
 		"connection.protocol", "http",
 		"connection.port", "3005",
 		"connection.host", "localhost",
+		"swagger.enable", "true", // Set true for swagger service enable
 	))
 
 	references := cref.NewReferencesFromTuples(
@@ -202,6 +204,14 @@ func (c *beaconsCommandableHttpServiceV1Test) testCrudOperations(t *testing.T) {
 	assert.Empty(t, beacon)
 }
 
+func (c *beaconsCommandableHttpServiceV1Test) testSwagger(t *testing.T) {
+	resp, err := http.Get("http://localhost:3005/v1/beacons/swagger")
+	assert.Nil(t, err)
+	body, err := ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.True(t, strings.Index((string)(body), "openapi:") >= 0)
+}
+
 func (c *beaconsCommandableHttpServiceV1Test) invoke(
 	route string, body *cdata.AnyValueMap, result interface{}) error {
 	var url string = "http://localhost:3005" + route
@@ -245,8 +255,11 @@ func TestBeaconsCommmandableHttpServiceV1(t *testing.T) {
 	c := newBeaconsCommandableHttpServiceV1Test()
 
 	c.setup(t)
-
 	t.Run("CRUD Operations", c.testCrudOperations)
+	c.teardown(t)
+
+	c.setup(t)
+	t.Run("Swagger open API", c.testSwagger)
 	c.teardown(t)
 
 }

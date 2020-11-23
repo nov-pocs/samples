@@ -48,6 +48,11 @@
 
 # HTTP Service V1
 - descriptor: "beacons:service:commandable-http:default:1.0"
+  swagger:
+    enable: true
+    auto: true
+    name: "Beacons Service V1"
+    description: "Sample beacons microservice"
 
 # Hearbeat service
 - descriptor: "pip-services:heartbeat-service:http:default:1.0"

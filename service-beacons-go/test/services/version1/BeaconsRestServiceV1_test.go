@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 
@@ -20,11 +21,13 @@ import (
 )
 
 type beaconsRestServiceV1Test struct {
-	BEACON1     *data1.BeaconV1
-	BEACON2     *data1.BeaconV1
-	persistence *persist.BeaconsMemoryPersistence
-	controller  *logic.BeaconsController
-	service     *services1.BeaconsRestServiceV1
+	BEACON1        *data1.BeaconV1
+	BEACON2        *data1.BeaconV1
+	persistence    *persist.BeaconsMemoryPersistence
+	controller     *logic.BeaconsController
+	service        *services1.BeaconsRestServiceV1
+	filename       string
+	openApiContent string
 }
 
 func newBeaconsRestServiceV1Test() *beaconsRestServiceV1Test {
@@ -48,6 +51,9 @@ func newBeaconsRestServiceV1Test() *beaconsRestServiceV1Test {
 		Radius: 70,
 	}
 
+	openApiContent := "swagger yaml content from file"
+	filename := "id_generator_temp.yaml"
+
 	persistence := persist.NewBeaconsMemoryPersistence()
 	persistence.Configure(cconf.NewEmptyConfigParams())
 
@@ -59,6 +65,8 @@ func newBeaconsRestServiceV1Test() *beaconsRestServiceV1Test {
 		"connection.protocol", "http",
 		"connection.port", "3006",
 		"connection.host", "localhost",
+		"swagger.enable", "true", // Set true for swagger service enable
+		"openapi_file", filename, // Set file name for test only
 	))
 
 	references := cref.NewReferencesFromTuples(
@@ -71,16 +79,24 @@ func newBeaconsRestServiceV1Test() *beaconsRestServiceV1Test {
 	service.SetReferences(references)
 
 	return &beaconsRestServiceV1Test{
-		BEACON1:     BEACON1,
-		BEACON2:     BEACON2,
-		persistence: persistence,
-		controller:  controller,
-		service:     service,
+		BEACON1:        BEACON1,
+		BEACON2:        BEACON2,
+		persistence:    persistence,
+		controller:     controller,
+		service:        service,
+		filename:       filename,
+		openApiContent: openApiContent,
 	}
 }
 
 func (c *beaconsRestServiceV1Test) setup(t *testing.T) {
-	err := c.persistence.Open("")
+
+	file, err := os.OpenFile(c.filename, os.O_RDWR|os.O_CREATE, 0755)
+	assert.Nil(t, err)
+	_, err = file.Write(([]byte)(c.openApiContent))
+	assert.Nil(t, err)
+
+	err = c.persistence.Open("")
 	if err != nil {
 		t.Error("Failed to open persistence", err)
 	}
@@ -106,6 +122,10 @@ func (c *beaconsRestServiceV1Test) teardown(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to close persistence", err)
 	}
+
+	// delete temp file
+	err = os.Remove(c.filename)
+	assert.Nil(t, err)
 }
 
 func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
@@ -175,6 +195,15 @@ func (c *beaconsRestServiceV1Test) testCrudOperations(t *testing.T) {
 	assert.Empty(t, beacon)
 }
 
+func (c *beaconsRestServiceV1Test) testSwagger(t *testing.T) {
+
+	resp, err := http.Get("http://localhost:3006/v1/beacons/swagger")
+	assert.Nil(t, err)
+	body, err := ioutil.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, c.openApiContent, (string)(body))
+}
+
 func (c *beaconsRestServiceV1Test) invoke(method string,
 	route string, body interface{}, result interface{}) error {
 	var url string = "http://localhost:3006" + route
@@ -227,8 +256,11 @@ func TestBeaconsRestServiceV1(t *testing.T) {
 	c := newBeaconsRestServiceV1Test()
 
 	c.setup(t)
-
 	t.Run("CRUD Operations", c.testCrudOperations)
+	c.teardown(t)
+
+	c.setup(t)
+	t.Run("Swagger open API", c.testSwagger)
 	c.teardown(t)
 
 }

@@ -5,6 +5,7 @@ import (
 
 	data1 "github.com/nov-pocs/samples/service-beacons-go/data/version1"
 	logic "github.com/nov-pocs/samples/service-beacons-go/logic"
+	cconf "github.com/pip-services3-go/pip-services3-commons-go/config"
 	cconv "github.com/pip-services3-go/pip-services3-commons-go/convert"
 	crefer "github.com/pip-services3-go/pip-services3-commons-go/refer"
 	cvalid "github.com/pip-services3-go/pip-services3-commons-go/validate"
@@ -13,7 +14,8 @@ import (
 
 type BeaconsRestServiceV1 struct {
 	*cservices.RestService
-	controller logic.IBeaconsController
+	controller  logic.IBeaconsController
+	openApiFile string
 }
 
 func NewBeaconsRestServiceV1() *BeaconsRestServiceV1 {
@@ -22,8 +24,14 @@ func NewBeaconsRestServiceV1() *BeaconsRestServiceV1 {
 	}
 	c.RestService.IRegisterable = c
 	c.BaseRoute = "v1/beacons"
+	c.openApiFile = "./swagger/beacons_v1.yaml"
 	c.DependencyResolver.Put("controller", crefer.NewDescriptor("beacons", "controller", "default", "*", "*"))
 	return c
+}
+
+func (c *BeaconsRestServiceV1) Configure(config *cconf.ConfigParams) {
+	c.openApiFile = config.GetAsStringWithDefault("openapi_file", c.openApiFile)
+	c.RestService.Configure(config)
 }
 
 func (c *BeaconsRestServiceV1) SetReferences(references crefer.IReferences) {
@@ -177,4 +185,9 @@ func (c *BeaconsRestServiceV1) Register() {
 			WithRequiredProperty("beacon_id", cconv.String).Schema,
 		c.deleteBeaconById,
 	)
+
+	// Register swagger file
+	if c.openApiFile != "" {
+		c.RegisterOpenApiSpecFromFile(c.openApiFile)
+	}
 }
