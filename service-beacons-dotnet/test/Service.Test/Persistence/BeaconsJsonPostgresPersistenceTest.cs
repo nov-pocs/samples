@@ -5,6 +5,7 @@ using Xunit;
 
 namespace Nov.MaxSamples.Beacons.Persistence
 {
+    [Collection("Sequential")]
     public class BeaconsJsonPostgresPersistenceTest : IDisposable
     {
         private bool _enabled = false;

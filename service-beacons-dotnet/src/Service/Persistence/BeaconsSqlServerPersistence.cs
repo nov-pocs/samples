@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Nov.MaxSamples.Beacons.Data.Version1;
 using PipServices3.Commons.Data;
 using PipServices3.SqlServer.Persistence;
+using PipServices3.Commons.Convert;
 
 namespace Nov.MaxSamples.Beacons.Persistence
 {
@@ -73,5 +74,5 @@ namespace Nov.MaxSamples.Beacons.Persistence
 
             return item;
         }
-    }
+	}
 }

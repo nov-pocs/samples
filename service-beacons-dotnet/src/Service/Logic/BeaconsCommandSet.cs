@@ -15,7 +15,7 @@ namespace Nov.MaxSamples.Beacons.Logic
             _controller = controller;
 
             AddCommand(MakeGetBeaconsCommand());
-            AddCommand(MakeGetBeaconByIdBeaconsCommand());
+            AddCommand(MakeGetBeaconByIdCommand());
             AddCommand(MakeGetBeaconByUdiCommand());
             AddCommand(MakeCalculatePositionCommand());
             AddCommand(MakeCreateBeaconCommand());
@@ -38,7 +38,7 @@ namespace Nov.MaxSamples.Beacons.Logic
                 });
         }
 
-        private ICommand MakeGetBeaconByIdBeaconsCommand()
+        private ICommand MakeGetBeaconByIdCommand()
         {
             return new Command(
                 "get_beacon_by_id",

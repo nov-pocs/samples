@@ -13,7 +13,8 @@ namespace Nov.MaxSamples.Beacons.Persistence
         public BeaconsJsonPostgresPersistence()
             : base("beacons_json")
         {
-            EnsureTable("VARCHAR(32)", "JSONB");
+            //EnsureTable("VARCHAR(32)", "JSONB");
+            EnsureTable();
             EnsureIndex("beacons_json_site_id", new Dictionary<string, bool> { { "(data->>'site_id')", true } }, new IndexOptions());
             this._maxPageSize = 1000;
         }
@@ -26,24 +27,24 @@ namespace Nov.MaxSamples.Beacons.Persistence
 
             var id = filter.GetAsNullableString("id");
             if (id != null)
-                filters.Add("data->'id'='" + id + "'");
+                filters.Add("data->>'id'='" + id + "'");
 
             var siteId = filter.GetAsNullableString("site_id");
             if (siteId != null)
-                filters.Add("data->'site_id'='" + siteId + "'");
+                filters.Add("data->>'site_id'='" + siteId + "'");
 
             var label = filter.GetAsNullableString("label");
             if (label != null)
-                filters.Add("data->'label'='" + label + "'");
+                filters.Add("data->>'label'='" + label + "'");
 
             var udi = filter.GetAsNullableString("udi");
             if (udi != null)
-                filters.Add("data->'udi'='" + udi + "'");
+                filters.Add("data->>'udi'='" + udi + "'");
 
             var tempUdis = filter.GetAsString("udis");
             var udis = tempUdis != null ? tempUdis.Split(',') : null;
             if (udis != null)
-                filters.Add("data->'udi' IN ('" + string.Join("','", udis) + "')");
+                filters.Add("data->>'udi' IN ('" + string.Join("','", udis) + "')");
 
             return filters.Count > 0 ? string.Join(" AND ", filters.ToArray()) : null;
         }

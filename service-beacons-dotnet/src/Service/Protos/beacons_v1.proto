@@ -1,0 +1,125 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "pip-services.beacons.version1";
+option java_outer_classname = "BeaconsProtoV1";
+option objc_class_prefix = "BEACONS_CMD_V1";
+
+package beacons_v1;
+
+message ErrorDescription {
+  string type = 1;
+  string category = 2;
+  string code = 3;
+  string correlation_id = 4;
+  string status = 5;
+  string message = 6;
+  string cause = 7;
+  string stack_trace = 8;
+  map<string, string> details = 9;
+}
+
+message PagingParams {
+    int64 skip = 1;
+    int32 take = 2;
+    bool total = 3;
+}
+
+message InternalArray {
+    repeated float internal_array = 1;
+}
+
+message GeoPointV1{
+    string type = 1;
+    repeated InternalArray coordinates = 2;
+}
+
+message BeaconV1 {
+    string id = 1;
+    string site_id = 2;
+    string type = 3;
+    string udi = 4;
+    string label = 5;
+    GeoPointV1 center = 6;
+    float radius = 8;
+}
+
+message BeaconV1Page {
+    int64 total = 1;
+    repeated BeaconV1 data = 2;
+}
+
+// The beacons service definition.
+service BeaconsV1 {
+  rpc get_beacons (BeaconV1PageRequest) returns (BeaconV1PageReply) {}
+  rpc get_beacon_by_id (BeaconV1IdRequest) returns (BeaconV1ObjectReply) {}
+  rpc create_beacon (BeaconV1ObjectRequest) returns (BeaconV1ObjectReply) {}
+  rpc update_beacon (BeaconV1ObjectRequest) returns (BeaconV1ObjectReply) {}
+  rpc delete_beacon_by_id (BeaconV1IdRequest) returns (BeaconV1ObjectReply) {}
+  rpc get_beacon_by_udi (BeaconV1UdiRequest) returns (BeaconV1ObjectReply) {}
+  rpc calculate_position (BeaconV1PositionRequest) returns (BeaconV1PositionReply) {}
+}
+
+// The request message containing the beacon page request.
+message BeaconV1PageRequest {
+  string correlation_id = 1;
+  map<string, string> filter = 2;
+  PagingParams paging = 3;
+}
+
+// The response message containing the beacon page response
+message BeaconV1PageReply {
+  ErrorDescription error = 1;
+  BeaconV1Page page = 2;
+}
+
+// The request message containing the beacon id request.
+message BeaconV1IdRequest {
+  string correlation_id = 1;
+  string beacon_id = 2;
+}
+
+// The request message containing the beacon udi request.
+message BeaconV1UdiRequest {
+    string correlation_id = 1;
+    string beacon_udi = 2;
+}
+
+// The request message containing the beacon position request.
+message BeaconV1PositionRequest {
+    string correlation_id = 1;
+    repeated string udis = 2;
+    string site_id = 3;
+}
+
+// The request message containing the beacon object request.
+message BeaconV1ObjectRequest {
+  string correlation_id = 1;
+  BeaconV1 beacon = 2;
+}
+
+// The response message containing the beacon object response
+message BeaconV1ObjectReply {
+  ErrorDescription error = 1;
+  BeaconV1 beacon = 2;
+}
+
+//  The response message containing the geo point object response
+message BeaconV1PositionReply {
+    ErrorDescription error = 1;
+    GeoPointV1 point = 2;
+}

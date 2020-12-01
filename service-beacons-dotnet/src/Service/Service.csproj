@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Swagger\beacons_v1.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Swagger\beacons_v1.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Interface\Interface.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -15,15 +23,13 @@
     <PackageReference Include="PipServices3.Rpc" Version="3.3.2" />
     <PackageReference Include="PipServices3.Grpc" Version="3.0.1" />
     <PackageReference Include="PipServices3.SqlServer" Version="3.0.1" />
-    <PackageReference Include="PipServices3.Postgres" Version="3.0.1" />
+    <PackageReference Include="PipServices3.Postgres" Version="3.0.3" />
     <PackageReference Include="PipServices3.MongoDb" Version="3.3.0" />
     <PackageReference Include="PipServices3.Data" Version="3.2.2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Persistence\" />
     <Folder Include="Logic\" />
-    <Folder Include="Services\" />
-    <Folder Include="Services\Version1\" />
     <Folder Include="Build\" />
     <Folder Include="Container\" />
   </ItemGroup>

@@ -61,7 +61,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             var page = await _client.GetBeaconsAsync(
                 null,
                 new FilterParams(),
-                new PagingParams()
+                new PagingParams(0, 100)
             );
 
             Assert.NotNull(page);

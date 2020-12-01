@@ -8,6 +8,7 @@ using Xunit;
 
 namespace Nov.MaxSamples.Beacons.Clients.Version1
 {
+    [Collection("Sequential")]
     public class BeaconsCommandableHttpClientV1Test
     {
         private static readonly ConfigParams HttpConfig = ConfigParams.FromTuples(
