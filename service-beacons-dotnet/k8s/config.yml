@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  postgres_db: app
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: credentials
+stringData:
+  postgres_user: postgres
+  postgres_pass: postgres

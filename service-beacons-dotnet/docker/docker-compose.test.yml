@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+  test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.test
+    image: ${IMAGE:-nov/test}
+    command: ${TEST_CMD:-bash -c "sleep 40 && dotnet test test/Service.Test/Service.Test.csproj && dotnet test test/Client.Test/Client.Test.csproj"}
+    depends_on:
+      - mongo
+      - postgres
+      # - sqlserver
+    environment:
+      - MONGO_SERVICE_HOST=mongo
+      - MONGO_SERVICE_PORT=27017
+      - MONGO_DB=test
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=test
+      # - SQLSERVER_HOST=sqlserver
+      # - SQLSERVER_PORT=1433
+      # - SQLSERVER_USER=sa
+      # - SQLSERVER_PASS=sqlserver_123
+      # - SQLSERVER_DB=master
+
+  mongo:
+    image: mongo:latest
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test
+
+  # sqlserver:
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   container_name: sqlserver
+  #   environment:
+  #     ACCEPT_EULA: Y
+  #     SA_PASSWORD: sqlserver_123
+  #   ports:
+  #     - "1433:1433"

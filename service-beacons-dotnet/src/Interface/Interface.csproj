@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Nov.MaxSamples.Beacons</RootNamespace>
+    <AssemblyName>Nov.MaxSamples.Beacons.Interface</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PipServices3.Commons" Version="3.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Data\Version1\" />
+    <Folder Include="Logic\" />
+  </ItemGroup>
+</Project>
