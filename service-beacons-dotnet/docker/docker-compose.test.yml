@@ -15,13 +15,13 @@ services:
       - MONGO_SERVICE_HOST=mongo
       - MONGO_SERVICE_PORT=27017
       - MONGO_DB=test
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+      - POSTGRES_SERVICE_HOST=postgres
+      - POSTGRES_SERVICE_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=test
-      # - SQLSERVER_HOST=sqlserver
-      # - SQLSERVER_PORT=1433
+      # - SQLSERVER_SERVICE_HOST=sqlserver
+      # - SQLSERVER_SERVICE_PORT=1433
       # - SQLSERVER_USER=sa
       # - SQLSERVER_PASS=sqlserver_123
       # - SQLSERVER_DB=master

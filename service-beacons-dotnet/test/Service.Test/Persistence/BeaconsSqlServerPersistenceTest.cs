@@ -14,21 +14,21 @@ namespace Nov.MaxSamples.Beacons.Persistence
 		public BeaconsSqlServerPersistenceTest()
 		{
 			var SQLSERVER_DB = Environment.GetEnvironmentVariable("SQLSERVER_DB") ?? "master";
-			var SQLSERVER_HOST = Environment.GetEnvironmentVariable("SQLSERVER_HOST") ?? "localhost";
-			var SQLSERVER_PORT = Environment.GetEnvironmentVariable("SQLSERVER_PORT") ?? "1433";
-			var SQLSERVER_URI = Environment.GetEnvironmentVariable("SQLSERVER_URI");
+			var SQLSERVER_SERVICE_HOST = Environment.GetEnvironmentVariable("SQLSERVER_SERVICE_HOST") ?? "localhost";
+			var SQLSERVER_SERVICE_PORT = Environment.GetEnvironmentVariable("SQLSERVER_SERVICE_PORT") ?? "1433";
+			var SQLSERVER_SERVICE_URI = Environment.GetEnvironmentVariable("SQLSERVER_SERVICE_URI");
 			var SQLSERVER_USER = Environment.GetEnvironmentVariable("SQLSERVER_USERNAME") ?? "sa";
 			var SQLSERVER_PASS = Environment.GetEnvironmentVariable("SQLSERVER_PASSWORD") ?? "sqlserver_123";
 
-			_enabled = !string.IsNullOrEmpty(SQLSERVER_URI) || !string.IsNullOrEmpty(SQLSERVER_HOST);
+			_enabled = !string.IsNullOrEmpty(SQLSERVER_SERVICE_URI) || !string.IsNullOrEmpty(SQLSERVER_SERVICE_HOST);
 
 			if (_enabled)
 			{
 				var config = ConfigParams.FromTuples(
 					"connection.database", SQLSERVER_DB,
-					"connection.host", SQLSERVER_HOST,
-					"connection.port", SQLSERVER_PORT,
-					"connection.uri", SQLSERVER_URI,
+					"connection.host", SQLSERVER_SERVICE_HOST,
+					"connection.port", SQLSERVER_SERVICE_PORT,
+					"connection.uri", SQLSERVER_SERVICE_URI,
 					"credential.username", SQLSERVER_USER,
 					"credential.password", SQLSERVER_PASS
 				);
