@@ -21,4 +21,4 @@ RUN go mod download
 COPY . .
 
 # Build the project
-RUN go build -a -installsuffix cgo -o run ./bin
+RUN go build -a -installsuffix cgo -o main ./bin
