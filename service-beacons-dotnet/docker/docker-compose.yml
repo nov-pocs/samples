@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+
+  app:
+    image: ${IMAGE:-nov/main}
+    links:
+      - mongo
+    environment:
+      - MONGO_ENABLED=true
+      - MONGO_SERVICE_URI=
+      - MONGO_SERVICE_HOST=mongo
+      - MONGO_SERVICE_PORT=27017
+      - MONGO_DB=app
+    ports:
+      - "8080:8080"
+
+  mongo:
+    image: mongo:latest

@@ -1,0 +1,9 @@
+FROM znly/protoc:latest
+
+# Set working directory
+WORKDIR /app
+
+# Restore
+COPY src/Service/Protos/*.proto .
+
+RUN /usr/bin/protoc --grpc_out=/app --csharp_out=/app --plugin=protoc-gen-grpc=/usr/bin/grpc_csharp_plugin -I. beacons_v1.proto

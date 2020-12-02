@@ -1,0 +1,6 @@
+{
+    "name": "beacons",
+    "registry": "myregistry:5000",
+    "version": "1.0.0",
+    "build": "0"
+}

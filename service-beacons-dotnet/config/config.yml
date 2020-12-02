@@ -1,0 +1,81 @@
+---
+# Container descriptor
+- descriptor: "pip-services:context-info:default:default:1.0"
+  name: "beacons"
+  description: "Beacons microservice"
+    
+# Console logger
+- descriptor: "pip-services:logger:console:default:1.0"
+  level: "trace"
+    
+# Performance counter that post values to log
+- descriptor: "pip-services:counters:log:default:1.0"
+    
+{{^SQLSERVER_ENABLED}}{{^POSTGRES_ENABLED}}{{^MONGO_ENABLED}}{{^FILE_ENABLED}}
+# Memory persistence
+- descriptor: "beacons:persistence:memory:default:1.0"
+{{/FILE_ENABLED}}{{/MONGO_ENABLED}}{{/POSTGRES_ENABLED}}{{/SQLSERVER_ENABLED}}
+    
+{{#if FILE_ENABLED}}
+# File persistence
+- descriptor: "beacons:persistence:file:default:1.0"
+  path: {{FILE_PATH}}{{^FILE_PATH}}"./data/beacons.json"{{/FILE_PATH}}
+{{/if}}
+    
+{{#if MONGO_ENABLED}}
+# MongoDb persistence
+- descriptor: "beacons:persistence:mongodb:default:1.0"
+  connection:
+    uri: {{MONGO_SERVICE_URI}}
+    host: {{MONGO_SERVICE_HOST}}{{^MONGO_SERVICE_HOST}}"localhost"{{/MONGO_SERVICE_HOST}}
+    port: {{MONGO_SERVICE_PORT}}{{^MONGO_SERVICE_PORT}}27017{{/MONGO_SERVICE_PORT}}
+    database: {{MONGO_DB}}{{^MONGO_DB}}"test"{{/MONGO_DB}}
+{{/if}}
+
+{{#if POSTGRES_ENABLED}}
+# Postgres persistence
+- descriptor: "beacons:persistence:postgres:default:1.0"
+  connection:
+    uri: {{POSTGRES_SERVICE_URI}}
+    host: {{POSTGRES_SERVICE_HOST}}{{^POSTGRES_SERVICE_HOST}}"localhost"{{/POSTGRES_SERVICE_HOST}}
+    port: {{POSTGRES_SERVICE_PORT}}{{^POSTGRES_SERVICE_PORT}}5432{{/POSTGRES_SERVICE_PORT}}
+    database: {{POSTGRES_DB}}{{^POSTGRES_DB}}"test"{{/POSTGRES_DB}}
+  credential:
+    username: {{POSTGRES_USER}}{{^POSTGRES_USER}}"postgres"{{/POSTGRES_USER}}
+    password: {{POSTGRES_PASS}}{{^POSTGRES_PASS}}"postgres"{{/POSTGRES_PASS}}
+{{/if}}
+
+{{#if SQLSERVER_ENABLED}}
+# SQLServer persistence
+- descriptor: "beacons:persistence:sqlserver:default:1.0"
+  connection:
+    uri: {{SQLSERVER_SERVICE_URI}}
+    host: {{SQLSERVER_SERVICE_HOST}}{{^SQLSERVER_SERVICE_HOST}}"localhost"{{/SQLSERVER_SERVICE_HOST}}
+    port: {{SQLSERVER_SERVICE_PORT}}{{^SQLSERVER_SERVICE_PORT}}1433{{/SQLSERVER_SERVICE_PORT}}
+    database: {{SQLSERVER_DB}}{{^SQLSERVER_DB}}"master"{{/SQLSERVER_DB}}
+  credential:
+    username: {{SQLSERVER_USER}}{{^SQLSERVER_USER}}"sa"{{/SQLSERVER_USER}}
+    password: {{SQLSERVER_PASS}}{{^SQLSERVER_PASS}}"sqlserver_123"{{/SQLSERVER_PASS}}
+{{/if}}
+
+# Controller
+- descriptor: "beacons:controller:default:default:1.0"
+  options:
+    param1: XYZ
+    param2: 765
+    
+# Shared HTTP Endpoint
+- descriptor: "pip-services3:endpoint:http:default:1.0"
+  connection:
+    protocol: http
+    host: 0.0.0.0
+    port: {{HTTP_PORT}}{{^HTTP_PORT}}8080{{/HTTP_PORT}}
+    
+# HTTP Service V1
+- descriptor: "beacons:service:commandable-http:default:1.0"
+
+# Hearbeat service
+- descriptor: "pip-services:heartbeat-service:http:default:1.0"
+    
+# Status service
+- descriptor: "pip-services:status-service:http:default:1.0"

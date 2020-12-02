@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Process": {
+      "commandName": "Project",
+      "commandLineArgs": "-c ../../../../../config/config.yml"
+    }
+  }
+}
