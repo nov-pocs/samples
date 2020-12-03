@@ -68,21 +68,16 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             _controller.SetReferences(references);
 
             _service.SetReferences(references);
-            //_service.OpenAsync(null).Wait();
+            _service.OpenAsync(null).Wait();
 
             Channel channel = new Channel("localhost:3000", ChannelCredentials.Insecure);
             _client = new BeaconsV1Client(channel);
-
-            // Todo: This is defect! Open shall not block the tread
-            Task.Run(() => _service.OpenAsync(null));
-            Thread.Sleep(1000); // Just let service a sec to be initialized
         }
 
         public void Dispose()
         {
             _service.CloseAsync(null).Wait();
         }
-
 
         [Fact]
         public async Task TestCrudOperationsAsync()

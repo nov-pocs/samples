@@ -170,6 +170,15 @@ namespace Nov.MaxSamples.Beacons.Persistence
             );
 
             Assert.Equal(2, page.Data.Count);
+
+            // Paging 
+            page = await _persistence.GetPageByFilterAsync(
+                null,
+                new FilterParams(),
+                new PagingParams(1, 1)
+            );
+
+            Assert.Single(page.Data);
         }
     }
 }

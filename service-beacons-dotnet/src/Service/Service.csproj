@@ -20,12 +20,12 @@
   <ItemGroup>
     <PackageReference Include="PipServices3.Components" Version="3.1.4" />
     <PackageReference Include="PipServices3.Container" Version="3.1.1" />
-    <PackageReference Include="PipServices3.Rpc" Version="3.3.2" />
+    <PackageReference Include="PipServices3.Rpc" Version="3.3.5" />
     <PackageReference Include="PipServices3.Grpc" Version="3.0.1" />
     <PackageReference Include="PipServices3.SqlServer" Version="3.0.1" />
     <PackageReference Include="PipServices3.Postgres" Version="3.0.3" />
     <PackageReference Include="PipServices3.MongoDb" Version="3.3.0" />
-    <PackageReference Include="PipServices3.Data" Version="3.2.2" />
+    <PackageReference Include="PipServices3.Data" Version="3.2.3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Persistence\" />

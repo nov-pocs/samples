@@ -16,93 +16,72 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
 		{
 			correlationId ??= IdGenerator.NextLong();
 
-			using (Instrument(correlationId, "beacons_v1.calculate_position"))
+			return await CallCommandAsync<CenterObjectV1>("calculate_position", correlationId, new
 			{
-				return await CallCommandAsync<CenterObjectV1>("calculate_position", correlationId, new
-				{
-					site_id = siteId,
-					udis = udis
-				});
-			}
+				site_id = siteId,
+				udis = udis
+			});
 		}
 
 		public async Task<BeaconV1> CreateBeaconAsync(string correlationId, BeaconV1 beacon)
 		{
 			correlationId ??= IdGenerator.NextLong();
 
-			using (Instrument(correlationId, "beacons_v1.create_beacon"))
+			return await CallCommandAsync<BeaconV1>("create_beacon", correlationId, new
 			{
-				return await CallCommandAsync<BeaconV1>("create_beacon", correlationId, new
-				{
-					beacon = beacon
-				});
-			}
+				beacon = beacon
+			});
 		}
 
 		public async Task<BeaconV1> UpdateBeaconAsync(string correlationId, BeaconV1 beacon)
 		{
 			correlationId ??= IdGenerator.NextLong();
 
-			using (Instrument(correlationId, "beacons_v1.update_beacon"))
+			return await CallCommandAsync<BeaconV1>("update_beacon", correlationId, new
 			{
-				return await CallCommandAsync<BeaconV1>("update_beacon", correlationId, new
-				{
-					beacon = beacon
-				});
-			}
+				beacon = beacon
+			});
 		}
 
 		public async Task<BeaconV1> DeleteBeaconByIdAsync(string correlationId, string id)
 		{
 			correlationId ??= IdGenerator.NextLong();
 
-			using (Instrument(correlationId, "beacons_v1.delete_beacon_by_id"))
+			return await CallCommandAsync<BeaconV1>("delete_beacon_by_id", correlationId, new
 			{
-				return await CallCommandAsync<BeaconV1>("delete_beacon_by_id", correlationId, new
-				{
-					beacon_id = id
-				});
-			}
+				beacon_id = id
+			});
 		}
 
 		public async Task<BeaconV1> GetBeaconByIdAsync(string correlationId, string id)
 		{
 			correlationId ??= IdGenerator.NextLong();
 
-			using (Instrument(correlationId, "beacons_v1.get_beacon_by_id"))
+			return await CallCommandAsync<BeaconV1>("get_beacon_by_id", correlationId, new
 			{
-				return await CallCommandAsync<BeaconV1>("get_beacon_by_id", correlationId, new
-				{
-					beacon_id = id
-				});
-			}
+				beacon_id = id
+			});
 		}
 
 		public async Task<BeaconV1> GetBeaconByUdiAsync(string correlationId, string udi)
 		{
 			correlationId ??= IdGenerator.NextLong();
 
-			using (Instrument(correlationId, "beacons_v1.get_beacon_by_udi"))
+			return await CallCommandAsync<BeaconV1>("get_beacon_by_udi", correlationId, new
 			{
-				return await CallCommandAsync<BeaconV1>("get_beacon_by_udi", correlationId, new
-				{
-					udi = udi
-				});
-			}
+				udi = udi
+			});
 		}
 
 		public async Task<DataPage<BeaconV1>> GetBeaconsAsync(string correlationId, FilterParams filter, PagingParams paging)
 		{
 			correlationId ??= IdGenerator.NextLong();
 
-			using (Instrument(correlationId, "beacons_v1.get_beacons"))
+			return await CallCommandAsync<DataPage<BeaconV1>>("get_beacons", correlationId, new
 			{
-				return await CallCommandAsync<DataPage<BeaconV1>>("get_beacons", correlationId, new
-				{
-					filter,
-					paging
-				});
-			}
+				filter,
+				paging
+			});
 		}
 	}
 }

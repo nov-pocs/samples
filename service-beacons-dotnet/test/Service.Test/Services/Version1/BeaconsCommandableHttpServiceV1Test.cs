@@ -64,10 +64,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             _service.Configure(HttpConfig);
             _service.SetReferences(references);
 
-            //_service.OpenAsync(null).Wait();
-            // Todo: This is defect! Open shall not block the tread
-            Task.Run(() => _service.OpenAsync(null));
-            Thread.Sleep(1000); // Just let service a sec to be initialized
+            _service.OpenAsync(null).Wait();
         }
 
         [Fact]

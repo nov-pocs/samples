@@ -69,13 +69,8 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             _client = new CommandableGrpcClient("beacons_v1");
             _client.Configure(config);
 
-            // Todo: This is defect! Open shall not block the tread
-            Task.Run(async () =>
-            {
-                await _service.OpenAsync(null);
-                await _client.OpenAsync(null);
-            });
-            Thread.Sleep(1000); // Just let service a sec to be initialized
+            _service.OpenAsync(null).Wait();
+            _client.OpenAsync(null).Wait();
         }
 
         public void Dispose()

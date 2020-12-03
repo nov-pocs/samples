@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Nov.MaxSamples.Beacons.Data.Version1;
 using Nov.MaxSamples.Beacons.Logic;
 using PipServices3.Commons.Convert;
 using PipServices3.Commons.Data;
 using PipServices3.Commons.Refer;
 using PipServices3.Commons.Run;
+using PipServices3.Rpc.Auth;
 using PipServices3.Rpc.Services;
 using System;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Nov.MaxSamples.Beacons.Services.Version1
@@ -28,145 +31,190 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 			_controller = _dependencyResolver.GetOneRequired<IBeaconsController>("controller");
 		}
 
-		private async Task<object> GetBeaconsAsync(string correlationId, Parameters parameters)
+		private async Task GetBeaconsAsync(HttpRequest request, HttpResponse response, RouteData routeData)
 		{
-			var filter = FilterParams.FromValue(parameters.Get("filter"));
-			var paging = PagingParams.FromValue(parameters.Get("paging"));
+			var correlationId = GetCorrelationId(request);
+			var methodName = $"{_baseRoute}.get_beacons";
 
-			return await _controller.GetBeaconsAsync(
-				correlationId,
-				filter,
-				paging
-			);
+			try
+			{
+				var filter = GetFilterParams(request);
+				var paging = GetPagingParams(request);
+
+				using var timing = Instrument(correlationId, methodName);
+				var result = await _controller.GetBeaconsAsync(
+					correlationId,
+					filter,
+					paging
+				);
+
+				await SendResultAsync(response, result);
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex);
+				await SendErrorAsync(response, ex);
+			}
 		}
 
-		private async Task<object> GetBeaconByIdAsync(string correlationId, Parameters parameters)
+		private async Task GetBeaconByIdAsync(HttpRequest request, HttpResponse response, RouteData routeData)
 		{
-			var id = parameters.GetAsString("beacon_id");
+			var correlationId = GetCorrelationId(request);
+			var methodName = $"{_baseRoute}.get_beacon_by_id";
+			
+			try
+			{
+				var parameters = GetParameters(request);
+				var id = parameters.GetAsString("id");
 
-			return await _controller.GetBeaconByIdAsync(
-				correlationId,
-				id
-			);
+				var result = await _controller.GetBeaconByIdAsync(
+					correlationId,
+					id
+				);
+
+				await SendResultAsync(response, result);
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex);
+				await SendErrorAsync(response, ex);
+			}
 		}
 
-		private async Task<object> GetBeaconByUdiAsync(string correlationId, Parameters parameters)
+		private async Task GetBeaconByUdiAsync(HttpRequest request, HttpResponse response, RouteData routeData)
 		{
-			var udi = parameters.GetAsString("udi");
+			var correlationId = GetCorrelationId(request);
+			var methodName = $"{_baseRoute}.get_beacon_by_udi";
 
-			return await _controller.GetBeaconByUdiAsync(
-				correlationId,
-				udi
-			);
+			try
+			{
+				var parameters = GetParameters(request);
+				var udi = parameters.GetAsString("udi");
+
+				var result = await _controller.GetBeaconByUdiAsync(
+					correlationId,
+					udi
+				);
+
+				await SendResultAsync(response, result);
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex);
+				await SendErrorAsync(response, ex);
+			}
 		}
 
-		private async Task<object> CalculatePositionAsync(string correlationId, Parameters parameters)
+		private async Task CalculatePositionAsync(HttpRequest request, HttpResponse response, RouteData routeData)
 		{
-			var siteId = parameters.GetAsString("site_id");
-			string[] udis = ConvertToStringList(parameters.Get("udis"));
+			var correlationId = GetCorrelationId(request);
+			var methodName = $"{_baseRoute}.calculate_position";
 
-			return await _controller.CalculatePositionAsync(
-				correlationId,
-				siteId,
-				udis
-			);
+			try
+			{
+				var parameters = GetParameters(request);
+				var siteId = parameters.GetAsString("site_id");
+				string[] udis = ConvertToStringList(parameters.Get("udis"));
+
+				var result = await _controller.CalculatePositionAsync(
+					correlationId,
+					siteId,
+					udis
+				);
+
+				await SendResultAsync(response, result);
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex);
+				await SendErrorAsync(response, ex);
+			}
 		}
 
-		private async Task<object> CreateBeaconAsync(string correlationId, Parameters parameters)
+		private async Task CreateBeaconAsync(HttpRequest request, HttpResponse response, RouteData routeData)
 		{
-			var beacon = ConvertToBeacon(parameters.GetAsObject("beacon"));
+			var correlationId = GetCorrelationId(request);
+			var methodName = $"{_baseRoute}.create_beacon";
 
-			return await _controller.CreateBeaconAsync(
-				correlationId,
-				beacon
-			);
+			try
+			{
+				var parameters = GetParameters(request);
+				var beacon = ConvertToBeacon(parameters.GetAsObject("beacon"));
+
+				var result = await _controller.CreateBeaconAsync(
+					correlationId,
+					beacon
+				);
+
+				await SendResultAsync(response, result);
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex);
+				await SendErrorAsync(response, ex);
+			}
 		}
 
-		private async Task<object> UpdateBeaconAsync(string correlationId, Parameters parameters)
+		private async Task UpdateBeaconAsync(HttpRequest request, HttpResponse response, RouteData routeData)
 		{
-			var beacon = ConvertToBeacon(parameters.GetAsObject("beacon"));
+			var correlationId = GetCorrelationId(request);
+			var methodName = $"{_baseRoute}.update_beacon";
 
-			return await _controller.UpdateBeaconAsync(
-				correlationId,
-				beacon
-			);
+			try
+			{
+				var parameters = GetParameters(request);
+				var beacon = ConvertToBeacon(parameters.GetAsObject("beacon"));
+
+				var result = await _controller.UpdateBeaconAsync(
+					correlationId,
+					beacon
+				);
+
+				await SendResultAsync(response, result);
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex);
+				await SendErrorAsync(response, ex);
+			}
 		}
 
-		private async Task<object> DeleteBeaconByIdAsync(string correlationId, Parameters parameters)
+		private async Task DeleteBeaconByIdAsync(HttpRequest request, HttpResponse response, RouteData routeData)
 		{
-			var id = parameters.GetAsString("beacon_id");
+			var correlationId = GetCorrelationId(request);
+			var methodName = $"{_baseRoute}.delete_beacon_by_id";
 
-			return await _controller.DeleteBeaconByIdAsync(
-				correlationId,
-				id
-			);
+			try
+			{
+				var parameters = GetParameters(request);
+				var id = parameters.GetAsString("id");
+
+				var result = await _controller.DeleteBeaconByIdAsync(
+					correlationId,
+					id
+				);
+
+				await SendResultAsync(response, result);
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex);
+				await SendErrorAsync(response, ex);
+			}
 		}
 
 		public override void Register()
 		{
-			RegisterRoute("post", "/get_beacons", GetBeaconsAsync);
-			RegisterRoute("post", "/get_beacon_by_id", GetBeaconByIdAsync);
-			RegisterRoute("post", "/get_beacon_by_udi", GetBeaconByUdiAsync);
+			RegisterRoute("get", "/", GetBeaconsAsync);
+			RegisterRoute("get", "/", GetBeaconsAsync);
+			RegisterRoute("get", "/{id}", GetBeaconByIdAsync);
+			RegisterRoute("get", "/udi/{udi}", GetBeaconByUdiAsync);
+			RegisterRoute("post", "/", CreateBeaconAsync);
+			RegisterRoute("put", "/", UpdateBeaconAsync);
+			RegisterRoute("delete", "/{id}", DeleteBeaconByIdAsync);
 			RegisterRoute("post", "/calculate_position", CalculatePositionAsync);
-			RegisterRoute("post", "/create_beacon", CreateBeaconAsync);
-			RegisterRoute("post", "/update_beacon", UpdateBeaconAsync);
-			RegisterRoute("post", "/delete_beacon_by_id", DeleteBeaconByIdAsync);
 
 			RegisterOpenApiSpecFromResource("beacons_v1.yaml");
-		}
-
-		private void RegisterRoute(string method, string route, Func<string, Parameters, Task<object>> func)
-		{
-			base.RegisterRoute(method, route, async (request, response, routeData) =>
-			{
-				string name = route.Trim('/');
-				var correlationId = "";
-
-				try
-				{
-					var body = string.Empty;
-
-					using (var streamReader = new StreamReader(request.Body))
-					{
-						body = streamReader.ReadToEnd();
-					}
-
-					var parameters = LoadQueryParameters(request.Query);
-					if (!string.IsNullOrEmpty(body))
-					{
-						var bodyParameters = Parameters.FromJson(body);
-						foreach (var key in bodyParameters.Keys)
-						{
-							parameters[key] = bodyParameters[key];
-						}
-					}
-
-					correlationId = parameters.GetAsStringWithDefault("correlation_id", string.Empty);
-
-					using (var timing = Instrument(correlationId, _baseRoute + '.' + name))
-					{
-						var result = await func(correlationId, parameters);
-						await SendResultAsync(response, result);
-					}
-				}
-				catch (Exception ex)
-				{
-					InstrumentError(correlationId, _baseRoute + '.' + name, ex);
-					await SendErrorAsync(response, ex);
-				}
-			});
-		}
-
-		private Parameters LoadQueryParameters(IQueryCollection query)
-		{
-			Parameters result = new Parameters();
-
-			foreach (var key in query.Keys)
-			{
-				result.Add(key, query[key].ToString());
-			}
-
-			return result;
 		}
 
 		private BeaconV1 ConvertToBeacon(object value)

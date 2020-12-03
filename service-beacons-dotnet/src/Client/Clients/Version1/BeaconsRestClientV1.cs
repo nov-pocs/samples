@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Nov.MaxSamples.Beacons.Data.Version1;
 using PipServices3.Commons.Data;
+using System;
 
 namespace Nov.MaxSamples.Beacons.Clients.Version1
 {
@@ -19,80 +20,135 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
 
 		public async Task<CenterObjectV1> CalculatePositionAsync(string correlationId, string siteId, string[] udis)
 		{
-			using (Instrument(correlationId, "beacons.calculate_position"))
+			var methodName = "beacons.calculate_position";
+			try
 			{
-				return await ExecuteAsync<CenterObjectV1>(correlationId, HttpMethod.Post, "/calculate_position", new
+				using (Instrument(correlationId, methodName))
 				{
-					site_id = siteId,
-					udis = udis
-				});
+					return await ExecuteAsync<CenterObjectV1>(correlationId, HttpMethod.Post, "/calculate_position", new
+					{
+						site_id = siteId,
+						udis = udis
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex, true);
+				return null;
 			}
 		}
 
 		public async Task<BeaconV1> CreateBeaconAsync(string correlationId, BeaconV1 beacon)
 		{
-			using (Instrument(correlationId, "beacons.create_beacon"))
+			var methodName = "beacons.create_beacon";
+			try
 			{
-				return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Post, "/create_beacon", new
+				using (Instrument(correlationId, methodName))
 				{
-					beacon = beacon
-				});
+					return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Post, "", new
+					{
+						beacon = beacon
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex, true);
+				return null;
 			}
 		}
 
 		public async Task<BeaconV1> UpdateBeaconAsync(string correlationId, BeaconV1 beacon)
 		{
-			using (Instrument(correlationId, "beacons.update_beacon"))
+			var methodName = "beacons.update_beacon";
+			try
 			{
-				return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Post, "/update_beacon", new
+				using (Instrument(correlationId, methodName))
 				{
-					beacon = beacon
-				});
+					return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Put, "", new
+					{
+						beacon = beacon
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex, true);
+				return null;
 			}
 		}
 
 		public async Task<BeaconV1> DeleteBeaconByIdAsync(string correlationId, string id)
 		{
-			using (Instrument(correlationId, "beacons.delete_beacon_by_id"))
+			var methodName = "beacons.delete_beacon_by_id";
+			try
 			{
-				return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Post, "/delete_beacon_by_id", new
+				using (Instrument(correlationId, methodName))
 				{
-					beacon_id = id
-				});
+					return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Delete, $"/{id}", new { });
+				}
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex, true);
+				return null;
 			}
 		}
 
 		public async Task<BeaconV1> GetBeaconByIdAsync(string correlationId, string id)
 		{
-			using (Instrument(correlationId, "beacons.get_beacon_by_id"))
+			var methodName = "beacons.get_beacon_by_id";
+			try
 			{
-				return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Post, "/get_beacon_by_id", new
+				using (Instrument(correlationId, methodName))
 				{
-					beacon_id = id
-				});
+					return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Get, $"/{id}", new { });
+				}
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex, true);
+				return null;
+
 			}
 		}
 
 		public async Task<BeaconV1> GetBeaconByUdiAsync(string correlationId, string udi)
 		{
-			using (Instrument(correlationId, "beacons.get_beacon_by_udi"))
+			var methodName = "beacons.get_beacon_by_udi";
+			try
 			{
-				return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Post, "/get_beacon_by_udi", new
+				using (Instrument(correlationId, methodName))
 				{
-					udi = udi
-				});
+					return await ExecuteAsync<BeaconV1>(correlationId, HttpMethod.Get, $"/udi/{udi}", new { });
+				}
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex, true);
+				return null;
 			}
 		}
 
 		public async Task<DataPage<BeaconV1>> GetBeaconsAsync(string correlationId, FilterParams filter, PagingParams paging)
 		{
-			using (Instrument(correlationId, "beacons.get_beacons"))
+			var methodName = "beacons.get_beacons";
+			try
 			{
-				return await ExecuteAsync<DataPage<BeaconV1>>(correlationId, HttpMethod.Post, "/get_beacons", new
+				using (Instrument(correlationId, methodName))
 				{
-					filter,
-					paging
-				});
+					return await ExecuteAsync<DataPage<BeaconV1>>(correlationId, HttpMethod.Get, "/", new
+					{
+						filter,
+						paging
+					});
+				}
+			}
+			catch (Exception ex)
+			{
+				InstrumentError(correlationId, methodName, ex, true);
+				return null;
 			}
 		}
 	}
