@@ -19,3 +19,6 @@ RUN dotnet restore --disable-parallel test/Client.Test/Client.Test.csproj
 
 # Copy src
 COPY . .
+
+# Wait 40 sec until SQLServer is ready and then execute tests
+CMD ["bash", "-c", "sleep 40 && dotnet test -v minimal test/Service.Test/Service.Test.csproj && dotnet test -v minimal test/Client.Test/Client.Test.csproj"]

@@ -9,6 +9,8 @@ namespace Nov.MaxSamples.Beacons.Container
         public BeaconsProcess()
             : base("beacons", "Beacons microservice")
         {
+            _configPath = "./config/config.yml";
+
             _factories.Add(new DefaultRpcFactory());
             _factories.Add(new BeaconsServiceFactory());
         }

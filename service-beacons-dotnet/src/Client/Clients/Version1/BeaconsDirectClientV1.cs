@@ -28,8 +28,8 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             }
             catch (Exception ex)
             {
-                InstrumentError(correlationId, methodName, ex, true);
-                return null;
+                InstrumentError(correlationId, methodName, ex);
+                throw ex;
             }
         }
 
@@ -45,8 +45,8 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             }
             catch (Exception ex)
             {
-                InstrumentError(correlationId, methodName, ex, true);
-                return null;
+                InstrumentError(correlationId, methodName, ex);
+                throw ex;
             }
         }
 
@@ -62,8 +62,8 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             }
             catch (Exception ex)
             {
-                InstrumentError(correlationId, methodName, ex, true);
-                return null;
+                InstrumentError(correlationId, methodName, ex);
+                throw ex;
             }
         }
 
@@ -79,8 +79,8 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             }
             catch (Exception ex)
             {
-                InstrumentError(correlationId, methodName, ex, true);
-                return null;
+                InstrumentError(correlationId, methodName, ex);
+                throw ex;
             }
         }
 
@@ -96,8 +96,8 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             }
             catch (Exception ex)
             {
-                InstrumentError(correlationId, methodName, ex, true);
-                return null;
+                InstrumentError(correlationId, methodName, ex);
+                throw ex;
             }
         }
 
@@ -113,8 +113,8 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             }
             catch (Exception ex)
             {
-                InstrumentError(correlationId, methodName, ex, true);
-                return null;
+                InstrumentError(correlationId, methodName, ex);
+                throw ex;
             }
         }
 
@@ -130,8 +130,8 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             }
             catch (Exception ex)
             {
-                InstrumentError(correlationId, methodName, ex, true);
-                return null;
+                InstrumentError(correlationId, methodName, ex);
+                throw ex;
             }
         }
     }

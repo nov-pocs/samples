@@ -16,7 +16,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         {
             return await CallCommandAsync<DataPage<BeaconV1>>(
                 "get_beacons",
-                correlationId,
+                correlationId ?? IdGenerator.NextLong(),
                 new
                 {
                     filter = filter,
@@ -29,7 +29,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         {
             return await CallCommandAsync<BeaconV1>(
                 "get_beacon_by_id",
-                correlationId,
+                correlationId ?? IdGenerator.NextLong(),
                 new
                 {
                     beacon_id = id
@@ -41,7 +41,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         {
             return await CallCommandAsync<BeaconV1>(
                 "get_beacon_by_udi",
-                correlationId,
+                correlationId ?? IdGenerator.NextLong(),
                 new
                 {
                     udi = udi
@@ -54,7 +54,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         {
             return await CallCommandAsync<CenterObjectV1>(
                 "calculate_position",
-                correlationId,
+                correlationId ?? IdGenerator.NextLong(),
                 new
                 {
                     site_id = siteId,
@@ -67,7 +67,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         {
             return await CallCommandAsync<BeaconV1>(
                 "create_beacon",
-                correlationId,
+                correlationId ?? IdGenerator.NextLong(),
                 new
                 {
                     beacon = beacon
@@ -79,7 +79,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         {
             return await CallCommandAsync<BeaconV1>(
                 "update_beacon",
-                correlationId,
+                correlationId ?? IdGenerator.NextLong(),
                 new
                 {
                     beacon = beacon
@@ -91,7 +91,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         {
             return await CallCommandAsync<BeaconV1>(
                 "delete_beacon_by_id",
-                correlationId,
+                correlationId ?? IdGenerator.NextLong(),
                 new
                 {
                     beacon_id = id

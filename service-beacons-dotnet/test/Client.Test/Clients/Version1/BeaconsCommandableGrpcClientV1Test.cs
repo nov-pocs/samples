@@ -16,7 +16,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         private static readonly ConfigParams HttpConfig = ConfigParams.FromTuples(
             "connection.protocol", "http",
             "connection.host", "localhost",
-            "connection.port", 3000
+            "connection.port", 3003
         );
 
         private BeaconsMemoryPersistence _persistence;
@@ -50,9 +50,6 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             _fixture = new BeaconsClientV1Fixture(_client);
 
             _service.OpenAsync(null).Wait();
-
-            Thread.Sleep(1000); // Just let service a sec to be initialized
-
             _client.OpenAsync(null).Wait();
         }
 

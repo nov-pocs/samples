@@ -50,9 +50,6 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
             _fixture = new BeaconsClientV1Fixture(_client);
 
             _service.OpenAsync(null).Wait();
-
-            Thread.Sleep(1000); // Just let service a sec to be initialized
-
             _client.OpenAsync(null).Wait();
         }
 

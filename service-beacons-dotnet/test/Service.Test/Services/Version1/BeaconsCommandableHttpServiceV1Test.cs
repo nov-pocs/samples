@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Nov.MaxSamples.Beacons.Data.Version1;
 using Nov.MaxSamples.Beacons.Logic;
@@ -40,7 +39,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
         private static readonly ConfigParams HttpConfig = ConfigParams.FromTuples(
             "connection.protocol", "http",
             "connection.host", "localhost",
-            "connection.port", "3000"
+            "connection.port", "3002"
         );
 
         private BeaconsMemoryPersistence _persistence;
@@ -71,7 +70,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
         public async Task TestCrudOperationsAsync()
         {
             // Create the first beacon
-            var beacon = await Invoke<BeaconV1>("create_beacon", new { beacon = BEACON1 });
+            var beacon = await Invoke<BeaconV1>("/v1/beacons/create_beacon", new { beacon = BEACON1 });
 
             Assert.NotNull(beacon);
             Assert.Equal(BEACON1.Udi, beacon.Udi);
@@ -81,7 +80,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             Assert.NotNull(beacon.Center);
 
             // Create the second beacon
-            beacon = await Invoke<BeaconV1>("create_beacon", new { beacon = BEACON2 });
+            beacon = await Invoke<BeaconV1>("/v1/beacons/create_beacon", new { beacon = BEACON2 });
 
             Assert.NotNull(beacon);
             Assert.Equal(BEACON2.Udi, beacon.Udi);
@@ -92,7 +91,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 
             // Get all beacons
             var page = await Invoke<DataPage<BeaconV1>>(
-                "get_beacons",
+                "/v1/beacons/get_beacons",
                 new
                 {
                     filter = new FilterParams(),
@@ -108,26 +107,26 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             // Update the beacon
             beacon1.Label = "ABC";
 
-            beacon = await Invoke<BeaconV1>("update_beacon", new { beacon = beacon1 });
+            beacon = await Invoke<BeaconV1>("/v1/beacons/update_beacon", new { beacon = beacon1 });
 
             Assert.NotNull(beacon);
             Assert.Equal(beacon1.Id, beacon.Id);
             Assert.Equal("ABC", beacon.Label);
 
             // Get beacon by udi
-            beacon = await Invoke<BeaconV1>("get_beacon_by_udi", new { udi = beacon1.Udi });
+            beacon = await Invoke<BeaconV1>("/v1/beacons/get_beacon_by_udi", new { udi = beacon1.Udi });
 
             Assert.NotNull(beacon);
             Assert.Equal(beacon1.Id, beacon.Id);
 
             // Delete the beacon
-            beacon = await Invoke<BeaconV1>("delete_beacon_by_id", new { beacon_id = beacon1.Id });
+            beacon = await Invoke<BeaconV1>("/v1/beacons/delete_beacon_by_id", new { beacon_id = beacon1.Id });
 
             Assert.NotNull(beacon);
             Assert.Equal(beacon1.Id, beacon.Id);
 
             // Try to get deleted beacon
-            beacon = await Invoke<BeaconV1>("get_beacon_by_id", new { beacon_id = beacon1.Id });
+            beacon = await Invoke<BeaconV1>("/v1/beacons/get_beacon_by_id", new { beacon_id = beacon1.Id });
 
             Assert.Null(beacon);
         }
@@ -139,7 +138,8 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
                 var requestValue = JsonConverter.ToJson(request);
                 using (var content = new StringContent(requestValue, Encoding.UTF8, "application/json"))
                 {
-                    var response = await httpClient.PostAsync("http://localhost:3000/v1/beacons/" + route, content);
+                    var response = await httpClient.PostAsync("http://localhost:3002" + route, content);
+
                     var responseValue = response.Content.ReadAsStringAsync().Result;
                     return JsonConverter.FromJson<T>(responseValue);
                 }

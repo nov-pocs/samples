@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Nov.MaxSamples.Beacons.Data.Version1;
 using Nov.MaxSamples.Beacons.Logic;
@@ -14,7 +13,7 @@ using Xunit;
 
 namespace Nov.MaxSamples.Beacons.Services.Version1
 {
-	[Collection("Sequential")]
+    [Collection("Sequential")]
 	public class BeaconsRestServiceV1Test : IDisposable
 	{
 		private BeaconV1 BEACON1 = new BeaconV1
@@ -53,7 +52,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 			var config = ConfigParams.FromTuples(
 				"connection.protocol", "http",
 				"connection.host", "localhost",
-				"connection.port", "3003"
+				"connection.port", "3000"
 			);
 			_service = new BeaconsRestServiceV1();
 			_service.Configure(config);
@@ -79,7 +78,8 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 		public async Task TestCrudOperationsAsync()
 		{
 			// Create the first beacon
-			var beacon = await Invoke<BeaconV1>("post", "", new { beacon = BEACON1 });
+			var beacon = await Invoke<BeaconV1>(
+				HttpMethod.Post, "/v1/beacons", new { beacon = BEACON1 });
 
 			Assert.NotNull(beacon);
 			Assert.Equal(BEACON1.Udi, beacon.Udi);
@@ -89,7 +89,8 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 			Assert.NotNull(beacon.Center);
 
 			// Create the second beacon
-			beacon = await Invoke<BeaconV1>("post", "", new { beacon = BEACON2 });
+			beacon = await Invoke<BeaconV1>(
+				HttpMethod.Post, "/v1/beacons", new { beacon = BEACON2 });
 
 			Assert.NotNull(beacon);
 			Assert.Equal(BEACON2.Udi, beacon.Udi);
@@ -99,7 +100,8 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 			Assert.NotNull(beacon.Center);
 
 			// Get beacon by id
-			beacon = await Invoke<BeaconV1>("get", $"/{BEACON2.Id}", new {});
+			beacon = await Invoke<BeaconV1>(
+				HttpMethod.Get, $"/v1/beacons/{BEACON2.Id}", new {});
 
 			Assert.NotNull(beacon);
 			Assert.Equal(BEACON2.Udi, beacon.Udi);
@@ -109,7 +111,8 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 			Assert.NotNull(beacon.Center);
 
 			// Get all beacons
-			var page = await Invoke<DataPage<BeaconV1>>("get", "",
+			var page = await Invoke<DataPage<BeaconV1>>(
+				HttpMethod.Get, "/v1/beacons",
 				new
 				{
 					filter = new FilterParams(),
@@ -125,52 +128,45 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 			// Update the beacon
 			beacon1.Label = "ABC";
 
-			beacon = await Invoke<BeaconV1>("put", "", new { beacon = beacon1 });
+			beacon = await Invoke<BeaconV1>(
+				HttpMethod.Put, "/v1/beacons", new { beacon = beacon1 });
 
 			Assert.NotNull(beacon);
 			Assert.Equal(beacon1.Id, beacon.Id);
 			Assert.Equal("ABC", beacon.Label);
 
 			// Get beacon by udi
-			beacon = await Invoke<BeaconV1>("get", $"/udi/{beacon1.Udi}", new {});
+			beacon = await Invoke<BeaconV1>(
+				HttpMethod.Get, $"/v1/beacons/udi/{beacon1.Udi}");
 
 			Assert.NotNull(beacon);
 			Assert.Equal(beacon1.Id, beacon.Id);
 
 			// Delete the beacon
-			beacon = await Invoke<BeaconV1>("delete", $"/{beacon1.Id}", new {});
+			beacon = await Invoke<BeaconV1>(
+				HttpMethod.Delete, $"/v1/beacons/{beacon1.Id}");
 
 			Assert.NotNull(beacon);
 			Assert.Equal(beacon1.Id, beacon.Id);
 
 			// Try to get deleted beacon
-			beacon = await Invoke<BeaconV1>("get", $"/{beacon1.Id}", new {});
+			beacon = await Invoke<BeaconV1>(
+				HttpMethod.Get, $"/v1/beacons/beacons/{beacon1.Id}");
 
 			Assert.Null(beacon);
 		}
 
-		private async Task<T> Invoke<T>(string method, string route, dynamic request)
+		private async Task<T> Invoke<T>(HttpMethod method, string route, dynamic body = null)
 		{
-			HttpContent content = new StringContent(JsonConverter.ToJson(request), Encoding.UTF8, "application/json");
+			var requestUri = $"http://localhost:3000" + route;
+			var request = new HttpRequestMessage(method, requestUri);
 
-			var response = new HttpResponseMessage();
-			var requestUri = $"http://localhost:3003/v1/beacons{route}";
-
-			switch (method)
-			{
-				case "get":
-					response = await _httpClient.GetAsync(requestUri);
-					break;
-				case "post":
-					response = await _httpClient.PostAsync(requestUri, content);
-					break;
-				case "put":
-					response = await _httpClient.PutAsync(requestUri, content);
-					break;
-				case "delete":
-					response = await _httpClient.DeleteAsync(requestUri);
-					break;
+			if (body != null)
+            {
+				request.Content = new StringContent(JsonConverter.ToJson(body), Encoding.UTF8, "application/json");
 			}
+
+			var response = await _httpClient.SendAsync(request);
 
 			var responseValue = await response.Content.ReadAsStringAsync();
 			return JsonConverter.FromJson<T>(responseValue);

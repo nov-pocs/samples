@@ -14,7 +14,7 @@ namespace Nov.MaxSamples.Beacons.Clients.Version1
         private static readonly ConfigParams HttpConfig = ConfigParams.FromTuples(
             "connection.protocol", "http",
             "connection.host", "localhost",
-            "connection.port", 8080
+            "connection.port", 3002
         );
 
         private BeaconsMemoryPersistence _persistence;

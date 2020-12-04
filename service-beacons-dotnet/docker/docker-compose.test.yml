@@ -6,7 +6,6 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.test
     image: ${IMAGE:-nov/test}
-    command: ${TEST_CMD:-bash -c "sleep 40 && dotnet test test/Service.Test/Service.Test.csproj && dotnet test test/Client.Test/Client.Test.csproj"}
     depends_on:
       - mongo
       - postgres
@@ -20,6 +19,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=test
+      - SQLSERVER_SERVICE_HOST=
       # - SQLSERVER_SERVICE_HOST=sqlserver
       # - SQLSERVER_SERVICE_PORT=1433
       # - SQLSERVER_USER=sa
@@ -42,5 +42,3 @@ services:
   #   environment:
   #     ACCEPT_EULA: Y
   #     SA_PASSWORD: sqlserver_123
-  #   ports:
-  #     - "1433:1433"

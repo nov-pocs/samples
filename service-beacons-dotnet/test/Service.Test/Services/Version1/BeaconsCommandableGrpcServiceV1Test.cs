@@ -50,7 +50,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             var config = ConfigParams.FromTuples(
                 "connection.protocol", "http",
                 "connection.host", "localhost",
-                "connection.port", "3000"
+                "connection.port", "3003"
             );
 
             _service = new BeaconsCommandableGrpcServiceV1();

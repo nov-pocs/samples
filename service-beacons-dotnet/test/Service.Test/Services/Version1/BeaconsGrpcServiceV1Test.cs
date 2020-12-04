@@ -52,7 +52,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             var config = ConfigParams.FromTuples(
                 "connection.protocol", "http",
                 "connection.host", "localhost",
-                "connection.port", "3000"
+                "connection.port", "3001"
             );
 
             // this service name is for test only, used by client
@@ -70,7 +70,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
             _service.SetReferences(references);
             _service.OpenAsync(null).Wait();
 
-            Channel channel = new Channel("localhost:3000", ChannelCredentials.Insecure);
+            Channel channel = new Channel("localhost:3001", ChannelCredentials.Insecure);
             _client = new BeaconsV1Client(channel);
         }
 

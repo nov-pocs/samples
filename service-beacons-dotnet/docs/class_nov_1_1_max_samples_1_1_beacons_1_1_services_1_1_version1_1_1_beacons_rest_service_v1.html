@@ -92,33 +92,27 @@ override void&#160;</td><td class="memItemRight" valign="bottom"><b>Register</b>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a362a676e6c02c31262c4353f5ed1c551"><td class="memItemLeft" align="right" valign="top"><a id="a362a676e6c02c31262c4353f5ed1c551"></a>
-async Task&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetBeaconsAsync</b> (string correlationId, Parameters parameters)</td></tr>
-<tr class="separator:a362a676e6c02c31262c4353f5ed1c551"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a790f8a18957bc560cb5f6350c01e0407"><td class="memItemLeft" align="right" valign="top"><a id="a790f8a18957bc560cb5f6350c01e0407"></a>
-async Task&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetBeaconByIdAsync</b> (string correlationId, Parameters parameters)</td></tr>
-<tr class="separator:a790f8a18957bc560cb5f6350c01e0407"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b9a1c9773e9e7bb2b399baa3bfc4c1d"><td class="memItemLeft" align="right" valign="top"><a id="a0b9a1c9773e9e7bb2b399baa3bfc4c1d"></a>
-async Task&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetBeaconByUdiAsync</b> (string correlationId, Parameters parameters)</td></tr>
-<tr class="separator:a0b9a1c9773e9e7bb2b399baa3bfc4c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61d3477d80a17109192f731d6baf3952"><td class="memItemLeft" align="right" valign="top"><a id="a61d3477d80a17109192f731d6baf3952"></a>
-async Task&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CalculatePositionAsync</b> (string correlationId, Parameters parameters)</td></tr>
-<tr class="separator:a61d3477d80a17109192f731d6baf3952"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed6daf804f14f088f9f560f92cf0717"><td class="memItemLeft" align="right" valign="top"><a id="a3ed6daf804f14f088f9f560f92cf0717"></a>
-async Task&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>CreateBeaconAsync</b> (string correlationId, Parameters parameters)</td></tr>
-<tr class="separator:a3ed6daf804f14f088f9f560f92cf0717"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78c5e52166545d50d487651e244c2e2f"><td class="memItemLeft" align="right" valign="top"><a id="a78c5e52166545d50d487651e244c2e2f"></a>
-async Task&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateBeaconAsync</b> (string correlationId, Parameters parameters)</td></tr>
-<tr class="separator:a78c5e52166545d50d487651e244c2e2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12a8a4c573fa3686ed9733696ce270c3"><td class="memItemLeft" align="right" valign="top"><a id="a12a8a4c573fa3686ed9733696ce270c3"></a>
-async Task&lt; object &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>DeleteBeaconByIdAsync</b> (string correlationId, Parameters parameters)</td></tr>
-<tr class="separator:a12a8a4c573fa3686ed9733696ce270c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05460dfa686bdafd3986196688f91cc8"><td class="memItemLeft" align="right" valign="top"><a id="a05460dfa686bdafd3986196688f91cc8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>RegisterRoute</b> (string method, string route, Func&lt; string, Parameters, Task&lt; object &gt;&gt; func)</td></tr>
-<tr class="separator:a05460dfa686bdafd3986196688f91cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d60ca9ac1c1cc83f33d61420a586ff1"><td class="memItemLeft" align="right" valign="top"><a id="a1d60ca9ac1c1cc83f33d61420a586ff1"></a>
-Parameters&#160;</td><td class="memItemRight" valign="bottom"><b>LoadQueryParameters</b> (IQueryCollection query)</td></tr>
-<tr class="separator:a1d60ca9ac1c1cc83f33d61420a586ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa10cec77ba332d434d06ce4b8703315c"><td class="memItemLeft" align="right" valign="top"><a id="aa10cec77ba332d434d06ce4b8703315c"></a>
+async Task&#160;</td><td class="memItemRight" valign="bottom"><b>GetBeaconsAsync</b> (HttpRequest request, HttpResponse response, RouteData routeData)</td></tr>
+<tr class="separator:aa10cec77ba332d434d06ce4b8703315c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac260773664aa7e5e7a17a8323d070cd2"><td class="memItemLeft" align="right" valign="top"><a id="ac260773664aa7e5e7a17a8323d070cd2"></a>
+async Task&#160;</td><td class="memItemRight" valign="bottom"><b>GetBeaconByIdAsync</b> (HttpRequest request, HttpResponse response, RouteData routeData)</td></tr>
+<tr class="separator:ac260773664aa7e5e7a17a8323d070cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc50a3d7253282aca0d687626d660c51"><td class="memItemLeft" align="right" valign="top"><a id="acc50a3d7253282aca0d687626d660c51"></a>
+async Task&#160;</td><td class="memItemRight" valign="bottom"><b>GetBeaconByUdiAsync</b> (HttpRequest request, HttpResponse response, RouteData routeData)</td></tr>
+<tr class="separator:acc50a3d7253282aca0d687626d660c51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91429b0a08daabcd57dbc0f184a355a0"><td class="memItemLeft" align="right" valign="top"><a id="a91429b0a08daabcd57dbc0f184a355a0"></a>
+async Task&#160;</td><td class="memItemRight" valign="bottom"><b>CalculatePositionAsync</b> (HttpRequest request, HttpResponse response, RouteData routeData)</td></tr>
+<tr class="separator:a91429b0a08daabcd57dbc0f184a355a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99bfa8966a01724b15e8f0ddef1dc406"><td class="memItemLeft" align="right" valign="top"><a id="a99bfa8966a01724b15e8f0ddef1dc406"></a>
+async Task&#160;</td><td class="memItemRight" valign="bottom"><b>CreateBeaconAsync</b> (HttpRequest request, HttpResponse response, RouteData routeData)</td></tr>
+<tr class="separator:a99bfa8966a01724b15e8f0ddef1dc406"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1039e05afa64972651a66db42d6442f8"><td class="memItemLeft" align="right" valign="top"><a id="a1039e05afa64972651a66db42d6442f8"></a>
+async Task&#160;</td><td class="memItemRight" valign="bottom"><b>UpdateBeaconAsync</b> (HttpRequest request, HttpResponse response, RouteData routeData)</td></tr>
+<tr class="separator:a1039e05afa64972651a66db42d6442f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9132e45a871f5fafc103c0e2d1cc1966"><td class="memItemLeft" align="right" valign="top"><a id="a9132e45a871f5fafc103c0e2d1cc1966"></a>
+async Task&#160;</td><td class="memItemRight" valign="bottom"><b>DeleteBeaconByIdAsync</b> (HttpRequest request, HttpResponse response, RouteData routeData)</td></tr>
+<tr class="separator:a9132e45a871f5fafc103c0e2d1cc1966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec399f6dd825e2210c95660a0b8fb58c"><td class="memItemLeft" align="right" valign="top"><a id="aec399f6dd825e2210c95660a0b8fb58c"></a>
 <a class="el" href="class_nov_1_1_max_samples_1_1_beacons_1_1_data_1_1_version1_1_1_beacon_v1.html">BeaconV1</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ConvertToBeacon</b> (object value)</td></tr>
 <tr class="separator:aec399f6dd825e2210c95660a0b8fb58c"><td class="memSeparator" colspan="2">&#160;</td></tr>
