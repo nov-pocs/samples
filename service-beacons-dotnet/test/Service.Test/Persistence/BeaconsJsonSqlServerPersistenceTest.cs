@@ -5,6 +5,7 @@ using Xunit;
 
 namespace Nov.MaxSamples.Beacons.Persistence
 {
+	[Collection("Sequential")]
 	public class BeaconsJsonSqlServerPersistenceTest : IDisposable
 	{
 		private bool _enabled = false;
@@ -30,7 +31,8 @@ namespace Nov.MaxSamples.Beacons.Persistence
 					"connection.port", SQLSERVER_SERVICE_PORT,
 					"connection.uri", SQLSERVER_SERVICE_URI,
 					"credential.username", SQLSERVER_USER,
-					"credential.password", SQLSERVER_PASS
+					"credential.password", SQLSERVER_PASS,
+					"options.connect_timeout", 5
 				);
 
 				_persistence = new BeaconsJsonSqlServerPersistence();

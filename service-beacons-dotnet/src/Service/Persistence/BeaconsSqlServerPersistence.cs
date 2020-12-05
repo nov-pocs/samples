@@ -74,28 +74,5 @@ namespace Nov.MaxSamples.Beacons.Persistence
 
             return item;
         }
-
-		protected override AnyValueMap ConvertFromPublic(BeaconV1 value)
-		{
-            var json = JsonConverter.ToJson(value);
-            var map = new AnyValueMap(MapConverter.ToMap(JsonConverter.FromJson(json)));
-            map["center"] = JsonConverter.ToJson(value.Center);
-			return map;
-		}
-
-		protected override BeaconV1 ConvertToPublic(AnyValueMap map)
-		{
-            CenterObjectV1 center = null;
-            if (map.TryGetValue("center", out object jsonCenter) && jsonCenter != null)
-            {
-                center = JsonConverter.FromJson<CenterObjectV1>(jsonCenter.ToString());
-                map.Remove("center");
-            }
-            
-            var json = JsonConverter.ToJson(map);
-            BeaconV1 obj = JsonConverter.FromJson<BeaconV1>(json);
-            obj.Center = center;
-            return obj;
-		}
 	}
 }

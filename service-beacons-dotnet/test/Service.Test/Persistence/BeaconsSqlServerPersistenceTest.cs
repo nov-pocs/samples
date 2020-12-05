@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PipServices3.Commons.Config;
+using PipServices3.Commons.Errors;
 using Xunit;
 
 namespace Nov.MaxSamples.Beacons.Persistence
 {
+
+	[Collection("Sequential")]
 	public class BeaconsSqlServerPersistenceTest : IDisposable
 	{
 		private bool _enabled = false;
@@ -17,8 +20,8 @@ namespace Nov.MaxSamples.Beacons.Persistence
 			var SQLSERVER_SERVICE_HOST = Environment.GetEnvironmentVariable("SQLSERVER_SERVICE_HOST") ?? "localhost";
 			var SQLSERVER_SERVICE_PORT = Environment.GetEnvironmentVariable("SQLSERVER_SERVICE_PORT") ?? "1433";
 			var SQLSERVER_SERVICE_URI = Environment.GetEnvironmentVariable("SQLSERVER_SERVICE_URI");
-			var SQLSERVER_USER = Environment.GetEnvironmentVariable("SQLSERVER_USERNAME") ?? "sa";
-			var SQLSERVER_PASS = Environment.GetEnvironmentVariable("SQLSERVER_PASSWORD") ?? "sqlserver_123";
+			var SQLSERVER_USER = Environment.GetEnvironmentVariable("SQLSERVER_USER") ?? "sa";
+			var SQLSERVER_PASS = Environment.GetEnvironmentVariable("SQLSERVER_PASS") ?? "sqlserver_123";
 
 			_enabled = !string.IsNullOrEmpty(SQLSERVER_SERVICE_URI) || !string.IsNullOrEmpty(SQLSERVER_SERVICE_HOST);
 
@@ -30,7 +33,8 @@ namespace Nov.MaxSamples.Beacons.Persistence
 					"connection.port", SQLSERVER_SERVICE_PORT,
 					"connection.uri", SQLSERVER_SERVICE_URI,
 					"credential.username", SQLSERVER_USER,
-					"credential.password", SQLSERVER_PASS
+					"credential.password", SQLSERVER_PASS,
+					"options.connect_timeout", 5
 				);
 
 				_persistence = new BeaconsSqlServerPersistence();

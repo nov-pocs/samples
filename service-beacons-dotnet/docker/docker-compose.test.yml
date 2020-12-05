@@ -9,7 +9,7 @@ services:
     depends_on:
       - mongo
       - postgres
-      # - sqlserver
+      - sqlserver
     environment:
       - MONGO_SERVICE_HOST=mongo
       - MONGO_SERVICE_PORT=27017
@@ -19,12 +19,11 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=test
-      - SQLSERVER_SERVICE_HOST=
-      # - SQLSERVER_SERVICE_HOST=sqlserver
-      # - SQLSERVER_SERVICE_PORT=1433
-      # - SQLSERVER_USER=sa
-      # - SQLSERVER_PASS=sqlserver_123
-      # - SQLSERVER_DB=master
+      - SQLSERVER_SERVICE_HOST=sqlserver
+      - SQLSERVER_SERVICE_PORT=1433
+      - SQLSERVER_USER=sa
+      - SQLSERVER_PASS=sqlserver_123
+      - SQLSERVER_DB=master
 
   mongo:
     image: mongo:latest
@@ -36,9 +35,11 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: test
 
-  # sqlserver:
-  #   image: mcr.microsoft.com/mssql/server:2019-latest
-  #   container_name: sqlserver
-  #   environment:
-  #     ACCEPT_EULA: Y
-  #     SA_PASSWORD: sqlserver_123
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: sqlserver_123
+    ports:
+      - "1433:1433"
