@@ -1,0 +1,30 @@
+FROM pipdevs/ts-dev:2.5.2
+
+# Install git and ssh
+RUN apk update && apk add git && apk add openssh
+
+# Copy local ssh keys
+COPY docker/id_rsa /root/.ssh/
+
+# Setup ssh access to git repositories
+RUN chmod 600 /root/.ssh/id_rsa* \
+    && ssh-keyscan github.com >> ~/.ssh/known_hosts \
+    && ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+
+# Set working directory
+WORKDIR /app
+
+# Copy project file
+COPY package.json .
+ 
+# Clear npm cache because sometimes it uses cache and do not install new code
+RUN npm cache clean --force
+
+# Install ALL node_modules, including 'devDependencies'
+RUN npm install
+
+# Copy all project
+COPY . .
+
+# Compile source code
+RUN  tsc

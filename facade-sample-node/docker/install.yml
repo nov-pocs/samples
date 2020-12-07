@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: nov
+  name: nov-max-facades-sample-node-deploy
+  labels:
+    product_nov-max-facades-sample-node: "true"
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        product_nov-max-facades-sample-node: "true"
+    spec:
+      containers:
+      - name: nov-max-facades-sample-node-pod
+        image: myregistry:5000/nov-services/nov-max-facades-sample-node:1.0.0-1-rc
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENV_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: nov-config
+              key: env_name
+        - name: VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: nov-config
+              key: version
+      imagePullSecrets:
+      - name: azure-container-registry-access
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: nov
+  name: nov-max-facades-sample-node-svc
+  labels: 
+    product_nov-max-facades-sample-node: "true"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    #nodePort: 30018
+    protocol: TCP
+  selector:
+    product_nov-max-facades-sample-node: "true"

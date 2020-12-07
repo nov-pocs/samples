@@ -1,0 +1,35 @@
+{
+  "name": "@nov-pocs/facade-sample-node",
+  "version": "1.0.0",
+  "author": "National Oilwell Varco",
+  "description": "Sample application facade for NOV",
+  "contributors": [
+    "Sergey Seroukhov <seroukhov@entinco.com>"
+  ],
+  "main": "./obj/src/index.js",
+  "typings": "./obj/src/index.d.ts",
+  "noAnalyze": true,
+  "private": false,
+  "scripts": {
+    "start": "node app",
+    "test": "mocha -t 10000 -R spec -u tdd --recursive ./obj/test",
+    "benchmark": "matcha -R clean -I tdd ./benchmark/run.js"
+  },
+  "dependencies": {
+    "pip-services3-commons-node": "^3.0.0",
+    "pip-services3-rpc-node": "^3.1.8",
+    "pip-services3-container-node": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "@types/lodash": "^4.0.0",
+    "@types/async": "^2.0.0",
+    "@types/mocha": "^7.0.0",
+    "@types/chai": "*",
+    "mocha": "^7.0.0",
+    "chai": "*"
+  },
+  "directories": {
+    "test": "test"
+  }
+}

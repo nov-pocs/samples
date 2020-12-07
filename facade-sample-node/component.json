@@ -1,0 +1,7 @@
+{
+    "name": "nov-max-facades-sample-node",
+    "registry": "myregistry:5000/nov-services",
+    "version": "1.0.0",
+    "build": 0
+  }
+  

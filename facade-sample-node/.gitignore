@@ -1,0 +1,10 @@
+/node_modules
+/.idea
+/debug.log
+/error.log
+/npm-debug.log
+/obj/test
+/tasks
+/docker/id_rsa*
+!/docker/docker-compose.*
+!/docker/docker-compose.test.yml

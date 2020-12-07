@@ -1,0 +1,63 @@
+---
+# Container info
+- descriptor: "pip-services:container-info:default:default:*"
+  name: "nov-facade"
+  description: "Sample application facade for NOV"
+
+# Console logger
+- descriptor: "pip-services:logger:console:default:*"
+  level: trace
+
+# Log counters
+- descriptor: "pip-services:counters:log:default:*"
+
+# Settings components
+- descriptor: "pip-services-settings:client:null:default:*"
+
+# Accounts components
+- descriptor: "pip-services-accounts:client:memory:default:*"
+
+# Email settings components
+- descriptor: "pip-services-emailsettings:client:memory:default:*"
+
+# Passwords components
+- descriptor: "pip-services-passwords:client:null:default:*"
+
+# Roles components
+- descriptor: "pip-services-roles:client:memory:default:*"
+
+# Session components
+- descriptor: "pip-services-sessions:client:memory:default:*"
+
+# Sites components
+- descriptor: "nov-services-sites:client:memory:default:*"
+
+# Beacons components
+- descriptor: "nov-services-beacons:client:memory:default:*"
+
+# Invitations components
+- descriptor: "nov-services-invitations:client:null:default:*"
+
+# Main facade service
+- descriptor: "pip-services:endpoint:http:default:*"
+  root_path: ""
+  connection:
+    protocol: "http"
+    host: "0.0.0.0"
+    port: 8080
+  options:
+    debug: true
+    maintenance_enabled: false
+    max_req_size: "1mb"
+
+# Facade API V1
+- descriptor: "nov-facades-application:service:http:default:1.0"
+
+# Facade API V2
+- descriptor: "nov-facades-application:service:http:default:2.0"
+
+# Hearbeat service
+- descriptor: "pip-services:heartbeat-service:http:default:1.0"
+
+# Status service
+- descriptor: "pip-services:status-service:http:default:1.0"

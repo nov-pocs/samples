@@ -1,0 +1,1 @@
+{"version":3,"file":"SettingsSectionV1.js","sourceRoot":"","sources":["../../../../src/clients/version1/SettingsSectionV1.ts"],"names":[],"mappings":";;AAAA,2EAA0D;AAG1D,MAAa,iBAAiB;IAC1B,YAAoB,EAAU,EAAE,UAAyB;QACrD,IAAI,CAAC,EAAE,GAAG,EAAE,CAAC;QACb,IAAI,CAAC,UAAU,GAAG,UAAU,IAAI,IAAI,yCAAY,EAAE,CAAC;QACnD,IAAI,CAAC,WAAW,GAAG,IAAI,IAAI,EAAE,CAAC;IAClC,CAAC;CAKJ;AAVD,8CAUC"}

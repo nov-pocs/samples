@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+
+  app:
+    image: ${IMAGE}
+    environment:
+      - MAGIC_CODE=magic
+      - DEMO_SITE_ID=9cfaf79bc95b4a9e912314eb3db7a4ba
+      - DEMO_SITE_RU_ID=9cfaf79bc95b4a9e912314eb3db7a4ba      
+    ports:
+      - "8080:8080"
+    command: node /app/bin/run.js -c /app/config/config.yml
