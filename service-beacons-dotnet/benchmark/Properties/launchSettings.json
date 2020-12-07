@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "benchmark": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "BENCHMARK_TYPE": "performance"
+      }
+    }
+  }
+}

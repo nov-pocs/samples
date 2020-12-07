@@ -206,7 +206,6 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 		public override void Register()
 		{
 			RegisterRoute("get", "/", GetBeaconsAsync);
-			RegisterRoute("get", "/", GetBeaconsAsync);
 			RegisterRoute("get", "/{id}", GetBeaconByIdAsync);
 			RegisterRoute("get", "/udi/{udi}", GetBeaconByUdiAsync);
 			RegisterRoute("post", "/", CreateBeaconAsync);
@@ -214,7 +213,7 @@ namespace Nov.MaxSamples.Beacons.Services.Version1
 			RegisterRoute("delete", "/{id}", DeleteBeaconByIdAsync);
 			RegisterRoute("post", "/calculate_position", CalculatePositionAsync);
 
-			RegisterOpenApiSpecFromResource("beacons_v1.yaml");
+			RegisterOpenApiSpecFromResource("beacons_rest_v1.yaml");
 		}
 
 		private BeaconV1 ConvertToBeacon(object value)

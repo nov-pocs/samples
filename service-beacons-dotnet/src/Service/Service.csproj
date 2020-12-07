@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Swagger\beacons_v1.yaml" />
+    <None Remove="Swagger\beacons_http_v1.yaml" />
+    <None Remove="Swagger\beacons_rest_v1.yaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Swagger\beacons_v1.yaml" />
+    <EmbeddedResource Include="Swagger\beacons_rest_v1.yaml" />
+    <EmbeddedResource Include="Swagger\beacons_http_v1.yaml" />
   </ItemGroup>
 
   <ItemGroup>

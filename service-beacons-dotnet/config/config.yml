@@ -64,6 +64,7 @@
     param1: XYZ
     param2: 765
     
+{{#if HTTP_ENABLED}}
 # Shared HTTP Endpoint
 - descriptor: "pip-services3:endpoint:http:default:1.0"
   connection:
@@ -79,3 +80,19 @@
     
 # Status service
 - descriptor: "pip-services:status-service:http:default:1.0"
+{{/if}}
+
+{{#if GRPC_ENABLED}}
+# Common GRPC endpoint
+- descriptor: "pip-services:endpoint:grpc:default:1.0"
+  connection:
+    protocol: "http"
+    host: "0.0.0.0"
+    port: {{GRPC_PORT}}{{#unless GRPC_PORT}}8090{{/unless}}
+
+# GRPC endpoint version 1.0
+- descriptor: "beacons:service:grpc:default:1.0"
+
+# Commandable GRPC endpoint version 1.0
+- descriptor: "beacons:service:commandable-grpc:default:1.0"
+{{/if}}

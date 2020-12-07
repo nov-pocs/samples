@@ -1,0 +1,203 @@
+﻿openapi: '3.0.2'
+info:
+  title: 'Beacons Service V1'
+  description: 'Sample Beacons microservice'
+  version: '1'
+paths:
+  /v1/beacons:
+    get:
+      tags:
+        - v1/beacons
+      operationId: 'get_beacons'
+      parameters:
+        - name: skip
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: take
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: total
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: filter
+          in: query
+          description: semicolon-separated key-value list
+          example: key1=value1;key2=value2
+          required: false
+          schema:
+            type: string
+      responses: 
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataPage'
+  /v1/beacons/{id}:
+    get:
+      tags:
+        - v1/beacons
+      operationId: 'get_beacon_by_id'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses: 
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconV1'
+  /v1/beacons/udi/{udi}:
+    get:
+      tags:
+        - v1/beacons
+      operationId: 'get_beacon_by_udi'
+      parameters:
+        - name: udi
+          in: path
+          required: true
+          schema:
+            type: string
+      responses: 
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconV1'
+  /v1/beacons/calculate_position:
+    post:
+      tags:
+        - v1/beacons
+      operationId: 'calculate_position'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                site_id:
+                  type: string
+                udis:
+                  $ref: '#/components/schemas/ArrayOfStrings'
+              required:
+                - udi
+      responses: 
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CenterObjectV1'
+  /v1/beacons/create_beacon:
+    post:
+      tags:
+        - v1/beacons
+      operationId: 'create_beacon'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                beacon:
+                  $ref: '#/components/schemas/BeaconV1'
+              required:
+                - beacon
+      responses: 
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconV1'
+  /v1/beacons/update_beacon:
+    patch:
+      tags:
+        - v1/beacons
+      operationId: 'update_beacon'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                beacon:
+                  $ref: '#/components/schemas/BeaconV1'
+              required:
+                - beacon
+      responses: 
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconV1'
+  /v1/beacons/{beacon_id}:
+    delete:
+      tags:
+        - v1/beacons
+      operationId: 'delete_beacon_by_id'
+      parameters:
+        - name: beacon_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses: 
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeaconV1'
+components:
+  schemas:
+    CenterObjectV1:
+      type: object
+      properties:
+        type: 
+          type: string
+        coordinates:
+          $ref: '#/components/schemas/ArrayOfDouble'
+    BeaconV1:
+      type: object
+      properties:
+        id:
+          type: string
+        site_id:
+          type: string
+        type:
+          type: string
+        udi:
+          type: string
+        label:
+          type: string
+        center:
+          $ref: '#/components/schemas/CenterObjectV1'
+    DataPage:
+      type: object
+      properties:
+        data: 
+          type: array
+          items:
+            $ref: '#/components/schemas/BeaconV1'
+        total:
+          type: integer
+    ArrayOfDouble:
+      type: array
+      items: 
+        type: number
+    ArrayOfStrings:
+      type: array
+      items: 
+        type: string

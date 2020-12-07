@@ -1,9 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Nov.MaxSamples.Beacons</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PipBenchmark" Version="3.0.2" />
+    <PackageReference Include="PipBenchmark.ConsoleRunner" Version="3.0.0" />
+    <PackageReference Include="PipServices3.Commons" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Service\Service.csproj" />
+  </ItemGroup>
 
 </Project>

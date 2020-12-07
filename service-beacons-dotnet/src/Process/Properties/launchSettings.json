@@ -2,7 +2,11 @@
   "profiles": {
     "Process": {
       "commandName": "Project",
-      "commandLineArgs": "-c ../../../../../config/config.yml"
+      "commandLineArgs": "-c ../../../../../config/config.yml",
+      "environmentVariables": {
+        "HTTP_ENABLED": "true",
+        "GRPC_ENABLED": "false"
+      }
     }
   }
 }
