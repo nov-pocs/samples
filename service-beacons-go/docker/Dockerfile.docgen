@@ -1,6 +1,15 @@
-FROM docker.pkg.github.com/nov-pocs/max-devops/go-docgen:latest
+#FROM docker.pkg.github.com/nov-pocs/max-devops/go-docgen:latest
+FROM golang:1.13-alpine
+
+RUN   apk update \                                                                                                                                                                                                                        
+  &&   apk add ca-certificates wget \                                                                                                                                                                                                      
+  &&   update-ca-certificates
+
+ENV GO111MODULE=on
 
 WORKDIR /app
+
+RUN go install golang.org/x/tools/cmd/godoc
 
 COPY . ./src
 
