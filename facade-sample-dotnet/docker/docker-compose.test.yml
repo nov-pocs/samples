@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  test:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.test
+    image: ${IMAGE:-rc}
+    command: ${TEST_CMD:-bash -c "dotnet test test/Service.Test/Service.Test.csproj"}
+

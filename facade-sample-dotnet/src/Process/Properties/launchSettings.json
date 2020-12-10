@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Process": {
+      "commandName": "Project",
+      "commandLineArgs": "-c ../../../../../config/config.yml",
+      "environmentVariables": {
+        "HTTP_PORT": "8081"
+      }
+    }
+  }
+}

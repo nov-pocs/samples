@@ -1,0 +1,7 @@
+{
+    "name": "nov-max-facades-sample-dotnet",
+    "registry": "myregistry:5000/nov-services",
+    "version": "1.0.0",
+    "build": 0
+  }
+  
