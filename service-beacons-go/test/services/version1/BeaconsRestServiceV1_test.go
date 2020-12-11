@@ -199,6 +199,9 @@ func (c *beaconsRestServiceV1Test) testSwagger(t *testing.T) {
 
 	resp, err := http.Get("http://localhost:3006/v1/beacons/swagger")
 	assert.Nil(t, err)
+	if resp != nil {
+		defer resp.Body.Close()
+	}
 	body, err := ioutil.ReadAll(resp.Body)
 	assert.Nil(t, err)
 	assert.Equal(t, c.openApiContent, (string)(body))
@@ -227,6 +230,10 @@ func (c *beaconsRestServiceV1Test) invoke(method string,
 
 	if respErr != nil {
 		return respErr
+	}
+
+	if response != nil {
+		defer response.Body.Close()
 	}
 
 	if response.StatusCode == 204 {

@@ -207,6 +207,9 @@ func (c *beaconsCommandableHttpServiceV1Test) testCrudOperations(t *testing.T) {
 func (c *beaconsCommandableHttpServiceV1Test) testSwagger(t *testing.T) {
 	resp, err := http.Get("http://localhost:3005/v1/beacons/swagger")
 	assert.Nil(t, err)
+	if resp != nil {
+		defer resp.Body.Close()
+	}
 	body, err := ioutil.ReadAll(resp.Body)
 	assert.Nil(t, err)
 	assert.True(t, strings.Index((string)(body), "openapi:") >= 0)
@@ -226,6 +229,10 @@ func (c *beaconsCommandableHttpServiceV1Test) invoke(
 
 	if postErr != nil {
 		return postErr
+	}
+
+	if postResponse != nil {
+		defer postResponse.Body.Close()
 	}
 
 	if postResponse.StatusCode == 204 {
