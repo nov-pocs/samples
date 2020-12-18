@@ -1,5 +1,5 @@
 #FROM docker.pkg.github.com/nov-pocs/max-devops/go-runtime:latest
-FROM alpine:latest
+FROM scratch
 
 # Set a working directory
 WORKDIR /app
